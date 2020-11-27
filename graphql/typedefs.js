@@ -11,6 +11,22 @@ module.exports = gql`
     commentCount: Int!
     likeCount: Int!
   }
+  type GamePre{
+    broadcast: [String],
+    sport: String,
+    league: String,
+    homeLogo: String,
+    awayLogo: String,
+    homeAbbreeviation: String,
+    awayAbbreeviation: String,
+    homeFullName: String,
+    awayFullName: String,
+    homeColor: String,
+    awayColor: String,
+    homeRecord: String,
+    awayRecord: String,
+    startTime: String,
+  }
   type Comment {
     id: ID!
     createdAt: String!
@@ -38,6 +54,8 @@ module.exports = gql`
   type Query {
     getPosts: [Post]
     getPost(postId: ID!): Post
+    getGamePres: [GamePre]
+    getGamePre(gamePreId: ID!): GamePre
   }
 
   type Mutation {
