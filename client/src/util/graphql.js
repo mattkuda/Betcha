@@ -21,3 +21,25 @@ export const FETCH_POSTS_QUERY = gql`
     }
   }
 `;
+
+export const FETCH_GAMEPRES_QUERY = gql`
+  {
+    getGamePres {
+      id
+      broadcast
+      sport
+      league
+      homeLogo
+      awayLogo
+      homeAbbreeviation
+      awayAbbreeviation
+      homeFullName
+      awayFullName
+      homeColor
+      awayColor
+      homeRecord
+      awayRecord
+      startTime
+    }
+  }
+`;
