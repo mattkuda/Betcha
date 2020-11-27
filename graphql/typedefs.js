@@ -130,14 +130,11 @@ module.exports = gql`
   type Query {
     getPosts: [Post]
     getPost(postId: ID!): Post
-<<<<<<< HEAD
     getNFLPregames: [NFLPregame]
     getNFLLivegames: [NFLLivegame]
     getNFLPostgames: [NFLPostgame]
-=======
     getGamePres: [GamePre]
     getGamePre(gamePreId: ID!): GamePre
->>>>>>> 586d3d5008ccefce2fa4f757cac294ac98df1889
   }
 
   type Mutation {
