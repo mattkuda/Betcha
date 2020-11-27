@@ -43,7 +43,7 @@ function Register(props) {
           name="username"
           type="text"
           value={values.username}
-          error={errors.username ? true : false}
+          error={ errors ? (errors.username != null ? true : false): false}
           onChange={onChange}
         />
         <Form.Input
@@ -52,7 +52,7 @@ function Register(props) {
           name="email"
           type="email"
           value={values.email}
-          error={errors.email ? true : false}
+          error={ errors ? (errors.email != null ? true : false): false}
           onChange={onChange}
         />
         <Form.Input
@@ -61,7 +61,7 @@ function Register(props) {
           name="password"
           type="password"
           value={values.password}
-          error={errors.password ? true : false}
+          error={ errors ? (errors.password != null ? true : false): false}
           onChange={onChange}
         />
         <Form.Input
@@ -70,7 +70,7 @@ function Register(props) {
           name="confirmPassword"
           type="password"
           value={values.confirmPassword}
-          error={errors.confirmPassword ? true : false}
+          error={ errors ? (errors.confirmPassword != null ? true : false): false}
           onChange={onChange}
         />
         <Button type="Submit" primary>
