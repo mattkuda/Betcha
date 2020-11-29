@@ -101,8 +101,8 @@ class GameService {
     })
 
     this.pregameLogic(games_pre, sport, league);
-    //this.liveLogic(games_in, sport, league);
-    //this.postgameLogic(games_post, sport, league);
+    this.liveLogic(games_in, sport, league);
+    this.postgameLogic(games_post, sport, league);
   }
 
 
