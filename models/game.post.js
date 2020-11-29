@@ -6,6 +6,7 @@ const Schema = mongoose.Schema;
 const gamePostSchema = new Schema({
   _id: String,
   state: String,
+  stateDetails: String,
   sport: String,
   league: String,
   homeLogo: String,
@@ -17,15 +18,14 @@ const gamePostSchema = new Schema({
   homeFullName: String,
   awayFullName: String,
   homeColor: String,
-  homeAlternateColor: String,
   awayColor: String,
-  awayAlternateColor: String,
   homeRecord: String,
   awayRecord: String,
   homeLines: [Number],
   awayLines: [Number],
-  spreadWinner: String,
-  ouWinner: String,
+  spread: String,
+  overUnder: String,
+  specificData: mongoose.Mixed
 }, { strict: false });
 
 module.exports = mongoose.model('gamePost', gamePostSchema);
