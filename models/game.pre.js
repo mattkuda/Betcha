@@ -6,6 +6,7 @@ const Schema = mongoose.Schema;
 const gamePreSchema = new Schema({
   _id: String,
   state: String,
+  stateDetails: String,
   sport: String,
   league: String,
   homeLogo: String,
@@ -16,12 +17,13 @@ const gamePreSchema = new Schema({
   awayFullName: String,
   homeColor: String,
   awayColor: String,
-  startTime: Date,
-  broadcasts: [String],
   homeRecord: String,
   awayRecord: String,
+  startTime: Date,
+  broadcasts: [String],
   spread: String,
-  overUnder: String
+  overUnder: String,
+  specificData: mongoose.Mixed
 }, { strict: false });
 
 module.exports = mongoose.model('gamePre', gamePreSchema);
