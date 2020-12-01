@@ -5,6 +5,9 @@ import { useMutation } from '@apollo/react-hooks';
 import { useQuery } from "@apollo/react-hooks";
 
 import { useForm } from '../util/hooks';
+
+import LeagueSelection from './LeagueSelection';
+
 import { FETCH_POSTS_QUERY } from '../util/graphql';
 import { FETCH_GAMEPRES_QUERY } from '../util/graphql';
 
@@ -48,7 +51,6 @@ function PostForm(props) {
   return (
     <>
       <Form onSubmit={onSubmit}>
-        <h2>Create a post:</h2>
         <Form.Field>
           <Form.Input
             placeholder="Hi World!"
@@ -57,32 +59,14 @@ function PostForm(props) {
             value={values.body}
             error={error ? true : false}
           />
+          <LeagueSelection/>
+
           <Button type="submit" color="teal">
             Submit
           </Button>
         </Form.Field>
       </Form>
-      <h1> Theststst</h1>
-      <button onClick={()=> console.log(JSON.stringify(gamepres))}>test</button>
-      {gamesLoading ? (
-            <h1>Loading games...</h1>
-          ) : (
-            //Transition group adds animation for when new post is added/deleted
-            
-            <Transition.Group>
-              {gamepres &&
-                gamepres.map((game) => (
-                  <p>{game.homeAbbreeviation} vs. {game.awayAbbreeviation}</p>
-                ))}
-            </Transition.Group>
-          )}
-      {error && (
-        <div className="ui error message" style={{ marginBottom: 20 }}>
-          <ul className="list">
-            <li>{error.graphQLErrors[0].message}</li>
-          </ul>
-        </div>
-      )}
+      
     </>
   );
 }
