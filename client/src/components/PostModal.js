@@ -70,7 +70,6 @@ function PostForm(props) {
             //Transition group adds animation for when new post is added/deleted
             
             <Transition.Group>
-            <h1>Not loading games</h1>
               {gamepres &&
                 gamepres.map((game) => (
                   <p>{game.homeAbbreeviation} vs. {game.awayAbbreeviation}</p>
