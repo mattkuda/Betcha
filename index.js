@@ -17,7 +17,7 @@ const server = new ApolloServer({
 });
 
 mongoose
-  .connect(MONGODB, { useNewUrlParser: true, useFindAndModify: false })
+  .connect(MONGODB, { useNewUrlParser: true, useFindAndModify: false, useUnifiedTopology: true })
   .then(() => {
     console.log("MongoDB Connected");
     return server.listen({ port: 5000 });
@@ -27,4 +27,4 @@ mongoose
   });
 
 //start game service here
-new myGameService().run();
+//new myGameService().run();

@@ -11,22 +11,6 @@ module.exports = gql`
     commentCount: Int!
     likeCount: Int!
   }
-  type GamePre{
-    broadcast: [String],
-    sport: String,
-    league: String,
-    homeLogo: String,
-    awayLogo: String,
-    homeAbbreeviation: String,
-    awayAbbreeviation: String,
-    homeFullName: String,
-    awayFullName: String,
-    homeColor: String,
-    awayColor: String,
-    homeRecord: String,
-    awayRecord: String,
-    startTime: String,
-  }
   type Comment {
     id: ID!
     createdAt: String!
@@ -46,9 +30,64 @@ module.exports = gql`
     createdAt: String!
   }
 
+
+  type NFLPregameMixedData {
+    weatherDescription: String
+  }
+  type NCAAFPregameMixedData {
+    weatherDescription: String,
+    homeRank: Int,
+    awayRank: Int
+  }
+  type NCAABMensPregameMixedData {
+    homeRank: Int,
+    awayRank: Int
+  }
+
+
+  type NFLLivegameMixedData {
+    down: Int!,
+    distance: Int!,
+    yardLine: Int!,
+    isRedZone: Boolean!,
+    possession: String!,
+    awayTimeouts: Int!,
+    homeTimeouts: Int!
+  }
+  type NCAAFLivegameMixedData {
+    homeRank: Int!,
+    awayRank: Int!,
+    down: Int!,
+    distance: Int!,
+    yardLine: Int!,
+    isRedZone: Boolean!,
+    possession: String!,
+    awayTimeouts: Int!,
+    homeTimeouts: Int!
+  }
+  type NCAABMensLivegameMixedData {
+    homeRank: Int!,
+    awayRank: Int!,
+    possession: String!,
+    awayTimeouts: Int!,
+    homeTimeouts: Int!
+  }
+
+
+  type NCAAFPostgameMixedData {
+    homeRank: Int!,
+    awayRank: Int!
+  }
+  type NCAABMensPostgameMixedData {
+    homeRank: Int!,
+    awayRank: Int!
+  }
+
+
   type NFLPregame {
     id: ID!,
     state: String!,
+    stateDetails: String!,
     sport: String!
     league: String!,
     homeLogo: String!,
@@ -59,17 +98,64 @@ module.exports = gql`
     awayFullName: String!,
     homeColor: String!,
     awayColor: String!,
-    startTime: String!,
-    broadcasts: [String],
     homeRecord: String!,
     awayRecord: String!,
+    startTime: String!,
+    broadcasts: [String],
     spread: String!,
-    overUnder: String!
+    overUnder: String!,
+    specificData: NFLPregameMixedData
   }
+  type NCAAFPregame {
+    id: ID!,
+    state: String!,
+    stateDetails: String!,
+    sport: String!
+    league: String!,
+    homeLogo: String!,
+    awayLogo: String!,
+    homeAbbreviation: String!,
+    awayAbbreviation: String!,
+    homeFullName: String!,
+    awayFullName: String!,
+    homeColor: String!,
+    awayColor: String!,
+    homeRecord: String!,
+    awayRecord: String!,
+    startTime: String!,
+    broadcasts: [String],
+    spread: String!,
+    overUnder: String!,
+    specificData: NCAAFPregameMixedData
+  }
+  type NCAABMensPregame {
+    id: ID!,
+    state: String!,
+    stateDetails: String!,
+    sport: String!
+    league: String!,
+    homeLogo: String!,
+    awayLogo: String!,
+    homeAbbreviation: String!,
+    awayAbbreviation: String!,
+    homeFullName: String!,
+    awayFullName: String!,
+    homeColor: String!,
+    awayColor: String!,
+    homeRecord: String!,
+    awayRecord: String!,
+    startTime: String!,
+    broadcasts: [String],
+    spread: String!,
+    overUnder: String!,
+    specificData: NCAABMensPregameMixedData
+  }
+
 
   type NFLLivegame {
     id: ID!,
     state: String!,
+    stateDetails: String!,
     sport: String!
     league: String!,
     homeLogo: String!,
@@ -82,23 +168,21 @@ module.exports = gql`
     awayFullName: String!,
     homeColor: String!,
     awayColor: String!,
-    startTime: String!,
-    broadcasts: [String],
     homeRecord: String!,
     awayRecord: String!,
+    startTime: String!,
+    broadcasts: [String],
     time: String!,
     period: Int!,
     spread: String!,
     overUnder: String!,
     lastPlay: String!,
-    downAndDistance: String!,
-    homeTimeouts: Int!,
-    awayTimeouts: Int!
+    specificData: NFLLivegameMixedData
   }
-
-  type NFLPostgame {
+  type NCAAFLivegame {
     id: ID!,
     state: String!,
+    stateDetails: String!,
     sport: String!
     league: String!,
     homeLogo: String!,
@@ -111,15 +195,118 @@ module.exports = gql`
     awayFullName: String!,
     homeColor: String!,
     awayColor: String!,
-    startTime: String!,
-    broadcasts: [String],
     homeRecord: String!,
     awayRecord: String!,
+    startTime: String!,
+    broadcasts: [String],
+    time: String!,
+    period: Int!,
     spread: String!,
     overUnder: String!,
-    homeLines: [Int],
-    awayLines: [Int]
+    lastPlay: String!,
+    specificData: NCAAFLivegameMixedData
   }
+  type NCAABMensLivegame {
+    id: ID!,
+    state: String!,
+    stateDetails: String!,
+    sport: String!
+    league: String!,
+    homeLogo: String!,
+    awayLogo: String!,
+    homeScore: String!,
+    awayScore: String!,
+    homeAbbreviation: String!,
+    awayAbbreviation: String!,
+    homeFullName: String!,
+    awayFullName: String!,
+    homeColor: String!,
+    awayColor: String!,
+    homeRecord: String!,
+    awayRecord: String!,
+    startTime: String!,
+    broadcasts: [String],
+    time: String!,
+    period: Int!,
+    spread: String!,
+    overUnder: String!,
+    lastPlay: String!,
+    specificData: NCAABMensLivegameMixedData
+  }
+
+
+  type NFLPostgame {
+    id: ID!,
+    state: String!,
+    stateDetails: String!,
+    sport: String!
+    league: String!,
+    homeLogo: String!,
+    awayLogo: String!,
+    homeScore: String!,
+    awayScore: String!,
+    homeAbbreviation: String!,
+    awayAbbreviation: String!,
+    homeFullName: String!,
+    awayFullName: String!,
+    homeColor: String!,
+    awayColor: String!,
+    homeRecord: String!,
+    awayRecord: String!,
+    homeLines: [Int],
+    awayLines: [Int],
+    spread: String!,
+    overUnder: String!
+  }
+  type NCAAFPostgame {
+    id: ID!,
+    state: String!,
+    stateDetails: String!,
+    sport: String!
+    league: String!,
+    homeLogo: String!,
+    awayLogo: String!,
+    homeScore: String!,
+    awayScore: String!,
+    homeAbbreviation: String!,
+    awayAbbreviation: String!,
+    homeFullName: String!,
+    awayFullName: String!,
+    homeColor: String!,
+    awayColor: String!,
+    homeRecord: String!,
+    awayRecord: String!,
+    homeLines: [Int],
+    awayLines: [Int],
+    spread: String!,
+    overUnder: String!,
+    specificData: NCAAFPostgameMixedData
+  }
+  type NCAABMensPostgame {
+    id: ID!,
+    state: String!,
+    stateDetails: String!,
+    sport: String!
+    league: String!,
+    homeLogo: String!,
+    awayLogo: String!,
+    homeScore: String!,
+    awayScore: String!,
+    homeAbbreviation: String!,
+    awayAbbreviation: String!,
+    homeFullName: String!,
+    awayFullName: String!,
+    homeColor: String!,
+    awayColor: String!,
+    homeRecord: String!,
+    awayRecord: String!,
+    homeLines: [Int],
+    awayLines: [Int],
+    spread: String!,
+    overUnder: String!,
+    specificData: NCAABMensPostgameMixedData
+  }
+
 
   input RegisterInput {
     username: String!
@@ -133,8 +320,12 @@ module.exports = gql`
     getNFLPregames: [NFLPregame]
     getNFLLivegames: [NFLLivegame]
     getNFLPostgames: [NFLPostgame]
-    getGamePres: [GamePre]
-    getGamePre(gamePreId: ID!): GamePre
+    getNCAAFPregames: [NCAAFPregame]
+    getNCAAFLivegames: [NCAAFLivegame]
+    getNCAAFPostgames: [NCAAFPostgame]
+    getNCAABMensPregames: [NCAABMensPregame]
+    getNCAABMensLivegames: [NCAABMensLivegame]
+    getNCAABMensPostgames: [NCAABMensPostgame]
   }
 
   type Mutation {
