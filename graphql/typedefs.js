@@ -308,6 +308,40 @@ module.exports = gql`
   }
 
 
+  type FootballPlayData {
+    homeScore: Int!,
+    awayScore: Int!
+    time: String!
+    quarter: Int!
+    down: Int!
+    distance: Int!
+    yardLine: Int!
+    possession: String!
+  }
+
+  type NCAABMensPlayData {
+    homeScore: Int!,
+    awayScore: Int!
+    time: String!
+    half: Int!
+    possession: String!
+  }
+
+
+  type FootballPlay {
+    id: ID!,
+    description: String!,
+    eventId: ID!,
+    specificData: FootballPlayData
+  }
+
+  type NCAABMensPlay {
+    id: ID!,
+    description: String!,
+    eventId: ID!,
+    specificData: NCAABMensPlayData
+  }
+
   input RegisterInput {
     username: String!
     password: String!
@@ -326,6 +360,12 @@ module.exports = gql`
     getNCAABMensPregames: [NCAABMensPregame]
     getNCAABMensLivegames: [NCAABMensLivegame]
     getNCAABMensPostgames: [NCAABMensPostgame]
+    getPlaysInNFLGame(gameId: ID!): [FootballPlay],
+    getPlaysInNCAAFGame(gameId: ID!): [FootballPlay],
+    getPlaysInNCAABMensGame(gameId: ID!): [NCAABMensPlay]
+    getPlaysInNFLGameInPeriod(gameId: ID!, period: Int!): [FootballPlay],
+    getPlaysInNCAAFGameInPeriod(gameId: ID!, period: Int!): [FootballPlay],
+    getPlaysInNCAABMensGameInPeriod(gameId: ID!, period: Int!): [NCAABMensPlay]
   }
 
   type Mutation {

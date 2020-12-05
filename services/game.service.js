@@ -8,7 +8,7 @@ Updates games within our database, making use of the ESPN API to obtain informat
 const Pregame = require('../models/game.pre');
 const Livegame = require('../models/game.live');
 const Postgame = require('../models/game.post');
-const Play = require('../models/play');
+const Play = require('../models/Play');
 
 
 //import libraries

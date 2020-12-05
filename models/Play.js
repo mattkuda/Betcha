@@ -8,6 +8,6 @@ const playSchema = new Schema({
   description: String,
   eventId: String,
   specificData: mongoose.Mixed
-});
+}, { strict: false });
 
 module.exports = mongoose.model('Play', playSchema);

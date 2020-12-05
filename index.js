@@ -27,4 +27,4 @@ mongoose
   });
 
 //start game service here
-//new myGameService().run();
+new myGameService().run();
