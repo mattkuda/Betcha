@@ -44,3 +44,13 @@ export const FETCH_GAMEPRES_QUERY = gql`
     }
   }
 `;
+
+// export const FETCH_NFL_PREGAMES_QUERY = gql`
+//   {
+//     getNFLPregames {
+//       id
+//       homeFullName
+//       awayFullName
+//     }
+//   }
+// `;

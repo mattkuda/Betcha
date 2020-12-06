@@ -8,7 +8,7 @@ Updates games within our database, making use of the ESPN API to obtain informat
 const Pregame = require('../models/game.pre');
 const Livegame = require('../models/game.live');
 const Postgame = require('../models/game.post');
-const Play = require('../models/play');
+const Play = require('../models/Play');
 
 
 //import libraries
@@ -28,7 +28,7 @@ add fields to a document based on the sport and league --> DONE - we use a switc
 
 4. Add betting logic for postgame entries
 
-5. Test this on other sport list entries (not just NFL).
+5. Test this on other sport list entries (not just NFL) --> DONE
 
 6. Look at ways to make this faster...can we reach out to the ESPN API and process
 the data in parallel? Or is this something we have to do sequentially? Run speed tests
@@ -41,7 +41,7 @@ class GameService {
   constructor() {
     this.ctr = 1;
 
-    //in-season sports that we care about
+    //in-season sports that we care about - eventually, we will get this from "Active Leagues" DB
     this.sport_list = [
       ['football', 'nfl'],
       ['football', 'college-football'],
@@ -100,9 +100,17 @@ class GameService {
       if (gameState === 'post') games_post.push(game);
     })
 
-    this.pregameLogic(games_pre, sport, league);
-    this.liveLogic(games_in, sport, league);
-    this.postgameLogic(games_post, sport, league);
+    if (games_pre.length > 0) {
+      this.pregameLogic(games_pre, sport, league);
+    }
+
+    if (games_in.length > 0) {
+      this.liveLogic(games_in, sport, league);
+    }
+
+    if (games_post.length > 0) {
+      this.postgameLogic(games_post, sport, league);
+    }
   }
 
 
@@ -145,18 +153,26 @@ class GameService {
 
         switch(league) {
           case 'nfl':
-            contents.specificData = {
-              weatherDescription: game.weather.displayValue,
-              highTemp: game.weather.temperature,
-            };
+
+            if (this.elementExists(game, "weather")) {
+              contents.specificData = {
+                weatherDescription: game.weather.displayValue
+                //highTemp: game.weather.temperature
+              };
+            }
+
             break;
           case 'college-football':
-            contents.specificData = {
-              weatherDescription: game.weather.displayValue,
-              highTemp: game.weather.temperature,
-              homeRank: game.competitions[0].competitors[0].curatedRank.current,
-              awayRank: game.competitions[0].competitors[1].curatedRank.current
-            };
+
+            if (this.elementExists(game, "weather")) {
+              contents.specificData = {
+                weatherDescription: game.weather.displayValue
+                //highTemp: game.weather.temperature
+              };
+              contents.specificData.homeRank = game.competitions[0].competitors[0].curatedRank.current;
+              contents.specificData.awayRank = game.competitions[0].competitors[1].curatedRank.current;
+            }
+
             break;
           case 'mens-college-basketball':
             contents.specificData = {
@@ -193,14 +209,14 @@ class GameService {
 
       let possessionTeam = "";
 
-      //check if home team has possession
-      if (game.competitions[0].situation.lastPlay.team.id === game.competitions[0].competitors[0].id) {
-        possessionTeam = game.competitions[0].competitors[0].team.abbreviation;
-      }
-      //check if away team has possession
-      if (game.competitions[0].situation.lastPlay.team.id === game.competitions[0].competitors[1].id) {
-        possessionTeam = game.competitions[0].competitors[1].team.abbreviation;
-      }
+      // //check if home team has possession
+      // if (game.competitions[0].situation.lastPlay.team.id === game.competitions[0].competitors[0].id) {
+      //   possessionTeam = game.competitions[0].competitors[0].team.abbreviation;
+      // }
+      // //check if away team has possession
+      // if (game.competitions[0].situation.lastPlay.team.id === game.competitions[0].competitors[1].id) {
+      //   possessionTeam = game.competitions[0].competitors[1].team.abbreviation;
+      // }
 
       const gameExists = await Livegame.exists({ _id: game.id });
 
@@ -212,9 +228,10 @@ class GameService {
         let localOU = "";
 
         //find game in pregame DB
-        let pregameEntry = Pregame.findById(game.id, (err, result) => {
+        Pregame.findById(game.id, (err, result) => {
           if (err) {
             console.log(err);
+            return
           }
           else {
             if (result) {
@@ -246,14 +263,27 @@ class GameService {
           awayFullName: game.competitions[0].competitors[1].team.displayName,
           homeColor: game.competitions[0].competitors[0].team.color,
           awayColor: game.competitions[0].competitors[1].team.color,
-          homeRecord: game.competitions[0].competitors[0].records[0].summary,
-          awayRecord: game.competitions[0].competitors[1].records[0].summary,
           startTime: game.date,
-          broadcasts: game.competitions[0].broadcasts[0].names,
           time: game.competitions[0].status.displayClock,
           period: game.competitions[0].status.period,
-          lastPlay: game.competitions[0].situation.lastPlay.text
+          lastPlay: ""
         };
+
+        if (this.elementExists(game.competitions[0].competitors[0], "records")) {
+          contents.homeRecord = game.competitions[0].competitors[0].records[0].summary;
+        }
+
+        if (this.elementExists(game.competitions[0].competitors[1], "records")) {
+          contents.awayRecord = game.competitions[0].competitors[1].records[0].summary;
+        }
+
+        if (this.elementExists(game.competitions[0].situation, "lastPlay")) {
+          contents.lastPlay = game.competitions[0].situation.lastPlay.text
+        }
+
+        if (game.competitions[0].broadcasts.length > 0) {
+          contents.broadcasts = game.competitions[0].broadcasts[0].names
+        }
 
         contents.spread = localSpread;
         contents.overUnder = localOU;
@@ -314,17 +344,19 @@ class GameService {
 
       }
 
-      else {
+      //TODO: make an actual fix for updating game info in games that
+      //have an empty situation array. Right now we don't update the
+      //games at all if they don't have lastPlay info...this avoids
+      //the error we were seeing but does not work as a final solution.
+      else if (game.status.type.name === "STATUS_IN_PROGRESS") {
 
         console.log("Updating existing game...")
-
-
 
         //first, update the live game entry
 
         switch(league) {
           case 'nfl':
-            livegame.findByIdAndUpdate(game.id, {
+            Livegame.findByIdAndUpdate(game.id, {
               homeScore: game.competitions[0].competitors[0].score,
               awayScore: game.competitions[0].competitors[1].score,
               time: game.competitions[0].status.displayClock,
@@ -345,7 +377,7 @@ class GameService {
             break;
 
           case 'college-football':
-            livegame.findByIdAndUpdate(game.id, {
+            Livegame.findByIdAndUpdate(game.id, {
               homeScore: game.competitions[0].competitors[0].score,
               awayScore: game.competitions[0].competitors[1].score,
               time: game.competitions[0].status.displayClock,
@@ -368,23 +400,24 @@ class GameService {
             break;
 
           case 'mens-college-basketball':
-            livegame.findByIdAndUpdate(game.id, {
-              homeScore: game.competitions[0].competitors[0].score,
-              awayScore: game.competitions[0].competitors[1].score,
-              time: game.competitions[0].status.displayClock,
-              period: game.competitions[0].status.period,
-              lastPlay: game.competitions[0].situation.lastPlay.text,
-              specificData: {
-                homeRank: game.competitions[0].competitors[0].curatedRank.current,
-                awayRank: game.competitions[0].competitors[1].curatedRank.current,
-                possession: possessionTeam,
-                awayTimeouts: game.competitions[0].situation.awayTimeouts,
-                homeTimeouts: game.competitions[0].situation.homeTimeouts
-              }
-            }, (err, result) => {
-              if (err) console.log(err);
-            });
-            break;
+
+              Livegame.findByIdAndUpdate(game.id, {
+                homeScore: game.competitions[0].competitors[0].score,
+                awayScore: game.competitions[0].competitors[1].score,
+                time: game.competitions[0].status.displayClock,
+                period: game.competitions[0].status.period,
+                lastPlay: game.competitions[0].situation.lastPlay.text,
+                specificData: {
+                  homeRank: game.competitions[0].competitors[0].curatedRank.current,
+                  awayRank: game.competitions[0].competitors[1].curatedRank.current,
+                  possession: possessionTeam,
+                  awayTimeouts: game.competitions[0].situation.awayTimeouts,
+                  homeTimeouts: game.competitions[0].situation.homeTimeouts
+                }
+              }, (err, result) => {
+                if (err) console.log(err);
+              });
+              break;
         }
 
         //look to see if current play has been logged in DB
@@ -398,8 +431,10 @@ class GameService {
           const playData = {
             _id: game.competitions[0].situation.lastPlay.id,
             description: game.competitions[0].situation.lastPlay.text,
-            gameId: game.id
+            eventId: game.id
           };
+
+          //for testing purposes - packers v bears game ID is 401220290
 
           switch(league) {
             case 'nfl':
@@ -455,7 +490,7 @@ class GameService {
 
       const gameExists = await Postgame.exists({ _id: game.id });
 
-      if (gameExists === false && game.status.type.name != "STATUS_CANCELED" && game.status.type.name != "STATUS_POSTPONED") {
+      if (gameExists === false && game.status.type.name !== "STATUS_CANCELED" && game.status.type.name !== "STATUS_POSTPONED") {
 
         console.log("Adding completed game...")
 
@@ -463,13 +498,16 @@ class GameService {
         let localOU = "";
 
         //find game in livegame collection
-        let livegameEntry = Livegame.findById(game.id, (err, result) => {
+        Livegame.findById(game.id, (err, result) => {
           if (err) {
             console.log(err);
+            return
           }
           else {
-            localSpread = result.spread;
-            localOU = result.overUnder;
+            if (result) {
+              localSpread = result.spread;
+              localOU = result.overUnder;
+            }
           }
         });
 
@@ -505,7 +543,25 @@ class GameService {
         // contents.overUnder = localOU;
 
         //spread winner --> calculate this here
+
+        if (localSpread !== '') {
+
+          //Step 1: parse spread string to figure out favored team, amount they should win by
+          //Step 2: calc favored score - underdog score
+            //if > spread, spreadResult = favored team
+            //if < spread, spreadResult = underdog
+            //if = spread, push
+
+        }
+
         //did O/U hit? --> calculate this here
+
+        if (localOU !== '') {
+          //Step 1: calc score total
+            //if > OU, ouResult = O
+            //if < OU, ouResult = U
+            //if = OU, ouResult = P
+        }
 
         let localHomeLines = []
         let localAwayLines = []
