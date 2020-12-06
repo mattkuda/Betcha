@@ -27,4 +27,5 @@ mongoose
   });
 
 //start game service here
-new myGameService().run();
+//NOTE: COMMENT OUT WHEN YOU DONT WANT IT UPDATED
+//new myGameService().run();

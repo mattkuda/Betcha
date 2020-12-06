@@ -30,7 +30,7 @@ module.exports = {
 
   
   Mutation: {
-    async createPost(_, { body }, context) {
+    async createPost(_, { body, bet }, context) {
       const user = checkAuth(context);
 
       if (body.trim() === '') {
@@ -39,6 +39,7 @@ module.exports = {
       //If we get here, that means no error was thrown during the checkAuth phase
       const newPost = new Post({
         body, //already destructured at the async line (above)
+        bet, //already destructured at the async line (above)
         user: user.id,
         username: user.username,
         createdAt: new Date().toISOString(),

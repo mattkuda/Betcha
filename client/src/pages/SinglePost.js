@@ -57,6 +57,7 @@ function SinglePost(props) {
     const {
       id,
       body,
+      bet,
       createdAt,
       username,
       comments,
@@ -80,6 +81,7 @@ function SinglePost(props) {
               <Card.Content>
                 <Card.Header>{username}</Card.Header>
                 <Card.Meta>{moment(createdAt).fromNow()}</Card.Meta>
+                <Card.Description style={{fontStyle: "italic"}}>{bet}</Card.Description>
                 <Card.Description>{body}</Card.Description>
               </Card.Content>
               <hr />
@@ -175,6 +177,7 @@ const FETCH_POST_QUERY = gql`
     getPost(postId: $postId) {
       id
       body
+      bet
       createdAt
       username
       likeCount

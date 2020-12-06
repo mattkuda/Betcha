@@ -5,7 +5,7 @@ import { Grid, Transition, Modal, Button } from "semantic-ui-react";
 import { AuthContext } from "../context/auth";
 import PostCard from "../components/PostCard";
 import PostForm from "../components/PostForm";
-import PostModal from "../components/PostModal";
+import PostModal from "../components/PostModal/PostModal";
 import { FETCH_POSTS_QUERY } from "../util/graphql";
 import { FETCH_GAMEPRES_QUERY } from "../util/graphql";
 
@@ -20,7 +20,7 @@ function Home() {
   return (
     <>
       <Modal open={modalOpen} onClose={() => setModalOpen(false)} closeIcon>
-        <Modal.Header>Create Post</Modal.Header>
+        <Modal.Header>Share Bet</Modal.Header>
         <Modal.Content>
           <PostModal handleClose={(e) => setModalOpen(false)} />
         </Modal.Content>
@@ -31,14 +31,14 @@ function Home() {
           <h1>Recent posts</h1>
         </Grid.Row>
         <Grid.Row>
-          <Button onClick={(e) => setModalOpen(true)}>Create Post</Button>
+          <Button onClick={(e) => setModalOpen(true)}>Share Bet</Button>
         </Grid.Row>
         <Grid.Row>
-          {user && (
+          {/* {user && (
             <Grid.Column>
               <PostForm />
             </Grid.Column>
-          )}
+          )} */}
           {loading ? (
             <h1>Loading posts...</h1>
           ) : (

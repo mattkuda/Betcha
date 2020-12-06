@@ -1,0 +1,53 @@
+
+.BI .jumbotron{
+  display: inline-block;
+  align-items: center;
+  flex-direction: column;
+
+  padding: 10px 10px;
+  border-radius: 10px;
+  margin-top: 20px ;
+}
+.BI button{
+  background-color: #8b9dc3;
+  border-radius: 5px;
+  border: none;
+  padding: 9px 11px;
+  color: white;
+  font-size: 16px;
+  transition-duration: 0.4s;
+  cursor: pointer;
+  outline: none;
+  display: inline-block;
+  margin: 2px;
+  width: 40px;
+  height: 40px;
+}
+.BI button:hover{
+  background-color: #f7f7f7;
+  border: 2px solid #8b9dc3;
+  color: black;
+}
+.BI .jumbotron__delete{
+  width: 40px;
+  height: 40px;
+}
+.BI .jumbotron__window{
+  background-color: #f7f7f7;
+  border: 0px;
+  width: 50px;
+  font-size: 30px;
+  margin-bottom: 5px;
+  padding: 5px 0px;
+  text-align: center;
+  outline: 0;
+  display: flex;
+  justify-content: center;
+  border-radius: 5px;
+}
+.BI input[type='number']::-webkit-inner-spin-button{
+  opacity: 1;
+}
+
+
+  
