@@ -19,7 +19,7 @@ const gamePreSchema = new Schema({
   awayColor: String,
   homeRecord: String,
   awayRecord: String,
-  startTime: Date,
+  startTime: String,
   broadcasts: [String],
   spread: String,
   overUnder: String,
