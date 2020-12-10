@@ -28,7 +28,7 @@ function MenuBar() {
           name="logout"
           onClick={logout}
         />
-       
+
       </Menu.Menu>
     </Menu>
   ) : (
@@ -39,6 +39,13 @@ function MenuBar() {
         onClick={handleItemClick}
         as={Link}
         to="/"
+      />
+      <Menu.Item
+        name="scores"
+        active={activeItem === "scores"}
+        onClick={handleItemClick}
+        as={Link}
+        to="/scoreboard"
       />
 
       <Menu.Menu position="right">
