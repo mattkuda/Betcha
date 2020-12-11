@@ -21,7 +21,7 @@ const gameLiveSchema = new Schema({
   awayColor: String,
   homeRecord: String,
   awayRecord: String,
-  startTime: Date,
+  startTime: String,
   broadcasts: [String],
   time: String,
   period: Number,

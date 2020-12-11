@@ -106,8 +106,8 @@ module.exports = gql`
     awayRecord: String!,
     startTime: String!,
     broadcasts: [String],
-    spread: String!,
-    overUnder: String!,
+    spread: String,
+    overUnder: String,
     specificData: NFLPregameMixedData
   }
   type NCAAFPregame {
@@ -128,8 +128,8 @@ module.exports = gql`
     awayRecord: String!,
     startTime: String!,
     broadcasts: [String],
-    spread: String!,
-    overUnder: String!,
+    spread: String,
+    overUnder: String,
     specificData: NCAAFPregameMixedData
   }
   type NCAABMensPregame {
@@ -150,8 +150,8 @@ module.exports = gql`
     awayRecord: String!,
     startTime: String!,
     broadcasts: [String],
-    spread: String!,
-    overUnder: String!,
+    spread: String,
+    overUnder: String,
     specificData: NCAABMensPregameMixedData
   }
 

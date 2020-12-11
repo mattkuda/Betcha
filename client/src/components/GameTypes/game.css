@@ -1,0 +1,14 @@
+.scoreboard {
+  border: 1px solid #e6e7e9;
+  box-shadow: 0 0 0 0 rgba(230,230,230,0.5);
+  display: flex;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 30px;
+  margin-bottom: 30px;
+  transition: box-shadow .5s ease;
+}
+
+.scoreboard:hover {
+  box-shadow: 0 0 11px rgba(33,33,33,.2);
+}
