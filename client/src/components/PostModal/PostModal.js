@@ -11,7 +11,6 @@ import GameSelection from "./GameStuff/GameSelection";
 import BetSelection from "./BetStuff/BetSelection";
 
 import { FETCH_POSTS_QUERY } from "../../util/graphql";
-import { FETCH_GAMEPRES_QUERY } from "../../util/graphql";
 
 function PostModal(props) {
   //Made this diff from og
@@ -22,10 +21,6 @@ function PostModal(props) {
     //defBetId: "",
     bet: "",
   });
-
-  const { gamesLoading, data: { getGamePres: gamepres } = {} } = useQuery(
-    FETCH_GAMEPRES_QUERY
-  );
 
   const [createPost, { error }] = useMutation(CREATE_POST_MUTATION, {
     variables: values,
@@ -75,7 +70,6 @@ function PostModal(props) {
     <>
       <Form onSubmit={onSubmit}>
         <Form.Field>
-          
           {values.leagueId === "" ? (
             <LeagueSelection chooseLeague={selectLeague} />
           ) : (
@@ -113,11 +107,13 @@ function PostModal(props) {
 }
 
 const CREATE_POST_MUTATION = gql`
-  mutation createPost($body: String!,$bet: String! ) {
-    createPost(body: $body, bet: $bet) {
+  mutation createPost($body: String!, $bet: String!) {
+    createPost(body: $body, betType: $betType, betAmount: $betAmount, gamePre: $gamePre) {
       id
       body
-      bet
+      betType
+      betAmount
+      gamePre
       createdAt
       username
       likes {

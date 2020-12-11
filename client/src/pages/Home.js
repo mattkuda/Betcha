@@ -7,7 +7,6 @@ import PostCard from "../components/PostCard";
 import PostForm from "../components/PostForm";
 import PostModal from "../components/PostModal/PostModal";
 import { FETCH_POSTS_QUERY } from "../util/graphql";
-import { FETCH_GAMEPRES_QUERY } from "../util/graphql";
 
 function Home() {
   const { user } = useContext(AuthContext);

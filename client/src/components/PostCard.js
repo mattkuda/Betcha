@@ -9,7 +9,7 @@ import LikeButton from "./LikeButton";
 import DeleteButton from "./DeleteButton";
 
 function PostCard({
-  post: { body, bet, createdAt, id, username, likeCount, commentCount, likes } = {},
+  post: { body, betType, betAmount, gamePre, createdAt, id, username, likeCount, commentCount, likes } = {},
 }) {
   const { user } = useContext(AuthContext);
 
@@ -30,7 +30,7 @@ function PostCard({
           {moment(createdAt).fromNow(true)}
         </Card.Meta>
         <Card.Description>{body}</Card.Description>
-        <Card.Description style={{fontStyle: "italic"}}>{bet}</Card.Description>
+        <Card.Description style={{fontStyle: "italic"}}>{betAmount}</Card.Description>
       </Card.Content>
       <Card.Content extra>
         <LikeButton user={user} post={{ id, likes, likeCount }} />

@@ -6,6 +6,19 @@ const Postgame = require("../../models/game.post");
 module.exports = {
   Query: {
 
+    async getGamePre(_, { gameId }) {
+      try {
+        const game = await Pregame.findById(gameId);
+        if (game) {
+          return game;
+        } else {
+          throw new Error("Game not found");
+        }
+      } catch (err) {
+        throw new Error(err);
+      }
+    },
+
     async getNFLPregames() {
       try {
         let pregames = await Pregame.find({league: "nfl"});

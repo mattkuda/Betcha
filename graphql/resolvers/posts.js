@@ -1,3 +1,5 @@
+
+import {getGamePre} from './scoreboard';
 const { AuthenticationError } = require("apollo-server");
 
 const Post = require("../../models/Post");
@@ -8,6 +10,9 @@ module.exports = {
     async getPosts() {
       try {
         const posts = await Post.find().sort({ createdAt: -1 });
+        post.array.forEach(post => {
+          post.gamePre = getGamePre(post.gameId)
+        });
         return posts;
       } catch (err) {
         throw new Error(err);
@@ -17,6 +22,7 @@ module.exports = {
       try {
         const post = await Post.findById(postId);
         if (post) {
+          post.gamePre = getGamePre(post.gameId)
           return post;
         } else {
           throw new Error("Post not found");
@@ -30,7 +36,7 @@ module.exports = {
 
   
   Mutation: {
-    async createPost(_, { body, bet }, context) {
+    async createPost(_, { body, betType, betAmount, gamePre }, context) {
       const user = checkAuth(context);
 
       if (body.trim() === '') {
@@ -39,7 +45,9 @@ module.exports = {
       //If we get here, that means no error was thrown during the checkAuth phase
       const newPost = new Post({
         body, //already destructured at the async line (above)
-        bet, //already destructured at the async line (above)
+        betType, 
+        betAmount, 
+        gamePre, //already destructured at the async line (above)
         user: user.id,
         username: user.username,
         createdAt: new Date().toISOString(),
