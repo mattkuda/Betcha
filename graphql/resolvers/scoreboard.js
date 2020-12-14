@@ -7,6 +7,7 @@ const Play = require("../../models/Play");
 module.exports = {
   Query: {
 
+
     async getNFLPregames() {
       try {
         let pregames = await Pregame.find({league: "nfl"});

@@ -1,10 +1,14 @@
 const { model, Schema } = require('mongoose');
+const mongoose = require('mongoose');
+
 
 const postSchema = new Schema({
   body: String,
-  bet: String,
   username: String,
   createdAt: String,
+  betType: String,
+  betAmount: String,
+  gameId: String,
   comments: [
     {
       body: String,

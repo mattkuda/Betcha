@@ -2,30 +2,26 @@ import React, { useState } from "react";
 import { Button, Form, Transition } from "semantic-ui-react";
 import gql from "graphql-tag";
 import { useMutation } from "@apollo/react-hooks";
-import { useQuery } from "@apollo/react-hooks";
 
 import { useForm } from "../../util/hooks";
+
 
 import LeagueSelection from "./LeagueStuff/LeagueSelection";
 import GameSelection from "./GameStuff/GameSelection";
 import BetSelection from "./BetStuff/BetSelection";
 
 import { FETCH_POSTS_QUERY } from "../../util/graphql";
-import { FETCH_GAMEPRES_QUERY } from "../../util/graphql";
 
 function PostModal(props) {
   //Made this diff from og
   const { values, onChange, onSubmit } = useForm(createPostCallback, {
     body: "",
-    leagueId: "",
+    betType: "",
+    betAmount: "",
     gameId: "",
-    //defBetId: "",
-    bet: "",
+    xdefBetAmount: "",
+    xleagueId: ""
   });
-
-  const { gamesLoading, data: { getGamePres: gamepres } = {} } = useQuery(
-    FETCH_GAMEPRES_QUERY
-  );
 
   const [createPost, { error }] = useMutation(CREATE_POST_MUTATION, {
     variables: values,
@@ -42,10 +38,13 @@ function PostModal(props) {
         },
       });
       values.body = "";
-      values.bet = "";
+      values.betType = "";
+      values.betAmount = "";
+      values.gameId = "";
     },
     //Added this so the page doesnt break
     onError(err) {
+
       return err;
     },
   });
@@ -54,45 +53,50 @@ function PostModal(props) {
     createPost();
   }
 
-  //use league, game, and bet to determine what to show in the post modal
-  // const [leagueState, setLeague] = useState(null);
-  // const [gameIdState, setGameId] = useState(null);
-  // const [betState, setBet] = useState(null);
-
   function selectLeague(pickedLeague) {
-    values.leagueId = pickedLeague;
+    values.xleagueId = pickedLeague;
   }
 
   function selectGameId(pickedGameId) {
     values.gameId = pickedGameId;
   }
 
-  function selectBet(pickedBet) {
-    values.bet = pickedBet;
+  function selectBetType(pickedBetType) {
+    values.betType = pickedBetType;
+  }
+
+  function selectBetAmount(pickedBetAmount) {
+    values.betAmount = pickedBetAmount.toString();
+  }
+
+  function selectxdefBetAmount(pickedxdefBetAmount) {
+    values.xdefBetAmount = pickedxdefBetAmount;
+    values.betAmount = pickedxdefBetAmount.toString();
+
   }
 
   return (
     <>
       <Form onSubmit={onSubmit}>
         <Form.Field>
-          
-          {values.leagueId === "" ? (
+          {values.xleagueId === "" ? (
             <LeagueSelection chooseLeague={selectLeague} />
           ) : (
-            <p>The league state is {values.leagueId}</p>
+            <p>The league state is {values.xleagueId}</p>
           )}
 
-          {values.leagueId !== "" && values.gameId === "" ? (
-            <GameSelection chooseGame={selectGameId} chooseBet={selectBet} />
+          {values.xleagueId !== "" && values.gameId === "" ? (
+            <GameSelection chooseGameId={selectGameId} chooseBetType={selectBetType} chooseBetAmount={selectxdefBetAmount} />
           ) : (
             <div>
-              <p>The game state is {values.gameId}</p>
-              <p>The bet state is {values.bet}</p>
+              <p>The gameId is {values.gameId}</p>
+              <p>The betType state is {values.betType}</p>
+              <p>The betAmount state is {values.betAmount}</p>
             </div>
           )}
 
-          {values.leagueId !== "" && values.gameId !== "" ? (
-            <BetSelection defValue={values.bet} chooseBet={selectBet} />
+          {values.xleagueId !== "" && values.gameId !== "" ? (
+            <BetSelection defValue={values.xdefBetAmount} chooseBetAmount={selectBetAmount} betValue = {values.betAmount} />
           ) : (
             <></>
           )}
@@ -103,21 +107,24 @@ function PostModal(props) {
             value={values.body}
             error={error ? true : false}
           />
-          <Button type="submit" color="teal">
+          <Button type="submit" color="teal" onClick={() => console.log(values)}>
             Submit
           </Button>
         </Form.Field>
       </Form>
+     
     </>
   );
 }
 
 const CREATE_POST_MUTATION = gql`
-  mutation createPost($body: String!,$bet: String! ) {
-    createPost(body: $body, bet: $bet) {
+  mutation createPost($body: String!, $betType: String!, $betAmount: String!, $gameId: String!){
+    createPost(body: $body, betType: $betType, betAmount: $betAmount, gameId: $gameId){
       id
       body
-      bet
+      betType
+      betAmount
+      gameId
       createdAt
       username
       likes {

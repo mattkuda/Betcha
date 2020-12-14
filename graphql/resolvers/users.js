@@ -55,11 +55,9 @@ module.exports = {
 
     async register(
       _,
-      { registerInput: { username, email, password, confirmPassword } },
-      context,
-      info
+      { registerInput: { username, email, password, confirmPassword } }
     ) {
-      //Validate User data
+      // Validate user data
       const { valid, errors } = validateRegisterInput(
         username,
         email,
@@ -69,8 +67,7 @@ module.exports = {
       if (!valid) {
         throw new UserInputError("Errors", { errors });
       }
-
-      //Make sure user doesnt already exist
+      // TODO: Make sure user doesnt already exist
       const user = await User.findOne({ username });
       if (user) {
         throw new UserInputError("Username is taken", {
@@ -79,7 +76,7 @@ module.exports = {
           },
         });
       }
-      //TODO: hash the pw and create auth token
+      // hash password and create an auth token
       password = await bcrypt.hash(password, 12);
 
       const newUser = new User({

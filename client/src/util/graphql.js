@@ -1,11 +1,13 @@
-import gql from 'graphql-tag';
+import gql from "graphql-tag";
 
 export const FETCH_POSTS_QUERY = gql`
   {
     getPosts {
       id
       body
-      bet
+      betType
+      betAmount
+      gameId
       createdAt
       username
       likeCount
@@ -23,17 +25,18 @@ export const FETCH_POSTS_QUERY = gql`
   }
 `;
 
-export const FETCH_GAMEPRES_QUERY = gql`
+export const FETCH_NCCABMENS_GAMEPRES_QUERY = gql`
   {
-    getGamePres {
+    getNCAABMensPregames {
       id
-      broadcast
+      state
+      stateDetails
       sport
       league
       homeLogo
       awayLogo
-      homeAbbreeviation
-      awayAbbreeviation
+      homeAbbreviation
+      awayAbbreviation
       homeFullName
       awayFullName
       homeColor
@@ -41,6 +44,8 @@ export const FETCH_GAMEPRES_QUERY = gql`
       homeRecord
       awayRecord
       startTime
+      spread
+      overUnder
     }
   }
 `;

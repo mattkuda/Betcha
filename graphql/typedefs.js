@@ -1,10 +1,13 @@
 const { gql } = require("apollo-server");
+const mongoose = require('mongoose');
 
 module.exports = gql`
   type Post {
     id: ID!
     body: String!
-    bet: String!
+    betType: String!
+    betAmount: String!
+    gameId: String!
     createdAt: String!
     username: String!
     comments: [Comment]!
@@ -354,6 +357,38 @@ module.exports = gql`
     specificData: NCAABMensPlayData
   }
 
+  type BetInfoPre {
+    id: ID!,
+    state: String!,
+    stateDetails: String!,
+    sport: String!
+    league: String!,
+    homeLogo: String!,
+    awayLogo: String!,
+    homeAbbreviation: String!,
+    awayAbbreviation: String!,
+    homeFullName: String!,
+    awayFullName: String!,
+    homeColor: String!,
+    awayColor: String!,
+    homeRecord: String!,
+    awayRecord: String!,
+    startTime: String!,
+    broadcasts: [String],
+    spread: String!,
+    overUnder: String!,
+  }
+
+  # TODO
+  #type BetInfoLive {
+    
+  # }
+
+  # TODO
+  #type BetInfoPost {
+    
+  # }
+
   input RegisterInput {
     username: String!
     password: String!
@@ -383,7 +418,7 @@ module.exports = gql`
   type Mutation {
     register(registerInput: RegisterInput): User!
     login(username: String!, password: String!): User!
-    createPost(body: String!, bet: String!): Post!
+    createPost(body: String!, betType: String!, betAmount: String!, gameId: String!): Post!
     deletePost(postId: ID!): String!
     createComment(postId: ID!, body: String!): Post!
     deleteComment(postId: ID!, commentId: ID!): Post!

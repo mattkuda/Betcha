@@ -57,7 +57,9 @@ function SinglePost(props) {
     const {
       id,
       body,
-      bet,
+      betType,
+      betAmount,
+      gamePre,
       createdAt,
       username,
       comments,
@@ -81,15 +83,15 @@ function SinglePost(props) {
               <Card.Content>
                 <Card.Header>{username}</Card.Header>
                 <Card.Meta>{moment(createdAt).fromNow()}</Card.Meta>
-                <Card.Description style={{fontStyle: "italic"}}>{bet}</Card.Description>
+                <Card.Description style={{ fontStyle: "italic" }}>
+                  {betAmount}
+                </Card.Description>
                 <Card.Description>{body}</Card.Description>
               </Card.Content>
               <hr />
               <Card.Content extra>
                 <LikeButton user={user} post={{ id, likeCount, likes }} />
-                <MyPopup
-                  content="Comment on post"
-                >
+                <MyPopup content="Comment on post">
                   <Button
                     as="div"
                     labelPosition="right"
@@ -177,7 +179,9 @@ const FETCH_POST_QUERY = gql`
     getPost(postId: $postId) {
       id
       body
-      bet
+      betType
+      betAmount
+      gamePre
       createdAt
       username
       likeCount
