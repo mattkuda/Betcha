@@ -95,7 +95,11 @@ function NFLScoreboard() {
     <Fragment>
       {
         pregameData.getNFLPregames.map(game => (
-          <NFLGame key={game.id} {...game} />
+          <Link to={`/scoreboard/nfl/${game.eventId}`}>
+            <span className="card" style={{"display": "block"}}>
+              <NFLGame key={game.eventId} {...game} />
+            </span>
+          </Link>
         ))
       }
     </Fragment>
@@ -104,7 +108,11 @@ function NFLScoreboard() {
     <Fragment>
       {
         livegameData.getNFLLivegames.map(game => (
-          <NFLGame key={game.id} {...game} />
+          <Link to={`/scoreboard/nfl/${game.eventId}`}>
+            <span className="card" style={{"display": "block"}}>
+              <NFLGame key={game.eventId} {...game} />
+            </span>
+          </Link>
         ))
       }
     </Fragment>
@@ -113,7 +121,11 @@ function NFLScoreboard() {
     <Fragment>
       {
         postgameData.getNFLPostgames.map(game => (
-          <NFLGame key={game.id} {...game} />
+          <Link to={`/scoreboard/nfl/${game.eventId}`}>
+            <span className="card" style={{"display": "block"}}>
+              <NFLGame key={game.eventId} {...game} />
+            </span>
+          </Link>
         ))
       }
     </Fragment>
@@ -125,6 +137,7 @@ const FETCH_NFL_PREGAMES = gql`
 {
     getNFLPregames {
       id
+      eventId
       state
       stateDetails
       homeFullName
@@ -150,12 +163,17 @@ const FETCH_NFL_LIVEGAMES = gql`
 {
    getNFLLivegames {
     id
+    eventId
     state
     stateDetails
     homeFullName
     homeScore
+    homeLogo
+    homeAbbreviation
     awayFullName
     awayScore
+    awayLogo
+    awayAbbreviation
     time
     period
     lastPlay
@@ -174,6 +192,7 @@ const FETCH_NFL_POSTGAMES = gql`
 {
    getNFLPostgames {
     id
+    eventId
     state
     stateDetails
     homeFullName

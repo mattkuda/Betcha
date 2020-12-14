@@ -10,7 +10,6 @@ const Livegame = require('../models/game.live');
 const Postgame = require('../models/game.post');
 const Play = require('../models/Play');
 
-
 //import libraries
 const fetch = require('node-fetch');
 
@@ -120,14 +119,14 @@ class GameService {
 
     for (const game of games) {
 
-      const gameExists = await Pregame.exists({ _id: game.id });
+      const gameExists = await Pregame.exists({ eventId: game.id });
 
       if (gameExists === false && this.elementExists(game.competitions[0], "odds")) {
 
         console.log("Adding new upcoming game...")
 
         const contents = {
-          _id: game.id,
+          eventId: game.id,
           state: 'pre',
           stateDetails: game.status.type.name,
           sport: sport,
@@ -191,7 +190,7 @@ class GameService {
       else {
 
         if (updatePregames && this.elementExists(game.competitions[0], "odds")) {
-          Pregame.findByIdAndUpdate(game.id, {
+          Pregame.findOneAndUpdate({ eventId: game.id }, {
             spread: game.competitions[0].odds[0].details,
             overUnder: game.competitions[0].odds[0].overUnder
           }, (err, result) => {
@@ -218,7 +217,7 @@ class GameService {
       //   possessionTeam = game.competitions[0].competitors[1].team.abbreviation;
       // }
 
-      const gameExists = await Livegame.exists({ _id: game.id });
+      const gameExists = await Livegame.exists({ eventId: game.id });
 
       if (gameExists === false) {
 
@@ -228,7 +227,7 @@ class GameService {
         let localOU = "";
 
         //find game in pregame DB
-        Pregame.findById(game.id, (err, result) => {
+        Pregame.findOne({ eventId: game.id }, (err, result) => {
           if (err) {
             console.log(err);
             return
@@ -241,14 +240,14 @@ class GameService {
           }
         });
 
-        Pregame.findByIdAndDelete(game.id, (err, result) => {
+        Pregame.findOneAndDelete({ eventId: game.id }, (err, result) => {
           if (err) {
             console.log(err);
           }
         });
 
         const contents = {
-          _id: game.id,
+          eventId: game.id,
           state: 'in',
           stateDetails: game.status.type.name,
           sport: sport,
@@ -356,7 +355,7 @@ class GameService {
 
         switch(league) {
           case 'nfl':
-            Livegame.findByIdAndUpdate(game.id, {
+            Livegame.findOneAndUpdate({ eventId: game.id }, {
               homeScore: game.competitions[0].competitors[0].score,
               awayScore: game.competitions[0].competitors[1].score,
               time: game.competitions[0].status.displayClock,
@@ -377,7 +376,7 @@ class GameService {
             break;
 
           case 'college-football':
-            Livegame.findByIdAndUpdate(game.id, {
+            Livegame.findOneAndUpdate({ eventId: game.id }, {
               homeScore: game.competitions[0].competitors[0].score,
               awayScore: game.competitions[0].competitors[1].score,
               time: game.competitions[0].status.displayClock,
@@ -401,7 +400,7 @@ class GameService {
 
           case 'mens-college-basketball':
 
-              Livegame.findByIdAndUpdate(game.id, {
+              Livegame.findOneAndUpdate({ eventId: game.id }, {
                 homeScore: game.competitions[0].competitors[0].score,
                 awayScore: game.competitions[0].competitors[1].score,
                 time: game.competitions[0].status.displayClock,
@@ -421,7 +420,7 @@ class GameService {
         }
 
         //look to see if current play has been logged in DB
-        const playExists = await Play.exists({ _id: game.competitions[0].situation.lastPlay.id });
+        const playExists = await Play.exists({ playId: game.competitions[0].situation.lastPlay.id });
 
         //if not, create the play and add to the Play collection
         if (playExists === false) {
@@ -429,7 +428,7 @@ class GameService {
           console.log("Adding new play...");
 
           const playData = {
-            _id: game.competitions[0].situation.lastPlay.id,
+            playId: game.competitions[0].situation.lastPlay.id,
             description: game.competitions[0].situation.lastPlay.text,
             eventId: game.id
           };
@@ -488,7 +487,7 @@ class GameService {
 
     for (const game of games) {
 
-      const gameExists = await Postgame.exists({ _id: game.id });
+      const gameExists = await Postgame.exists({ eventId: game.id });
 
       if (gameExists === false && game.status.type.name !== "STATUS_CANCELED" && game.status.type.name !== "STATUS_POSTPONED") {
 
@@ -498,7 +497,7 @@ class GameService {
         let localOU = "";
 
         //find game in livegame collection
-        Livegame.findById(game.id, (err, result) => {
+        Livegame.findOne({ eventId: game.id }, (err, result) => {
           if (err) {
             console.log(err);
             return
@@ -511,14 +510,14 @@ class GameService {
           }
         });
 
-        Livegame.findByIdAndDelete(game.id, (err, result) => {
+        Livegame.findOneAndDelete({ eventId: game.id }, (err, result) => {
           if (err) {
             console.log(err);
           }
         });
 
         const contents = {
-          _id: game.id,
+          eventId: game.id,
           state: 'post',
           stateDetails: game.status.type.name,
           sport: sport,

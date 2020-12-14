@@ -28,4 +28,4 @@ mongoose
 
 //start game service here
 //NOTE: COMMENT OUT WHEN YOU DONT WANT IT UPDATED
-//new myGameService().run();
+new myGameService().run();

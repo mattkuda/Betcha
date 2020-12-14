@@ -82,7 +82,47 @@ class NFLGame extends Component {
 
       return (
         <div>
-          Live games!
+          <Container textAlign='center' className='scoreboard'>
+            <Grid rows={3}>
+              <Grid.Row>
+                <Grid columns={3}>
+                  <Grid.Column>
+                    <Image centered verticalAlign='middle' src={this.props.awayLogo} size='tiny'/>
+                  </Grid.Column>
+                  <Grid.Column>
+                    <p>{this.props.period}</p>
+                    <p>{this.props.time}</p>
+                  </Grid.Column>
+                  <Grid.Column>
+                  <Image centered verticalAlign='middle' src={this.props.homeLogo} size='tiny'/>
+                  </Grid.Column>
+                </Grid>
+              </Grid.Row>
+              <Grid.Row>
+                <Grid columns={3}>
+                  <Grid.Column>
+                  <p>{this.props.awayAbbreviation}</p>
+                  <p>{this.props.awayScore}</p>
+                  </Grid.Column>
+                  <Grid.Column>
+                    <p>{this.props.specificData.down} and {this.props.specificData.distance} at the {this.props.specificData.yardLine}</p>
+                  </Grid.Column>
+                  <Grid.Column>
+                    <p>{this.props.homeAbbreviation}</p>
+                    <p>{this.props.homeScore}</p>
+                  </Grid.Column>
+                </Grid>
+              </Grid.Row>
+              <Grid.Row>
+                <Grid columns={1}>
+                  <Grid.Column>
+                    <p>{this.props.lastPlay}</p>
+                  </Grid.Column>
+                </Grid>
+              </Grid.Row>
+            </Grid>
+          </Container>
+
         </div>
       )
 

@@ -87,6 +87,7 @@ module.exports = gql`
 
   type NFLPregame {
     id: ID!,
+    eventId: String!,
     state: String!,
     stateDetails: String!,
     sport: String!
@@ -109,6 +110,7 @@ module.exports = gql`
   }
   type NCAAFPregame {
     id: ID!,
+    eventId: String!,
     state: String!,
     stateDetails: String!,
     sport: String!
@@ -131,6 +133,7 @@ module.exports = gql`
   }
   type NCAABMensPregame {
     id: ID!,
+    eventId: String!,
     state: String!,
     stateDetails: String!,
     sport: String!
@@ -155,6 +158,7 @@ module.exports = gql`
 
   type NFLLivegame {
     id: ID!,
+    eventId: String!,
     state: String!,
     stateDetails: String!,
     sport: String!
@@ -182,6 +186,7 @@ module.exports = gql`
   }
   type NCAAFLivegame {
     id: ID!,
+    eventId: String!,
     state: String!,
     stateDetails: String!,
     sport: String!
@@ -209,6 +214,7 @@ module.exports = gql`
   }
   type NCAABMensLivegame {
     id: ID!,
+    eventId: String!,
     state: String!,
     stateDetails: String!,
     sport: String!
@@ -238,6 +244,7 @@ module.exports = gql`
 
   type NFLPostgame {
     id: ID!,
+    eventId: String!,
     state: String!,
     stateDetails: String!,
     sport: String!
@@ -261,6 +268,7 @@ module.exports = gql`
   }
   type NCAAFPostgame {
     id: ID!,
+    eventId: String!,
     state: String!,
     stateDetails: String!,
     sport: String!
@@ -285,6 +293,7 @@ module.exports = gql`
   }
   type NCAABMensPostgame {
     id: ID!,
+    eventId: String!,
     state: String!,
     stateDetails: String!,
     sport: String!
@@ -331,6 +340,7 @@ module.exports = gql`
 
   type FootballPlay {
     id: ID!,
+    playId: String!,
     description: String!,
     eventId: ID!,
     specificData: FootballPlayData
@@ -338,6 +348,7 @@ module.exports = gql`
 
   type NCAABMensPlay {
     id: ID!,
+    playId: String!,
     description: String!,
     eventId: ID!,
     specificData: NCAABMensPlayData
@@ -361,12 +372,12 @@ module.exports = gql`
     getNCAABMensPregames: [NCAABMensPregame]
     getNCAABMensLivegames: [NCAABMensLivegame]
     getNCAABMensPostgames: [NCAABMensPostgame]
-    getPlaysInNFLGame(gameId: ID!): [FootballPlay],
-    getPlaysInNCAAFGame(gameId: ID!): [FootballPlay],
-    getPlaysInNCAABMensGame(gameId: ID!): [NCAABMensPlay]
-    getPlaysInNFLGameInPeriod(gameId: ID!, period: Int!): [FootballPlay],
-    getPlaysInNCAAFGameInPeriod(gameId: ID!, period: Int!): [FootballPlay],
-    getPlaysInNCAABMensGameInPeriod(gameId: ID!, period: Int!): [NCAABMensPlay]
+    getPlaysInNFLGame(gameId: String!): [FootballPlay],
+    getPlaysInNCAAFGame(gameId: String!): [FootballPlay],
+    getPlaysInNCAABMensGame(gameId: String!): [NCAABMensPlay]
+    getPlaysInNFLGameInPeriod(gameId: String!, period: Int!): [FootballPlay],
+    getPlaysInNCAAFGameInPeriod(gameId: String!, period: Int!): [FootballPlay],
+    getPlaysInNCAABMensGameInPeriod(gameId: String!, period: Int!): [NCAABMensPlay]
   }
 
   type Mutation {

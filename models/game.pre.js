@@ -3,8 +3,10 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
+//will need to set gameId as something separate from _id
+
 const gamePreSchema = new Schema({
-  _id: String,
+  eventId: String,
   state: String,
   stateDetails: String,
   sport: String,

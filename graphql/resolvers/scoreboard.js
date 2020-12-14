@@ -2,6 +2,7 @@
 const Pregame = require("../../models/game.pre");
 const Livegame = require("../../models/game.live");
 const Postgame = require("../../models/game.post");
+const Play = require("../../models/Play");
 
 module.exports = {
   Query: {
@@ -82,5 +83,13 @@ module.exports = {
         throw new Error(err);
       }
     },
+    async getPlaysInNFLGame(eventId) {
+      try {
+        const plays = await Play.find({eventId: eventId});
+        return plays;
+      } catch (err) {
+        throw new Error(err);
+      }
+    }
   }
 };
