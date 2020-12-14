@@ -8,14 +8,12 @@ import { AuthContext } from "../context/auth";
 import LikeButton from "./LikeButton";
 import DeleteButton from "./DeleteButton";
 
+import { FETCH_POSTS_QUERY } from "../util/graphql";
+
 function PostCard({
-  post: { body, betType, betAmount, gamePre, createdAt, id, username, likeCount, commentCount, likes } = {},
+  post: { body, betType, betAmount, gameId, createdAt, id, username, likeCount, commentCount, likes } = {},
 }) {
   const { user } = useContext(AuthContext);
-
-  function commentOnPost() {
-    console.log("comment on Post");
-  }
 
   return (
     <Card fluid>
@@ -29,8 +27,10 @@ function PostCard({
         <Card.Meta as={Link} to={`/posts/${id}`}>
           {moment(createdAt).fromNow(true)}
         </Card.Meta>
-        <Card.Description>{body}</Card.Description>
-        <Card.Description style={{fontStyle: "italic"}}>{betAmount}</Card.Description>
+        <Card.Description>body: {body}</Card.Description>
+        <Card.Description style={{fontStyle: "italic"}}>gameId: {gameId}</Card.Description>
+        <Card.Description style={{fontStyle: "italic"}}>betType: {betType}</Card.Description>
+        <Card.Description style={{fontStyle: "italic"}}>betAmount: {betAmount}</Card.Description>
       </Card.Content>
       <Card.Content extra>
         <LikeButton user={user} post={{ id, likes, likeCount }} />

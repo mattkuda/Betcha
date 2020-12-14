@@ -49,7 +49,7 @@ function GameSelection(props) {
     <>
       <Grid columns="two">
         <Grid.Row>
-          {loading ? (
+          {loading2 ? (
             <h1>Loading Games...</h1>
           ) : (
             //Transition group adds animation for when new post is added/deleted
@@ -62,8 +62,9 @@ function GameSelection(props) {
                   >
                     <GameCard
                       gameData={game}
-                      pickGame={props.chooseGame}
-                      pickBet={props.chooseBet}
+                      pickGameId={props.chooseGameId}
+                      pickBetType={props.chooseBetType}
+                      pickBetAmount={props.chooseBetAmount}
                     />
                   </Grid.Column>
                 ))}

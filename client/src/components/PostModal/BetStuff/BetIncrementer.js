@@ -7,9 +7,9 @@ class BetIncrementer extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      count: parseInt(props.defValue.split(" ")[1].replace("+", "")),
+      count: parseFloat(props.defValue).toFixed(1),
     };
-    this.regularSpread = parseInt(props.defValue.split(" ")[1].replace("+", ""));
+    this.regularSpread = props.defValue;
 
     this.handleChange = this.handleChange.bind(this);
     this.increment = this.increment.bind(this);
@@ -17,37 +17,48 @@ class BetIncrementer extends Component {
     this.reset = this.reset.bind(this);
   }
 
-
   increment() {
     this.setState({
-      count: this.state.count + 0.5,
+      count: (parseFloat(this.state.count) + 0.5).toFixed(1),
     });
+     console.log("1: " + this.state.count);
+    this.props.finalizeBet(parseFloat(this.state.count));
+    console.log("2");
   }
   decrement() {
     this.setState({
-      count: this.state.count - 0.5,
+      count: (parseFloat(this.state.count) - 0.5).toFixed(1),
     });
+    console.log("1: " + this.state.count);
+    this.props.finalizeBet(parseFloat(this.state.count));
+    console.log("2");
   }
   reset() {
     this.setState({
-      count: this.regularSpread,
+      count: parseFloat(this.state.count).toFixed(1),
     });
+     console.log("1: " + this.state.count);
+    this.props.finalizeBet(parseFloat(this.state.count));
+    console.log("2");
   }
   handleChange(event) {
-    this.setState({ count: Number(event.target.value) });
+    this.setState({ count: event.target.value });
+     console.log("1: " + this.state.count);
+    this.props.finalizeBet(parseFloat(this.state.count));
+    console.log("2");
   }
 
   render() {
     return (
       <div className="BI">
         <div className="jumbotron">
-     
           <button onClick={this.decrement}>
             <i className="fas fa-minus"></i>
           </button>
           <form style={{ display: "inline-block" }}>
             <input
               className="jumbotron__window"
+              type="number"
               style={{ display: "inline-block" }}
               value={this.state.count}
               onChange={this.handleChange}

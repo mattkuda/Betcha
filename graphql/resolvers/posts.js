@@ -1,18 +1,14 @@
-
-import {getGamePre} from './scoreboard';
 const { AuthenticationError } = require("apollo-server");
 
 const Post = require("../../models/Post");
+
 const checkAuth = require("../../util/check-auth");
 
 module.exports = {
   Query: {
     async getPosts() {
       try {
-        const posts = await Post.find().sort({ createdAt: -1 });
-        post.array.forEach(post => {
-          post.gamePre = getGamePre(post.gameId)
-        });
+        const posts = await Post.find().sort({ createdAt: -1 }); //TODO: .populate(gameId)
         return posts;
       } catch (err) {
         throw new Error(err);
@@ -22,7 +18,6 @@ module.exports = {
       try {
         const post = await Post.findById(postId);
         if (post) {
-          post.gamePre = getGamePre(post.gameId)
           return post;
         } else {
           throw new Error("Post not found");
@@ -36,18 +31,31 @@ module.exports = {
 
   
   Mutation: {
-    async createPost(_, { body, betType, betAmount, gamePre }, context) {
+    async createPost(_, { body, betType, betAmount, gameId }, context) {
       const user = checkAuth(context);
 
       if (body.trim() === '') {
         throw new Error('Post body must not be empty');
       }
+
+      if (betType.trim() === '') {
+        throw new Error('Post betType must not be empty');
+      }
+
+      if (betAmount.trim() === '') {
+        throw new Error('Post betAmount must not be empty');
+      }
+
+      if (gameId.trim() === '') {
+        throw new Error('Post gameId must not be empty');
+      }
+
       //If we get here, that means no error was thrown during the checkAuth phase
       const newPost = new Post({
         body, //already destructured at the async line (above)
         betType, 
         betAmount, 
-        gamePre, //already destructured at the async line (above)
+        gameId, //already destructured at the async line (above)
         user: user.id,
         username: user.username,
         createdAt: new Date().toISOString(),

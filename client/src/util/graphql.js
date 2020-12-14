@@ -7,7 +7,7 @@ export const FETCH_POSTS_QUERY = gql`
       body
       betType
       betAmount
-      gamePre
+      gameId
       createdAt
       username
       likeCount

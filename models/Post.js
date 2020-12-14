@@ -1,14 +1,14 @@
 const { model, Schema } = require('mongoose');
-const Schema = mongoose.Schema;
+const mongoose = require('mongoose');
+
 
 const postSchema = new Schema({
   body: String,
   username: String,
   createdAt: String,
   betType: String,
-  betAmount: Number,
-  ganeId: String,
-  gamePre: mongoose.Mixed,
+  betAmount: String,
+  gameId: String,
   comments: [
     {
       body: String,

@@ -5,8 +5,6 @@ import moment from "moment";
 
 import { betTimeFormat } from "../../../util/betTimeFormat";
 
-//onClick={props.pickLeague(props.name)}
-
 function GameCard(props) {
   var spreadNumber = props.gameData.spread.replace("-", "").split(" ")[1];
   var homeSpread = "";
@@ -21,11 +19,15 @@ function GameCard(props) {
     awaySpread = "-" + spreadNumber;
   }
 
-  function handleClick(gameId, bet) {
-    props.pickGame(gameId);
-    props.pickBet(bet);
+  function handleClick(gameId, betType, betAmount) {
+    props.pickGameId(gameId);
+    props.pickBetType(betType);
+    props.pickBetAmount(betAmount);
+
+
     console.log(gameId);
-    console.log(bet);
+    console.log(betType);
+    console.log(betAmount);
   }
 
   return (
@@ -35,7 +37,7 @@ function GameCard(props) {
           <Image floated="left" size="mini" src={props.gameData.awayLogo} />
           {props.gameData.awayAbbreviation}
           <Button floated="right" 
-            onClick={() => handleClick(props.gameData._id, props.gameData.awayAbbreviation + " " + awaySpread)}
+            onClick={() => handleClick(props.gameData.id, "AWAY", parseFloat(awaySpread.replace("+", "")))}
             style={{ display: "inline-block" }}>
             {awaySpread}
           </Button>
@@ -48,7 +50,7 @@ function GameCard(props) {
           {props.gameData.homeAbbreviation}
           <Button
             floated="right"
-            onClick={() => handleClick(props.gameData._id, props.gameData.homeAbbreviation + " " + homeSpread)}
+            onClick={() => handleClick(props.gameData.id, "HOME",parseFloat(homeSpread.replace("+", "")))}
             style={{ display: "inline-block" }}
           >
             {homeSpread}
