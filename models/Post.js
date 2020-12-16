@@ -8,7 +8,10 @@ const postSchema = new Schema({
   createdAt: String,
   betType: String,
   betAmount: String,
-  gameId: String,
+  gameId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'gamePre'
+  },
   comments: [
     {
       body: String,

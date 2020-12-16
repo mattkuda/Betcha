@@ -9,28 +9,48 @@ import LikeButton from "./LikeButton";
 import DeleteButton from "./DeleteButton";
 
 import { FETCH_POSTS_QUERY } from "../util/graphql";
+import { betDescFormat } from "../util/Extensions/betDescFormat";
+import { betTimeFormat } from "../util/Extensions/betTimeFormat";
 
 function PostCard({
-  post: { body, betType, betAmount, gameId, createdAt, id, username, likeCount, commentCount, likes } = {},
+  post: {
+    body,
+    betType,
+    betAmount,
+    gameId,
+    createdAt,
+    id,
+    username,
+    likeCount,
+    commentCount,
+    likes,
+  } = {},
 }) {
   const { user } = useContext(AuthContext);
 
   return (
-    <Card fluid>
+    <Card fluid as={Link} to={`/posts/${id}`} floated="right">
       <Card.Content>
         <Image
           floated="right"
           size="mini"
           src="https://react.semantic-ui.com/images/avatar/large/matthew.png"
         />
-        <Card.Header>{username}</Card.Header>
-        <Card.Meta as={Link} to={`/posts/${id}`}>
-          {moment(createdAt).fromNow(true)}
-        </Card.Meta>
-        <Card.Description>body: {body}</Card.Description>
-        <Card.Description style={{fontStyle: "italic"}}>gameId: {gameId}</Card.Description>
-        <Card.Description style={{fontStyle: "italic"}}>betType: {betType}</Card.Description>
-        <Card.Description style={{fontStyle: "italic"}}>betAmount: {betAmount}</Card.Description>
+        <Card.Header>
+          @{username} ·{" "}
+          <div style={{ display: "inline-block", color: "gray" }}>
+            {moment(createdAt).fromNow(true)} ago
+          </div>
+        </Card.Header>
+        {/* Condtional Game formatting based on fields */}
+        <Card.Description style={{ fontStyle: "italic" }}>
+          {betDescFormat(betType, betAmount, gameId)}
+        </Card.Description>
+
+        <Card.Description style={{ fontStyle: "italic" }}>
+        {gameId.awayAbbreviation} @ {gameId.homeAbbreviation}, {betTimeFormat(gameId.startTime)}
+        </Card.Description>
+        <Card.Description>This is the body: {body}</Card.Description>
       </Card.Content>
       <Card.Content extra>
         <LikeButton user={user} post={{ id, likes, likeCount }} />

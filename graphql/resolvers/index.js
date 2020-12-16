@@ -1,4 +1,5 @@
 const postsResolvers = require("./posts");
+const leaguesResolvers = require("./leagues");
 const usersResolvers = require("./users");
 const commentsResolvers = require("./comments");
 const scoreboardResolvers = require("./scoreboard");
@@ -13,7 +14,8 @@ module.exports = {
   Query: {
     ...postsResolvers.Query,
     ...scoreboardResolvers.Query,
-    ...playsResolvers.Query
+    ...playsResolvers.Query,
+    ...leaguesResolvers.Query
   },
   Mutation: {
     ...usersResolvers.Mutation,

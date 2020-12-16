@@ -7,7 +7,20 @@ module.exports = gql`
     body: String!
     betType: String!
     betAmount: String!
-    gameId: String!
+    gameId: gamePre!
+    createdAt: String!
+    username: String!
+    comments: [Comment]!
+    likes: [Like]!
+    commentCount: Int!
+    likeCount: Int!
+  }
+  type PostPOP {
+    id: ID!
+    body: String!
+    betType: String!
+    betAmount: String!
+    gameId: [gamePre]
     createdAt: String!
     username: String!
     comments: [Comment]!
@@ -357,7 +370,14 @@ module.exports = gql`
     specificData: NCAABMensPlayData
   }
 
-  type BetInfoPre {
+  type League {
+    id: ID!,
+    displayName: String!,
+    leagueName: String!,
+    image: String!
+  }
+
+  type gamePre {
     id: ID!,
     state: String!,
     stateDetails: String!,
@@ -397,7 +417,9 @@ module.exports = gql`
   }
   type Query {
     getPosts: [Post]
+    getLeagues: [League]
     getPost(postId: ID!): Post
+    getAllPregames: [gamePre]
     getNFLPregames: [NFLPregame]
     getNFLLivegames: [NFLLivegame]
     getNFLPostgames: [NFLPostgame]
@@ -412,7 +434,7 @@ module.exports = gql`
     getPlaysInNCAABMensGame(gameId: String!): [NCAABMensPlay]
     getPlaysInNFLGameInPeriod(gameId: String!, period: Int!): [FootballPlay],
     getPlaysInNCAAFGameInPeriod(gameId: String!, period: Int!): [FootballPlay],
-    getPlaysInNCAABMensGameInPeriod(gameId: String!, period: Int!): [NCAABMensPlay]
+    getPlaysInNCAABMensGameInPeriod(gameId: String!, period: Int!): [NCAABMensPlay],
   }
 
   type Mutation {
