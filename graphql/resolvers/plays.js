@@ -5,6 +5,15 @@ const Postgame = require("../../models/game.post");
 
 module.exports = {
   Query: {
+
+    async getPlay(_, { playId }) {
+      try {
+        let play = await Play.find({playId: playId});
+        return play;
+      } catch (err) {
+        throw new Error(err);
+      }
+    },
     async getPlaysInNFLGame(_, { gameId }) {
       try {
         let plays = await Play.find({eventId: gameId});
@@ -31,9 +40,7 @@ module.exports = {
     },
     async getPlaysInNFLGameInPeriod(_, { gameId, period }) {
       try {
-
         //may want to add a check for invalid period entry
-
         let plays = await Play.find({eventId: gameId, 'specificData.quarter': period});
         return plays;
       } catch (err) {

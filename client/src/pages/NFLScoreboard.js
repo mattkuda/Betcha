@@ -5,6 +5,7 @@ import gql from "graphql-tag";
 import { Input, Menu } from 'semantic-ui-react';
 //import { HashLink as Link } from 'react-router-hash-link';
 import NFLGame from "../components/GameTypes/NFLGame";
+import './scoreboard.css';
 
 
 /*
@@ -116,7 +117,7 @@ function NFLScoreboard() {
       {
         livegameData.getNFLLivegames.map(game => (
           <Link to={`/scoreboard/nfl/${game.eventId}`}>
-            <span className="card" style={{"display": "block"}}>
+            <span className="card" class="noDecoration" style={{"display": "block"}}>
               <NFLGame key={game.eventId} {...game} />
             </span>
           </Link>
