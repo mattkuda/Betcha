@@ -96,8 +96,11 @@ function PostModal(props) {
           )}
 
           {values.xleagueId !== "" && values.gameId !== "" ? (
-            <><BetSelection defValue={values.xdefBetAmount} chooseBetAmount={selectBetAmount} betValue = {values.betAmount} />
-            <Form.Input
+            <BetSelection defValue={values.xdefBetAmount} chooseBetAmount={selectBetAmount} betValue = {values.betAmount} />
+          ) : (
+            <></>
+          )}
+          <><Form.Input
             placeholder="Why are you taking this bet?"
             name="body"
             onChange={onChange}
@@ -107,10 +110,6 @@ function PostModal(props) {
           <Button type="submit" color="teal" onClick={() => console.log(values)}>
             Submit
           </Button></>
-          ) : (
-            <></>
-          )}
-         
         </Form.Field>
       </Form>
      

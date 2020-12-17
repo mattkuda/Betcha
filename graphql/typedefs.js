@@ -15,12 +15,12 @@ module.exports = gql`
     commentCount: Int!
     likeCount: Int!
   }
-  type PostPOP {
+  type PostCREATE {
     id: ID!
     body: String!
     betType: String!
     betAmount: String!
-    gameId: [gamePre]
+    gameId: ID!
     createdAt: String!
     username: String!
     comments: [Comment]!
