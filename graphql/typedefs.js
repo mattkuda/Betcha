@@ -47,6 +47,13 @@ module.exports = gql`
     createdAt: String!
   }
 
+  type React {
+    id: ID!,
+    user: User!,
+    play: Play!,
+    body: String!,
+    createdAt: String!
+  }
 
   type NFLPregameMixedData {
     weatherDescription: String
@@ -333,6 +340,12 @@ module.exports = gql`
     specificData: NCAABMensPostgameMixedData
   }
 
+  type Play {
+    id: ID!,
+    playId: String!,
+    description: String!,
+    eventId: ID!,
+  }
 
   type FootballPlayData {
     homeScore: Int!,
@@ -401,12 +414,12 @@ module.exports = gql`
 
   # TODO
   #type BetInfoLive {
-    
+
   # }
 
   # TODO
   #type BetInfoPost {
-    
+
   # }
 
   input RegisterInput {
@@ -429,12 +442,16 @@ module.exports = gql`
     getNCAABMensPregames: [NCAABMensPregame]
     getNCAABMensLivegames: [NCAABMensLivegame]
     getNCAABMensPostgames: [NCAABMensPostgame]
+    getPlay(playId: String!): Play
     getPlaysInNFLGame(gameId: String!): [FootballPlay],
     getPlaysInNCAAFGame(gameId: String!): [FootballPlay],
     getPlaysInNCAABMensGame(gameId: String!): [NCAABMensPlay]
     getPlaysInNFLGameInPeriod(gameId: String!, period: Int!): [FootballPlay],
     getPlaysInNCAAFGameInPeriod(gameId: String!, period: Int!): [FootballPlay],
-    getPlaysInNCAABMensGameInPeriod(gameId: String!, period: Int!): [NCAABMensPlay],
+    getPlaysInNCAABMensGameInPeriod(gameId: String!, period: Int!): [NCAABMensPlay]
+    getAllReacts: [React]
+    getReactsForPlay(playId: String!): [React]
+    getReactsForUser(userId: String!): [React]
   }
 
   type Mutation {
@@ -445,6 +462,7 @@ module.exports = gql`
     createComment(postId: ID!, body: String!): Post!
     deleteComment(postId: ID!, commentId: ID!): Post!
     likePost(postId: ID!): Post!
+    createReact(body: String!, playId: String!): React!
   }
 
   type Subscription{

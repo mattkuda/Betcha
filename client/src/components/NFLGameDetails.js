@@ -36,14 +36,45 @@ function NFLGameDetails(props) {
   const handleItemClick = (e, { name }) => setActiveItem(name);
 
   let myGameId = props.match.params.eventId;
+  let myPeriod = 1;
 
-  const { loading, error, data } = useQuery(FETCH_PLAYS_IN_NFL_GAME, {
-    variables: { myGameId },
+  const { loading: periodOneLoading, error: periodOneError, data: periodOneData } = useQuery(FETCH_PLAYS_IN_NFL_GAME_IN_PERIOD, {
+    variables: { myGameId, myPeriod },
     pollInterval: 30000,
   });
 
-  if (loading) return 'Loading...';
-  if (error) return `Error! ${error.message}`;
+  myPeriod+=1;
+
+  const { loading: periodTwoLoading, error: periodTwoError, data: periodTwoData } = useQuery(FETCH_PLAYS_IN_NFL_GAME_IN_PERIOD, {
+    variables: { myGameId, myPeriod },
+    pollInterval: 30000,
+  });
+
+  myPeriod+=1;
+
+  const { loading: periodThreeLoading, error: periodThreeError, data: periodThreeData } = useQuery(FETCH_PLAYS_IN_NFL_GAME_IN_PERIOD, {
+    variables: { myGameId, myPeriod },
+    pollInterval: 30000,
+  });
+
+  myPeriod+=1;
+
+  const { loading: periodFourLoading, error: periodFourError, data: periodFourData } = useQuery(FETCH_PLAYS_IN_NFL_GAME_IN_PERIOD, {
+    variables: { myGameId, myPeriod },
+    pollInterval: 30000,
+  });
+
+  if (periodOneLoading) return 'Loading...';
+  if (periodOneError) return `Error! ${periodOneError.message}`;
+
+  if (periodTwoLoading) return 'Loading...';
+  if (periodTwoError) return `Error! ${periodTwoError.message}`;
+
+  if (periodThreeLoading) return 'Loading...';
+  if (periodThreeError) return `Error! ${periodThreeError.message}`;
+
+  if (periodFourLoading) return 'Loading...';
+  if (periodFourError) return `Error! ${periodFourError.message}`;
 
   return (
     <div>
@@ -83,9 +114,38 @@ function NFLGameDetails(props) {
     </Menu>
 
     <h1>Plays In Game</h1>
+
+    <h3>Q4</h3>
     <Fragment>
       {
-        data.getPlaysInNFLGame.map(play => (
+        periodFourData.getPlaysInNFLGameInPeriod.map(play => (
+          <p>{play.description}</p>
+        ))
+      }
+    </Fragment>
+
+    <h3>Q3</h3>
+    <Fragment>
+      {
+        periodThreeData.getPlaysInNFLGameInPeriod.reverse().map(play => (
+          <p>{play.description}</p>
+        ))
+      }
+    </Fragment>
+
+    <h3>Q2</h3>
+    <Fragment>
+      {
+        periodTwoData.getPlaysInNFLGameInPeriod.map(play => (
+          <p>{play.description}</p>
+        ))
+      }
+    </Fragment>
+
+    <h3>Q1</h3>
+    <Fragment>
+      {
+        periodOneData.getPlaysInNFLGameInPeriod.map(play => (
           <p>{play.description}</p>
         ))
       }
@@ -94,9 +154,9 @@ function NFLGameDetails(props) {
   )
 }
 
-const FETCH_PLAYS_IN_NFL_GAME = gql`
-  query($myGameId: String!) {
-    getPlaysInNFLGame(gameId: $myGameId) {
+const FETCH_PLAYS_IN_NFL_GAME_IN_PERIOD = gql`
+  query($myGameId: String!, $myPeriod: Int!) {
+    getPlaysInNFLGameInPeriod(gameId: $myGameId, period: $myPeriod) {
       description
       specificData {
         homeScore

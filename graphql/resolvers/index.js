@@ -4,6 +4,7 @@ const usersResolvers = require("./users");
 const commentsResolvers = require("./comments");
 const scoreboardResolvers = require("./scoreboard");
 const playsResolvers = require("./plays");
+const reactResolvers = require("./react");
 
 module.exports = {
   //Any query or mutation that returns a post will go thru this.
@@ -15,14 +16,19 @@ module.exports = {
     ...postsResolvers.Query,
     ...scoreboardResolvers.Query,
     ...playsResolvers.Query,
-    ...leaguesResolvers.Query
+    ...leaguesResolvers.Query,
+    ...reactResolvers.Query
   },
   Mutation: {
     ...usersResolvers.Mutation,
     ...postsResolvers.Mutation,
     ...commentsResolvers.Mutation,
+    ...reactResolvers.Mutation
   },
   Subscription: {
     ...postsResolvers.Subscription,
   },
+  React: {
+    ...reactResolvers.React
+  }
 };
