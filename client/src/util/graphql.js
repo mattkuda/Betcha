@@ -7,7 +7,20 @@ export const FETCH_POSTS_QUERY = gql`
       body
       betType
       betAmount
-      gameId
+      gameId {
+        homeFullName
+        awayFullName
+        homeRecord
+        awayRecord
+        awayLogo
+        homeLogo
+        awayAbbreviation
+        homeAbbreviation
+        startTime
+        broadcasts
+        spread
+        overUnder
+      }
       createdAt
       username
       likeCount
@@ -29,6 +42,7 @@ export const FETCH_NCCABMENS_GAMEPRES_QUERY = gql`
   {
     getNCAABMensPregames {
       id
+      eventId
       state
       stateDetails
       sport
@@ -46,6 +60,67 @@ export const FETCH_NCCABMENS_GAMEPRES_QUERY = gql`
       startTime
       spread
       overUnder
+    }
+  }
+`;
+
+export const FETCH_NCAAF_PREGAMES = gql`
+  {
+    getNCAAFPregames {
+      id
+      state
+      stateDetails
+      homeFullName
+      awayFullName
+      homeRecord
+      awayRecord
+      awayLogo
+      homeLogo
+      awayAbbreviation
+      homeAbbreviation
+      startTime
+      broadcasts
+      spread
+      overUnder
+      specificData {
+        weatherDescription
+        homeRank
+        awayRank
+      }
+    }
+  }
+`;
+
+
+export const FETCH_ALL_PREGAMES = gql`
+  {
+    getAllPregames {
+      id
+      league
+      homeFullName
+      awayFullName
+      homeRecord
+      awayRecord
+      awayLogo
+      homeLogo
+      awayAbbreviation
+      homeAbbreviation
+      startTime
+      broadcasts
+      spread
+      overUnder
+    }
+  }
+`;
+
+
+export const FETCH_LEAGUES_QUERY = gql`
+  {
+    getLeagues {
+      id
+      displayName
+      leagueName
+      image
     }
   }
 `;

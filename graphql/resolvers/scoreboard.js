@@ -33,7 +33,14 @@ module.exports = {
       }
     },
 
-
+    async getAllPregames() {
+      try {
+        let pregames = await Pregame.find();
+        return pregames;
+      } catch (err) {
+        throw new Error(err);
+      }
+    },
     async getNCAAFPregames() {
       try {
         let pregames = await Pregame.find({league: "college-football"});

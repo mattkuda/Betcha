@@ -86,7 +86,7 @@ function PostModal(props) {
           )}
 
           {values.xleagueId !== "" && values.gameId === "" ? (
-            <GameSelection chooseGameId={selectGameId} chooseBetType={selectBetType} chooseBetAmount={selectxdefBetAmount} />
+            <GameSelection league={values.xleagueId} chooseGameId={selectGameId} chooseBetType={selectBetType} chooseBetAmount={selectxdefBetAmount} />
           ) : (
             <div>
               <p>The gameId is {values.gameId}</p>
@@ -96,11 +96,8 @@ function PostModal(props) {
           )}
 
           {values.xleagueId !== "" && values.gameId !== "" ? (
-            <BetSelection defValue={values.xdefBetAmount} chooseBetAmount={selectBetAmount} betValue = {values.betAmount} />
-          ) : (
-            <></>
-          )}
-          <Form.Input
+            <><BetSelection defValue={values.xdefBetAmount} chooseBetAmount={selectBetAmount} betValue = {values.betAmount} />
+            <Form.Input
             placeholder="Why are you taking this bet?"
             name="body"
             onChange={onChange}
@@ -109,7 +106,11 @@ function PostModal(props) {
           />
           <Button type="submit" color="teal" onClick={() => console.log(values)}>
             Submit
-          </Button>
+          </Button></>
+          ) : (
+            <></>
+          )}
+         
         </Form.Field>
       </Form>
      

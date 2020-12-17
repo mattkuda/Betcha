@@ -3,7 +3,7 @@ import { Card, Icon, Label, Image, Button } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 import moment from "moment";
 
-import { betTimeFormat } from "../../../util/betTimeFormat";
+import { betTimeFormat } from "../../../util/Extensions/betTimeFormat";
 
 function GameCard(props) {
   var spreadNumber = props.gameData.spread.replace("-", "").split(" ")[1];
@@ -24,7 +24,6 @@ function GameCard(props) {
     props.pickBetType(betType);
     props.pickBetAmount(betAmount);
 
-
     console.log(gameId);
     console.log(betType);
     console.log(betAmount);
@@ -36,9 +35,17 @@ function GameCard(props) {
         <div style={{ display: "inline-block" }}>
           <Image floated="left" size="mini" src={props.gameData.awayLogo} />
           {props.gameData.awayAbbreviation}
-          <Button floated="right" 
-            onClick={() => handleClick(props.gameData.id, "AWAY", parseFloat(awaySpread.replace("+", "")))}
-            style={{ display: "inline-block" }}>
+          <Button
+            floated="right"
+            onClick={() =>
+              handleClick(
+                props.gameData.id,
+                "AWAY",
+                parseFloat(awaySpread.replace("+", ""))
+              )
+            }
+            style={{ display: "inline-block" }}
+          >
             {awaySpread}
           </Button>
         </div>
@@ -50,7 +57,13 @@ function GameCard(props) {
           {props.gameData.homeAbbreviation}
           <Button
             floated="right"
-            onClick={() => handleClick(props.gameData.id, "HOME",parseFloat(homeSpread.replace("+", "")))}
+            onClick={() =>
+              handleClick(
+                props.gameData.id,
+                "HOME",
+                parseFloat(homeSpread.replace("+", ""))
+              )
+            }
             style={{ display: "inline-block" }}
           >
             {homeSpread}
@@ -58,7 +71,7 @@ function GameCard(props) {
         </div>
       </Card.Content>
       {betTimeFormat(props.gameData.startTime)}
-      <Card.Content></Card.Content>
+  
     </Card>
   );
 }

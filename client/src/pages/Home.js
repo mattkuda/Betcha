@@ -8,6 +8,7 @@ import PostForm from "../components/PostForm";
 import PostModal from "../components/PostModal/PostModal";
 import { FETCH_POSTS_QUERY } from "../util/graphql";
 
+
 function Home() {
   const { user } = useContext(AuthContext);
   const { loading, data: { getPosts: posts } = {} } = useQuery(
@@ -31,6 +32,7 @@ function Home() {
         </Grid.Row>
         <Grid.Row>
           <Button onClick={(e) => setModalOpen(true)}>Share Bet</Button>
+          <Button onClick={(e) => console.log(posts)}>Console Post</Button>
         </Grid.Row>
         <Grid.Row>
           {/* {user && (
