@@ -39,7 +39,7 @@ function GameCard(props) {
             floated="right"
             onClick={() =>
               handleClick(
-                props.gameData.id,
+                props.gameData.eventId,
                 "AWAY",
                 parseFloat(awaySpread.replace("+", ""))
               )
@@ -59,7 +59,7 @@ function GameCard(props) {
             floated="right"
             onClick={() =>
               handleClick(
-                props.gameData.id,
+                props.gameData.eventId,
                 "HOME",
                 parseFloat(homeSpread.replace("+", ""))
               )

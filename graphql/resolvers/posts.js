@@ -1,6 +1,7 @@
 const { AuthenticationError } = require("apollo-server");
 
 const Post = require("../../models/Post");
+const gamePre = require("../../models/game.pre");
 const BetInfoPre = require("../../models/game.pre.js");
 
 const checkAuth = require("../../util/check-auth");
@@ -9,15 +10,8 @@ module.exports = {
   Query: {
     async getPosts() {
       try {
-        const posts = await Post.find().sort({ createdAt: -1 }).populate('gameId').exec()
-
-        // post.foreach((post) => {
-        //   const tempGame = BetInfoPre.findById(post.gameId);
-        //   post.gameId = tempGame;
-        // })
-        
-        //TODO see if this works .populate('gameId')
-        console.log(posts);
+        const posts = await Post.find().sort({ createdAt: -1 })
+        //FORMERLY const posts = await Post.find().sort({ createdAt: -1 }).populate('gameId').exec()
         return posts;
       } catch (err) {
         throw new Error(err);
@@ -37,6 +31,15 @@ module.exports = {
     },
   },
 
+  Post: {
+    async gameId(eventIdent) {
+      let gameId = await gamePre.find({eventId: eventIdent.gameId}).then(games => games[0]);
+      console.log("Here is the game we're attching to the post: " + gameId);
+      return gameId;
+    }
+  },
+
+ 
 
   
   Mutation: {

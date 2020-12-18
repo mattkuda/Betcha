@@ -96,8 +96,11 @@ function PostModal(props) {
           )}
 
           {values.xleagueId !== "" && values.gameId !== "" ? (
-            <><BetSelection defValue={values.xdefBetAmount} chooseBetAmount={selectBetAmount} betValue = {values.betAmount} />
-            <Form.Input
+            <BetSelection defValue={values.xdefBetAmount} chooseBetAmount={selectBetAmount} betValue = {values.betAmount} />
+          ) : (
+            <></>
+          )}
+          <><Form.Input
             placeholder="Why are you taking this bet?"
             name="body"
             onChange={onChange}
@@ -107,10 +110,6 @@ function PostModal(props) {
           <Button type="submit" color="teal" onClick={() => console.log(values)}>
             Submit
           </Button></>
-          ) : (
-            <></>
-          )}
-         
         </Form.Field>
       </Form>
      
@@ -125,22 +124,33 @@ const CREATE_POST_MUTATION = gql`
       body
       betType
       betAmount
-      gameId
+      gameId {
+        homeFullName
+        awayFullName
+        homeRecord
+        awayRecord
+        awayLogo
+        homeLogo
+        awayAbbreviation
+        homeAbbreviation
+        startTime
+        broadcasts
+        spread
+        overUnder
+      }
       createdAt
       username
-      likes {
-        id
-        username
-        createdAt
-      }
       likeCount
-      comments {
-        id
-        body
+      likes {
         username
-        createdAt
       }
       commentCount
+      comments {
+        id
+        username
+        createdAt
+        body
+      }
     }
   }
 `;

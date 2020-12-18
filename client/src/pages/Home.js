@@ -19,9 +19,9 @@ function Home() {
 
   return (
     <>
-      <Modal open={modalOpen} onClose={() => setModalOpen(false)} closeIcon>
+      <Modal open={modalOpen} onClose={() => setModalOpen(false)} closeIcon dimmer='blurring' style={{height: '90%'}}>
         <Modal.Header>Share Bet</Modal.Header>
-        <Modal.Content>
+        <Modal.Content image scrolling>
           <PostModal handleClose={(e) => setModalOpen(false)} />
         </Modal.Content>
       </Modal>
