@@ -56,6 +56,55 @@ class GameService {
     return prop_parent.hasOwnProperty(prop);
   }
 
+
+  calculateSpreadWinner(homeScore, awayScore, homeAbbreviation, awayAbbreviation, spread) {
+    const parseSpread = spread.split(" ");
+    const favoredTeam = parseSpread[0];
+    const favoredAmount = parseFloat(parseSpread[1]);
+
+    //if home team is favored
+    if (favoredTeam === homeAbbreviation) {
+      if ((homeScore - awayScore) > spread) {
+        return "F";
+      }
+      else if ((homeScore - awayScore) < spread) {
+        return "U";
+      }
+      return "P";
+    }
+
+    //if away team is favored
+    else if (favoredTeam === awayAbbreviation) {
+      if ((awayScore - homeScore) > spread) {
+        return "F";
+      }
+      else if ((awayScore - homeScore) < spread) {
+        return "U";
+      }
+      return "P";
+    }
+
+    //if neither favored
+    else {
+      if (homeScore - awayScore !== 0) {
+        let highestScore = Math.max(homeScore, awayScore);
+        if (homeScore === highestScore) {
+          return "H";
+        }
+        else if (awayScore === highestScore) {
+          return "A";
+        }
+        return "P";
+      }
+    }
+  }
+
+  calculateOuResult(totalScore, ou) {
+    if (totalScore < ou) return "U";
+    if (totalScore > ou) return "O";
+    return "P";
+  }
+
   /* This is our "main()" function - we call it within the index.js file to start the game service */
   run() {
     this.tick();
@@ -208,43 +257,23 @@ class GameService {
 
       let possessionTeam = "";
 
-      // //check if home team has possession
-      // if (game.competitions[0].situation.lastPlay.team.id === game.competitions[0].competitors[0].id) {
-      //   possessionTeam = game.competitions[0].competitors[0].team.abbreviation;
-      // }
-      // //check if away team has possession
-      // if (game.competitions[0].situation.lastPlay.team.id === game.competitions[0].competitors[1].id) {
-      //   possessionTeam = game.competitions[0].competitors[1].team.abbreviation;
-      // }
+      //check if home team has possession
+
+      if (this.elementExists(game.competitions[0].situation, "lastPlay")) {
+        if (game.competitions[0].situation.lastPlay.team.id === game.competitions[0].competitors[0].id) {
+          possessionTeam = game.competitions[0].competitors[0].team.abbreviation;
+        }
+        if (game.competitions[0].situation.lastPlay.team.id === game.competitions[0].competitors[1].id) {
+          possessionTeam = game.competitions[0].competitors[1].team.abbreviation;
+        }
+      }
 
       const gameExists = await Livegame.exists({ eventId: game.id });
+      const gameWasInPregame = await Pregame.exists({eventId: game.id});
 
-      if (gameExists === false) {
+      if (gameExists === false && gameWasInPregame === true) {
 
         console.log("Adding new live game...")
-
-        let localSpread = "";
-        let localOU = "";
-
-        //find game in pregame DB
-        Pregame.findOne({ eventId: game.id }, (err, result) => {
-          if (err) {
-            console.log(err);
-            return
-          }
-          else {
-            if (result) {
-              localSpread = result.spread;
-              localOU = result.overUnder;
-            }
-          }
-        });
-
-        Pregame.findOneAndDelete({ eventId: game.id }, (err, result) => {
-          if (err) {
-            console.log(err);
-          }
-        });
 
         const contents = {
           eventId: game.id,
@@ -265,7 +294,9 @@ class GameService {
           startTime: game.date,
           time: game.competitions[0].status.displayClock,
           period: game.competitions[0].status.period,
-          lastPlay: ""
+          lastPlay: "",
+          spread: "",
+          overUnder: -1
         };
 
         if (this.elementExists(game.competitions[0].competitors[0], "records")) {
@@ -284,8 +315,23 @@ class GameService {
           contents.broadcasts = game.competitions[0].broadcasts[0].names
         }
 
-        contents.spread = localSpread;
-        contents.overUnder = localOU;
+        //find game in pregame DB
+        Pregame.findOne({ eventId: game.id }, (err, result) => {
+          if (err) {
+            console.log(err);
+            return
+          }
+          else {
+            contents.spread = result.spread;
+            contents.overUnder = result.overUnder;
+          }
+        });
+
+        Pregame.findOneAndDelete({ eventId: game.id }, (err, result) => {
+          if (err) {
+            console.log(err);
+          }
+        });
 
         switch(league) {
           case 'nfl':
@@ -488,33 +534,11 @@ class GameService {
     for (const game of games) {
 
       const gameExists = await Postgame.exists({ eventId: game.id });
+      const gameWasInLive = await Livegame.exists({ eventId: game.id });
 
-      if (gameExists === false && game.status.type.name !== "STATUS_CANCELED" && game.status.type.name !== "STATUS_POSTPONED") {
+      if (gameExists === false && game.status.type.name !== "STATUS_CANCELED" && game.status.type.name !== "STATUS_POSTPONED" && gameWasInLive === true) {
 
         console.log("Adding completed game...")
-
-        let localSpread = "";
-        let localOU = "";
-
-        //find game in livegame collection
-        Livegame.findOne({ eventId: game.id }, (err, result) => {
-          if (err) {
-            console.log(err);
-            return
-          }
-          else {
-            if (result) {
-              localSpread = result.spread;
-              localOU = result.overUnder;
-            }
-          }
-        });
-
-        Livegame.findOneAndDelete({ eventId: game.id }, (err, result) => {
-          if (err) {
-            console.log(err);
-          }
-        });
 
         const contents = {
           eventId: game.id,
@@ -534,33 +558,31 @@ class GameService {
           awayColor: game.competitions[0].competitors[1].team.color,
           homeRecord: game.competitions[0].competitors[0].records[0].summary,
           awayRecord: game.competitions[0].competitors[1].records[0].summary,
-          spread: localSpread,
-          overUnder: localOU
+          spread: "",
+          overUnder: -1,
+          spreadWinner: "P",
+          ouResult: "P"
         };
 
-        // contents.spread = localSpread;
-        // contents.overUnder = localOU;
+        //find game in livegame collection
+        Livegame.findOne({ eventId: game.id }, (err, result) => {
+          if (err) {
+            console.log(err);
+            return
+          }
+          else {
+            contents.spread = result.spread;
+            contents.overUnder = result.overUnder;
+            if (spread) { contents.spreadWinner = this.calculateSpreadWinner(); }
+            if (overUnder !== -1) { contents.ouResult = this.calculateOuResult(); }
+          }
+        });
 
-        //spread winner --> calculate this here
-
-        if (localSpread !== '') {
-
-          //Step 1: parse spread string to figure out favored team, amount they should win by
-          //Step 2: calc favored score - underdog score
-            //if > spread, spreadResult = favored team
-            //if < spread, spreadResult = underdog
-            //if = spread, push
-
-        }
-
-        //did O/U hit? --> calculate this here
-
-        if (localOU !== '') {
-          //Step 1: calc score total
-            //if > OU, ouResult = O
-            //if < OU, ouResult = U
-            //if = OU, ouResult = P
-        }
+        Livegame.findOneAndDelete({ eventId: game.id }, (err, result) => {
+          if (err) {
+            console.log(err);
+          }
+        });
 
         let localHomeLines = []
         let localAwayLines = []

@@ -287,7 +287,9 @@ module.exports = gql`
     homeLines: [Int],
     awayLines: [Int],
     spread: String!,
-    overUnder: String!
+    overUnder: String!,
+    spreadWinner: String!,
+    ouResult: String!
   }
   type NCAAFPostgame {
     id: ID!,
@@ -312,6 +314,8 @@ module.exports = gql`
     awayLines: [Int],
     spread: String!,
     overUnder: String!,
+    spreadWinner: String!,
+    ouResult: String!,
     specificData: NCAAFPostgameMixedData
   }
   type NCAABMensPostgame {
@@ -337,6 +341,8 @@ module.exports = gql`
     awayLines: [Int],
     spread: String!,
     overUnder: String!,
+    spreadWinner: String!,
+    ouResult: String!,
     specificData: NCAABMensPostgameMixedData
   }
 

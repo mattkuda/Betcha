@@ -27,6 +27,8 @@ const gamePostSchema = new Schema({
   awayLines: [Number],
   spread: String,
   overUnder: String,
+  spreadWinner: String,
+  ouResult: String,
   specificData: mongoose.Mixed
 }, { strict: false });
 
