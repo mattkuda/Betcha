@@ -5,12 +5,14 @@ const commentsResolvers = require("./comments");
 const scoreboardResolvers = require("./scoreboard");
 const playsResolvers = require("./plays");
 const reactResolvers = require("./react");
+const postResolvers = require("./posts");
 
 module.exports = {
   //Any query or mutation that returns a post will go thru this.
   Post: {
     likeCount: (parent) => parent.likes.length,
     commentCount: (parent) => parent.comments.length,
+    ...postResolvers.Post
   },
   Query: {
     ...postsResolvers.Query,
@@ -30,5 +32,5 @@ module.exports = {
   },
   React: {
     ...reactResolvers.React
-  }
+  },
 };

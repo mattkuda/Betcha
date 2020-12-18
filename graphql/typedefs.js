@@ -8,19 +8,7 @@ module.exports = gql`
     betType: String!
     betAmount: String!
     gameId: gamePre!
-    createdAt: String!
-    username: String!
-    comments: [Comment]!
-    likes: [Like]!
-    commentCount: Int!
-    likeCount: Int!
-  }
-  type PostCREATE {
-    id: ID!
-    body: String!
-    betType: String!
-    betAmount: String!
-    gameId: ID!
+    user: User!
     createdAt: String!
     username: String!
     comments: [Comment]!
@@ -392,6 +380,7 @@ module.exports = gql`
 
   type gamePre {
     id: ID!,
+    eventId: String,
     state: String!,
     stateDetails: String!,
     sport: String!
@@ -408,7 +397,7 @@ module.exports = gql`
     awayRecord: String!,
     startTime: String!,
     broadcasts: [String],
-    spread: String!,
+    spread: String,
     overUnder: String!,
   }
 

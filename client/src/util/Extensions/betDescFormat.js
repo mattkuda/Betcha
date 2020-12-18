@@ -8,11 +8,13 @@ export const betDescFormat = (betType, betAmount, gameData) => {
   if (betType === "HOME") {
     rValue =
       gameData.homeAbbreviation +
-      " " +
-      (betAmount >= 0 ? "+" : "-") +
+      (betAmount >= 0 ? " +" : " ") +
       betAmount;
   } else if (betType === "AWAY") {
-    rValue = gameData.awayAbbreviation + betAmount;
+    rValue =
+      gameData.awayAbbreviation +
+      (betAmount >= 0 ? " +" : " ") +
+      betAmount;
   } else if (betType === "UNDER") {
   } else if (betType === "OVER") {
   }

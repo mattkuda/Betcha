@@ -96,6 +96,7 @@ export const FETCH_ALL_PREGAMES = gql`
   {
     getAllPregames {
       id
+      eventId
       league
       homeFullName
       awayFullName
