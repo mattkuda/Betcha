@@ -4,7 +4,7 @@ import { Link, useParams } from 'react-router-dom';
 import gql from "graphql-tag";
 import { Input, Menu } from 'semantic-ui-react';
 //import { HashLink as Link } from 'react-router-hash-link';
-import NFLGame from "../components/GameTypes/NFLGame";
+import NCAABMensGame from "../components/GameTypes/NCAABMensGame";
 
 
 /*
@@ -27,7 +27,7 @@ TODO:
 
 */
 
-function NFLGameDetails(props) {
+function NCAABMensGameDetails(props) {
 
   const pathname = window.location.pathname;
   // e.g. /NFL
@@ -38,28 +38,14 @@ function NFLGameDetails(props) {
   let myGameId = props.match.params.eventId;
   let myPeriod = 1;
 
-  const { loading: periodOneLoading, error: periodOneError, data: periodOneData } = useQuery(FETCH_PLAYS_IN_NFL_GAME_IN_PERIOD, {
+  const { loading: periodOneLoading, error: periodOneError, data: periodOneData } = useQuery(FETCH_PLAYS_IN_NCAABMENS_GAME_IN_PERIOD, {
     variables: { myGameId, myPeriod },
     pollInterval: 30000,
   });
 
   myPeriod+=1;
 
-  const { loading: periodTwoLoading, error: periodTwoError, data: periodTwoData } = useQuery(FETCH_PLAYS_IN_NFL_GAME_IN_PERIOD, {
-    variables: { myGameId, myPeriod },
-    pollInterval: 30000,
-  });
-
-  myPeriod+=1;
-
-  const { loading: periodThreeLoading, error: periodThreeError, data: periodThreeData } = useQuery(FETCH_PLAYS_IN_NFL_GAME_IN_PERIOD, {
-    variables: { myGameId, myPeriod },
-    pollInterval: 30000,
-  });
-
-  myPeriod+=1;
-
-  const { loading: periodFourLoading, error: periodFourError, data: periodFourData } = useQuery(FETCH_PLAYS_IN_NFL_GAME_IN_PERIOD, {
+  const { loading: periodTwoLoading, error: periodTwoError, data: periodTwoData } = useQuery(FETCH_PLAYS_IN_NCAABMENS_GAME_IN_PERIOD, {
     variables: { myGameId, myPeriod },
     pollInterval: 30000,
   });
@@ -70,48 +56,24 @@ function NFLGameDetails(props) {
   if (periodTwoLoading) return 'Loading...';
   if (periodTwoError) return `Error! ${periodTwoError.message}`;
 
-  if (periodThreeLoading) return 'Loading...';
-  if (periodThreeError) return `Error! ${periodThreeError.message}`;
-
-  if (periodFourLoading) return 'Loading...';
-  if (periodFourError) return `Error! ${periodFourError.message}`;
-
   return (
     <div>
 
     <h1>Plays In Game</h1>
 
-    <h3>Q4</h3>
+    <h3>2nd Half</h3>
     <Fragment>
       {
-        periodFourData.getPlaysInNFLGameInPeriod.map(play => (
+        periodTwoData.getPlaysInNCAABMensGameInPeriod.map(play => (
           <p>{play.specificData.time}: {play.description} ({play.specificData.awayScore} - {play.specificData.homeScore})</p>
         ))
       }
     </Fragment>
 
-    <h3>Q3</h3>
+    <h3>1st Half</h3>
     <Fragment>
       {
-        periodThreeData.getPlaysInNFLGameInPeriod.map(play => (
-          <p>{play.specificData.time}: {play.description} ({play.specificData.awayScore} - {play.specificData.homeScore})</p>
-        ))
-      }
-    </Fragment>
-
-    <h3>Q2</h3>
-    <Fragment>
-      {
-        periodTwoData.getPlaysInNFLGameInPeriod.map(play => (
-          <p>{play.specificData.time}: {play.description} ({play.specificData.awayScore} - {play.specificData.homeScore})</p>
-        ))
-      }
-    </Fragment>
-
-    <h3>Q1</h3>
-    <Fragment>
-      {
-        periodOneData.getPlaysInNFLGameInPeriod.map(play => (
+        periodOneData.getPlaysInNCAABMensGameInPeriod.map(play => (
           <p>{play.specificData.time}: {play.description} ({play.specificData.awayScore} - {play.specificData.homeScore})</p>
         ))
       }
@@ -120,21 +82,19 @@ function NFLGameDetails(props) {
   )
 }
 
-const FETCH_PLAYS_IN_NFL_GAME_IN_PERIOD = gql`
+const FETCH_PLAYS_IN_NCAABMENS_GAME_IN_PERIOD = gql`
   query($myGameId: String!, $myPeriod: Int!) {
-    getPlaysInNFLGameInPeriod(gameId: $myGameId, period: $myPeriod) {
+    getPlaysInNCAABMensGameInPeriod(gameId: $myGameId, period: $myPeriod) {
       description
       specificData {
         homeScore
         awayScore
         time
-        quarter
-        down
-        distance
-        yardLine
+        half
+        possession
       }
     }
   }
 `;
 
-export default NFLGameDetails;
+export default NCAABMensGameDetails;

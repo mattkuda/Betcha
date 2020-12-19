@@ -19,6 +19,7 @@ TODO:
 class NFLGame extends Component {
 
   gameState = this.props.state;
+  localStartTime = new Date(Date.parse(this.props.startTime));
 
   render() {
 
@@ -35,7 +36,7 @@ class NFLGame extends Component {
                     <Image centered verticalAlign='middle' src={this.props.awayLogo} size='tiny'/>
                   </Grid.Column>
                   <Grid.Column>
-                    <p> @ </p>
+                    <p>{this.localStartTime.toString()}</p>
                   </Grid.Column>
                   <Grid.Column>
                   <Image centered verticalAlign='middle' src={this.props.homeLogo} size='tiny'/>
@@ -82,15 +83,47 @@ class NFLGame extends Component {
 
       return (
         <div>
-        <p>{this.props.homeFullName}</p>
-        <p>{this.props.homeAbbreviation}</p>
-        <p>{this.props.homeScore}</p>
-        <p>{this.props.awayFullName}</p>
-        <p>{this.props.awayAbbreviation}</p>
-        <p>{this.props.awayScore}</p>
-        <p>Time: {this.props.time}</p>
-        <p>Half: {this.props.period}</p>
-        <p>Last Play: {this.props.lastPlay}</p>
+          <Container textAlign='center' className='scoreboard'>
+            <Grid rows={3}>
+              <Grid.Row>
+                <Grid columns={3}>
+                  <Grid.Column>
+                    <Image centered verticalAlign='middle' src={this.props.awayLogo} size='tiny'/>
+                  </Grid.Column>
+                  <Grid.Column>
+                    <p>{this.props.period}</p>
+
+                  </Grid.Column>
+                  <Grid.Column>
+                  <Image centered verticalAlign='middle' src={this.props.homeLogo} size='tiny'/>
+                  </Grid.Column>
+                </Grid>
+              </Grid.Row>
+              <Grid.Row>
+                <Grid columns={3}>
+                  <Grid.Column>
+                  <p>{this.props.awayAbbreviation}</p>
+                  <p>{this.props.awayScore}</p>
+                  </Grid.Column>
+                  <Grid.Column>
+                    <p>{this.props.time}</p>
+                  </Grid.Column>
+                  <Grid.Column>
+                    <p>{this.props.homeAbbreviation}</p>
+                    <p>{this.props.homeScore}</p>
+                  </Grid.Column>
+                </Grid>
+              </Grid.Row>
+              <Grid.Row>
+                <Grid columns={1}>
+                  <Grid.Column>
+                    <p>{this.props.lastPlay}</p>
+                  </Grid.Column>
+                </Grid>
+              </Grid.Row>
+            </Grid>
+          </Container>
+
         </div>
       )
 
@@ -137,7 +170,8 @@ class NFLGame extends Component {
                     <p>{this.props.awayRecord}</p>
                   </Grid.Column>
                   <Grid.Column>
-                    <p>Betting results will go here!</p>
+                    <p>Cover: {this.props.spreadWinner}</p>
+                    <p>OU Result: {this.props.ouResult}</p>
                   </Grid.Column>
                   <Grid.Column>
                     <p>{this.props.homeRecord}</p>

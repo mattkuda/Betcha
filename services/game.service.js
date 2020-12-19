@@ -44,7 +44,8 @@ class GameService {
     this.sport_list = [
       ['football', 'nfl'],
       ['football', 'college-football'],
-      ['basketball', 'mens-college-basketball']
+      ['basketball', 'mens-college-basketball'],
+      ['basketball', 'nba']
     ];
   }
 
@@ -60,26 +61,26 @@ class GameService {
   calculateSpreadWinner(homeScore, awayScore, homeAbbreviation, awayAbbreviation, spread) {
     const parseSpread = spread.split(" ");
     const favoredTeam = parseSpread[0];
-    const favoredAmount = parseFloat(parseSpread[1]);
+    const favoredAmount = parseFloat(parseSpread[1].substring(1));
 
     //if home team is favored
     if (favoredTeam === homeAbbreviation) {
-      if ((homeScore - awayScore) > spread) {
-        return "F";
+      if ((homeScore - awayScore) > favoredAmount) {
+        return homeAbbreviation;
       }
-      else if ((homeScore - awayScore) < spread) {
-        return "U";
+      else if ((homeScore - awayScore) < favoredAmount) {
+        return awayAbbreviation;
       }
       return "P";
     }
 
     //if away team is favored
     else if (favoredTeam === awayAbbreviation) {
-      if ((awayScore - homeScore) > spread) {
-        return "F";
+      if ((awayScore - homeScore) > favoredAmount) {
+        return awayAbbreviation;
       }
-      else if ((awayScore - homeScore) < spread) {
-        return "U";
+      else if ((awayScore - homeScore) < favoredAmount) {
+        return homeAbbreviation;
       }
       return "P";
     }
@@ -89,10 +90,10 @@ class GameService {
       if (homeScore - awayScore !== 0) {
         let highestScore = Math.max(homeScore, awayScore);
         if (homeScore === highestScore) {
-          return "H";
+          return homeAbbreviation;
         }
         else if (awayScore === highestScore) {
-          return "A";
+          return awayAbbreviation;
         }
         return "P";
       }
@@ -259,7 +260,7 @@ class GameService {
 
       //check if home team has possession
 
-      if (this.elementExists(game.competitions[0].situation, "lastPlay")) {
+      if (this.elementExists(game.competitions[0].situation, "lastPlay") && this.elementExists(game.competitions[0].situation.lastPlay, "team")) {
         if (game.competitions[0].situation.lastPlay.team.id === game.competitions[0].competitors[0].id) {
           possessionTeam = game.competitions[0].competitors[0].team.abbreviation;
         }
@@ -315,23 +316,16 @@ class GameService {
           contents.broadcasts = game.competitions[0].broadcasts[0].names
         }
 
-        //find game in pregame DB
-        Pregame.findOne({ eventId: game.id }, (err, result) => {
-          if (err) {
-            console.log(err);
-            return
-          }
-          else {
-            contents.spread = result.spread;
-            contents.overUnder = result.overUnder;
-          }
-        });
+        let localSpread = "";
+        let localOverUnder = "";
 
-        Pregame.findOneAndDelete({ eventId: game.id }, (err, result) => {
-          if (err) {
-            console.log(err);
-          }
-        });
+        //find game in pregame DB
+        let result = await Pregame.findOne({ eventId: game.id });
+
+        if (result) {
+          contents.spread = result.spread;
+          contents.overUnder = result.overUnder;
+        }
 
         switch(league) {
           case 'nfl':
@@ -380,12 +374,25 @@ class GameService {
               //awayInBonus:
             };
             break;
+
+          case 'nba':
+            contents.specificData = {
+              possession: possessionTeam
+            }
+            break;
+
           default:
             contents.specificData = {};
         }
 
         let g = new Livegame( contents );
         g.save();
+
+        Pregame.findOneAndDelete({ eventId: game.id }, (err, result) => {
+          if (err) {
+            console.log(err);
+          }
+        });
 
       }
 
@@ -463,6 +470,23 @@ class GameService {
                 if (err) console.log(err);
               });
               break;
+
+          case 'nba':
+
+            Livegame.findOneAndUpdate({ eventId: game.id }, {
+              homeScore: game.competitions[0].competitors[0].score,
+              awayScore: game.competitions[0].competitors[1].score,
+              time: game.competitions[0].status.displayClock,
+              period: game.competitions[0].status.period,
+              lastPlay: game.competitions[0].situation.lastPlay.text,
+              specificData: {
+                possession: possessionTeam,
+
+              }
+            }, (err, result) => {
+              if (err) console.log(err);
+            });
+            break;
         }
 
         //look to see if current play has been logged in DB
@@ -476,7 +500,8 @@ class GameService {
           const playData = {
             playId: game.competitions[0].situation.lastPlay.id,
             description: game.competitions[0].situation.lastPlay.text,
-            eventId: game.id
+            eventId: game.id,
+            createdAt: new Date().toISOString()
           };
 
           //for testing purposes - packers v bears game ID is 401220290
@@ -517,6 +542,16 @@ class GameService {
                 possession: possessionTeam
               }
               break;
+
+            case 'nba':
+                playData.specificData = {
+                  homeScore: game.competitions[0].competitors[0].score,
+                  awayScore: game.competitions[0].competitors[1].score,
+                  time: game.competitions[0].status.displayClock,
+                  quarter: game.competitions[0].status.period,
+                  possession: possessionTeam
+                }
+                break;
           }
 
           let currentPlay = new Play( playData );
@@ -565,28 +600,18 @@ class GameService {
         };
 
         //find game in livegame collection
-        Livegame.findOne({ eventId: game.id }, (err, result) => {
-          if (err) {
-            console.log(err);
-            return
-          }
-          else {
-            contents.spread = result.spread;
-            contents.overUnder = result.overUnder;
-            if (result.spread) {
-              contents.spreadWinner = this.calculateSpreadWinner(game.competitions[0].competitors[0].score, game.competitions[0].competitors[1].score, game.competitions[0].competitors[0].team.abbreviation, game.competitions[0].competitors[1].team.abbreviation, result.spread);
-            }
-            if (result.overUnder !== -1) {
-              contents.ouResult = this.calculateOuResult((game.competitions[0].competitors[0].score + game.competitions[0].competitors[1].score), result.overUnder);
-            }
-          }
-        });
+        let result = await Livegame.findOne({ eventId: game.id });
 
-        Livegame.findOneAndDelete({ eventId: game.id }, (err, result) => {
-          if (err) {
-            console.log(err);
+        if (result) {
+          contents.spread = result.spread;
+          contents.overUnder = result.overUnder;
+          if (result.spread.length > 0) {
+            contents.spreadWinner = this.calculateSpreadWinner(game.competitions[0].competitors[0].score, game.competitions[0].competitors[1].score, game.competitions[0].competitors[0].team.abbreviation, game.competitions[0].competitors[1].team.abbreviation, result.spread);
           }
-        });
+          if (result.overUnder !== -1) {
+            contents.ouResult = this.calculateOuResult((game.competitions[0].competitors[0].score + game.competitions[0].competitors[1].score), result.overUnder);
+          }
+        }
 
         let localHomeLines = []
         let localAwayLines = []
@@ -626,6 +651,13 @@ class GameService {
 
         let g = new Postgame( contents );
         g.save();
+
+        Livegame.findOneAndDelete({ eventId: game.id }, (err, result) => {
+          if (err) {
+            console.log(err);
+          }
+        });
+
       }
     }
   }

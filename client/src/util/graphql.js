@@ -126,6 +126,15 @@ export const FETCH_LEAGUES_QUERY = gql`
   }
 `;
 
+export const FETCH_ACTIVE_LEAGUES_QUERY = gql`
+  {
+    getActiveLeagues {
+      sportName
+      leagueName
+    }
+  }
+`;
+
 // export const FETCH_NFL_PREGAMES_QUERY = gql`
 //   {
 //     getNFLPregames {

@@ -116,7 +116,7 @@ function NCAABMensScoreboard() {
 const FETCH_NCAABMENS_PREGAMES = gql`
 {
     getNCAABMensPregames {
-      id
+      eventId
       state
       stateDetails
       homeFullName
@@ -142,13 +142,15 @@ const FETCH_NCAABMENS_PREGAMES = gql`
 const FETCH_NCAABMENS_LIVEGAMES = gql`
 {
    getNCAABMensLivegames {
-    id
+    eventId
     state
     stateDetails
     homeFullName
     homeScore
+    homeLogo
     awayFullName
     awayScore
+    awayLogo
     time
     period
     lastPlay
@@ -163,7 +165,7 @@ const FETCH_NCAABMENS_LIVEGAMES = gql`
 const FETCH_NCAABMENS_POSTGAMES = gql`
 {
    getNCAABMensPostgames {
-    id
+    eventId
     state
     stateDetails
     homeFullName
@@ -176,6 +178,8 @@ const FETCH_NCAABMENS_POSTGAMES = gql`
     awayScore
     awayLines
     awayLogo
+    spreadWinner
+    ouResult
     specificData {
       homeRank
       awayRank

@@ -5,8 +5,10 @@ const Schema = mongoose.Schema;
 
 const leagueSchema = new Schema({
   displayName: String,
+  sportName: String,
   leagueName: String,
   image: String,
+  isActive: Boolean
 });
 
 module.exports = mongoose.model('League', leagueSchema);

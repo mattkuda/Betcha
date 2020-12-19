@@ -14,6 +14,14 @@ module.exports = {
       } catch (err) {
         throw new Error(err);
       }
-    }, 
+    },
+    async getActiveLeagues() {
+      try {
+        const leagues = await League.find({isActive: true});
+        return leagues;
+      } catch (err) {
+        throw new Error(err);
+      }
+    },
   },
 };
