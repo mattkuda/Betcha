@@ -16,7 +16,9 @@ export const betDescFormat = (betType, betAmount, gameData) => {
       (betAmount >= 0 ? " +" : " ") +
       betAmount;
   } else if (betType === "UNDER") {
+    rValue = "Over " + betAmount;
   } else if (betType === "OVER") {
+    rValue = "Under " + betAmount;
   }
 
   return rValue;

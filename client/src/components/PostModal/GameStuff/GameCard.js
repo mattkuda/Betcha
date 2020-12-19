@@ -48,6 +48,19 @@ function GameCard(props) {
           >
             {awaySpread}
           </Button>
+          <Button
+            floated="right"
+            onClick={() =>
+              handleClick(
+                props.gameData.eventId,
+                "OVER",
+                parseFloat(props.gameData.overUnder)
+              )
+            }
+            style={{ display: "inline-block" }}
+          >
+           O {props.gameData.overUnder}
+          </Button>
         </div>
       </Card.Content>
 
@@ -67,6 +80,19 @@ function GameCard(props) {
             style={{ display: "inline-block" }}
           >
             {homeSpread}
+          </Button>
+          <Button
+            floated="right"
+            onClick={() =>
+              handleClick(
+                props.gameData.eventId,
+                "UNDER",
+                parseFloat(props.gameData.overUnder)
+              )
+            }
+            style={{ display: "inline-block" }}
+          >
+           U {props.gameData.overUnder}
           </Button>
         </div>
       </Card.Content>

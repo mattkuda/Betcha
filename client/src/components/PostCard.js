@@ -29,14 +29,14 @@ function PostCard({
   const { user } = useContext(AuthContext);
 
   return (
-    <Card fluid as={Link} to={`/posts/${id}`} floated="right">
+    <Card fluid  floated="right" style={{width: "100%"}}>
       <Card.Content>
         <Image
           floated="right"
           size="mini"
           src="https://react.semantic-ui.com/images/avatar/large/matthew.png"
         />
-        <Card.Header>
+        <Card.Header as={Link} to={`/posts/${id}`}>
           @{username} ·{" "}
           <div style={{ display: "inline-block", color: "gray" }}>
             {moment(createdAt).fromNow(true)} ago

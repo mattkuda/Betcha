@@ -79,15 +79,19 @@ module.exports = {
       // hash password and create an auth token
       password = await bcrypt.hash(password, 12);
 
+     
+
       const newUser = new User({
         email,
         username,
         password,
         createdAt: new Date().toISOString(),
       });
-
+      console.log("newuser: " + newUser);
       const res = await newUser.save();
 
+      console.log("res: " + JSON.stringify(res));
+      console.log("we got here!");
       const token = generateToken(res);
 
       return {

@@ -39,8 +39,6 @@ module.exports = {
     }
   },
 
- 
-
   
   Mutation: {
     async createPost(_, { body, betType, betAmount, gameId }, context) {
