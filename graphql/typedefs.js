@@ -380,8 +380,10 @@ module.exports = gql`
   type League {
     id: ID!,
     displayName: String!,
+    sportName: String!
     leagueName: String!,
-    image: String!
+    image: String!,
+    isActive: Boolean!
   }
 
   type gamePre {
@@ -426,6 +428,7 @@ module.exports = gql`
   type Query {
     getPosts: [Post]
     getLeagues: [League]
+    getActiveLeagues: [League]
     getPost(postId: ID!): Post
     getAllPregames: [gamePre]
     getNFLPregames: [NFLPregame]
