@@ -44,7 +44,8 @@ class GameService {
     this.sport_list = [
       ['football', 'nfl'],
       ['football', 'college-football'],
-      ['basketball', 'mens-college-basketball']
+      ['basketball', 'mens-college-basketball'],
+      ['basketball', 'nba']
     ];
   }
 
@@ -380,6 +381,13 @@ class GameService {
               //awayInBonus:
             };
             break;
+
+          case 'nba':
+            contents.specificData = {
+              possession: possessionTeam
+            }
+            break;
+
           default:
             contents.specificData = {};
         }
@@ -463,6 +471,23 @@ class GameService {
                 if (err) console.log(err);
               });
               break;
+
+          case 'nba':
+
+            Livegame.findOneAndUpdate({ eventId: game.id }, {
+              homeScore: game.competitions[0].competitors[0].score,
+              awayScore: game.competitions[0].competitors[1].score,
+              time: game.competitions[0].status.displayClock,
+              period: game.competitions[0].status.period,
+              lastPlay: game.competitions[0].situation.lastPlay.text,
+              specificData: {
+                possession: possessionTeam,
+
+              }
+            }, (err, result) => {
+              if (err) console.log(err);
+            });
+            break;
         }
 
         //look to see if current play has been logged in DB
@@ -517,6 +542,16 @@ class GameService {
                 possession: possessionTeam
               }
               break;
+
+            case 'nba':
+                playData.specificData = {
+                  homeScore: game.competitions[0].competitors[0].score,
+                  awayScore: game.competitions[0].competitors[1].score,
+                  time: game.competitions[0].status.displayClock,
+                  quarter: game.competitions[0].status.period,
+                  possession: possessionTeam
+                }
+                break;
           }
 
           let currentPlay = new Play( playData );
