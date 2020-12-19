@@ -16,6 +16,8 @@ import LikeButton from "../components/LikeButton";
 import { AuthContext } from "../context/auth";
 import DeleteButton from "../components/DeleteButton";
 import MyPopup from "../util/MyPopup";
+import { betDescFormat } from "../util/Extensions/betDescFormat";
+import { betTimeFormat } from "../util/Extensions/betTimeFormat";
 
 function SinglePost(props) {
   const postId = props.match.params.postId;
@@ -59,7 +61,7 @@ function SinglePost(props) {
       body,
       betType,
       betAmount,
-      gamePre,
+      gameId,
       createdAt,
       username,
       comments,
@@ -84,9 +86,14 @@ function SinglePost(props) {
                 <Card.Header>{username}</Card.Header>
                 <Card.Meta>{moment(createdAt).fromNow()}</Card.Meta>
                 <Card.Description style={{ fontStyle: "italic" }}>
-                  {betAmount}
+                  {betDescFormat(betType, betAmount, gameId)}
                 </Card.Description>
-                <Card.Description>{body}</Card.Description>
+
+                <Card.Description style={{ fontStyle: "italic" }}>
+                  {gameId.awayAbbreviation} @ {gameId.homeAbbreviation},{" "}
+                  {betTimeFormat(gameId.startTime)}
+                </Card.Description>
+                <Card.Description>This is the body: {body}</Card.Description>
               </Card.Content>
               <hr />
               <Card.Content extra>
@@ -181,7 +188,20 @@ const FETCH_POST_QUERY = gql`
       body
       betType
       betAmount
-      gamePre
+      gameId {
+        homeFullName
+        awayFullName
+        homeRecord
+        awayRecord
+        awayLogo
+        homeLogo
+        awayAbbreviation
+        homeAbbreviation
+        startTime
+        broadcasts
+        spread
+        overUnder
+      }
       createdAt
       username
       likeCount

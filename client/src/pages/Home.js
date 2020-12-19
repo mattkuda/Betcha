@@ -1,6 +1,7 @@
 import React, { useContext, useState } from "react";
 import { useQuery } from "@apollo/react-hooks";
 import { Grid, Transition, Modal, Button } from "semantic-ui-react";
+import { Link } from "react-router-dom";
 
 import { AuthContext } from "../context/auth";
 import PostCard from "../components/PostCard";
@@ -31,7 +32,8 @@ function Home() {
           <h1>Recent posts</h1>
         </Grid.Row>
         <Grid.Row>
-          <Button onClick={(e) => setModalOpen(true)}>Share Bet</Button>
+        {user ? <Button onClick={(e) => setModalOpen(true)}>Share Bet</Button>: <Button as={Link} to="/login">Share Bet</Button>}
+          
           <Button onClick={(e) => console.log(posts)}>Console Post</Button>
         </Grid.Row>
         <Grid.Row>
