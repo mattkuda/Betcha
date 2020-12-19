@@ -39,7 +39,13 @@ module.exports = {
     }
   },
 
+<<<<<<< HEAD
+
+
+
+=======
   
+>>>>>>> ba51e7df032ce2e3a8a30bbc6e5cb5800dcad812
   Mutation: {
     async createPost(_, { body, betType, betAmount, gameId }, context) {
       const user = checkAuth(context);
@@ -63,8 +69,8 @@ module.exports = {
       //If we get here, that means no error was thrown during the checkAuth phase
       const newPost = new Post({
         body, //already destructured at the async line (above)
-        betType, 
-        betAmount, 
+        betType,
+        betAmount,
         gameId, //already destructured at the async line (above)
         user: user.id,
         username: user.username,

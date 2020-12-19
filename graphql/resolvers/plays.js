@@ -5,7 +5,6 @@ const Postgame = require("../../models/game.post");
 
 module.exports = {
   Query: {
-
     async getPlay(_, { playId }) {
       try {
         let play = await Play.find({playId: playId});

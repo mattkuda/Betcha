@@ -13,7 +13,8 @@ import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import SinglePost from "./pages/SinglePost";
-import Scoreboard from "./pages/Scoreboard";
+import ScoreboardNav from "./components/ScoreboardNav";
+import ScoreboardHome from "./pages/ScoreboardHome";
 import NFLScoreboard from "./pages/NFLScoreboard";
 import NCAAFScoreboard from "./pages/NCAAFScoreboard";
 import NCAABMensScoreboard from "./pages/NCAABMensScoreboard";
@@ -29,7 +30,10 @@ function App() {
           <AuthRoute exact path="/login" component={Login} />
           <AuthRoute exact path="/register" component={Register} />
           <Route exact path="/posts/:postId" component={SinglePost} />
-          <Route exact path="/scoreboard" component={Scoreboard} />
+          <Route path="/scoreboard">
+            <ScoreboardNav />
+          </Route>
+          <Route exact path="/scoreboard" component={ScoreboardHome} />
           <Route exact path="/scoreboard/nfl" component={NFLScoreboard} />
           <Route exact path="/scoreboard/ncaaf" component={NCAAFScoreboard} />
           <Route exact path="/scoreboard/ncaabmens" component={NCAABMensScoreboard} />

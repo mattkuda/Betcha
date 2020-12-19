@@ -5,6 +5,7 @@ import gql from "graphql-tag";
 import { Input, Menu } from 'semantic-ui-react';
 //import { HashLink as Link } from 'react-router-hash-link';
 import NFLGame from "../components/GameTypes/NFLGame";
+import { Grid } from "semantic-ui-react";
 import './scoreboard.css';
 
 
@@ -37,12 +38,6 @@ Adding comment here (NFL).
 
 function NFLScoreboard() {
 
-  const pathname = window.location.pathname;
-  // e.g. /NFL
-  const path = pathname === "/" ? "home" : pathname.substr(1);
-  const [activeItem, setActiveItem] = useState(path);
-  const handleItemClick = (e, { name }) => setActiveItem(name);
-
   const { loading: pregameLoading, error: pregameError, data: pregameData } = useQuery(FETCH_NFL_PREGAMES, {
     pollInterval: 30000,
   });
@@ -64,79 +59,65 @@ function NFLScoreboard() {
 
   return (
     <div>
-    <Menu secondary>
-      <Menu.Item
-        name="home"
-        content="Home"
-        active={activeItem === "home"}
-        onClick={handleItemClick}
-        as={Link}
-        to="/scoreboard"
-      />
-      <Menu.Item
-        name="nfl"
-        content="NFL"
-        active={activeItem === "nfl"}
-        onClick={handleItemClick}
-        as={Link}
-        to="/scoreboard/nfl"
-      />
-      <Menu.Item
-        name="ncaaf"
-        content="NCAAF"
-        active={activeItem === "ncaaf"}
-        onClick={handleItemClick}
-        as={Link}
-        to="/scoreboard/ncaaf"
-      />
-      <Menu.Item
-        name="ncaabmens"
-        content="NCAAB (Mens)"
-        active={activeItem === "ncaabmens"}
-        onClick={handleItemClick}
-        as={Link}
-        to="/scoreboard/ncaabmens"
-      />
-    </Menu>
-
+  
     <h1>Upcoming Games</h1>
-    <Fragment>
-      {
-        pregameData.getNFLPregames.map(game => (
-          <Link to={`/scoreboard/nfl/${game.eventId}`}>
-            <span className="card" style={{"display": "block"}}>
-              <NFLGame key={game.eventId} {...game} />
-            </span>
-          </Link>
-        ))
-      }
-    </Fragment>
+    <Grid columns="two">
+      <Grid.Row>
+        <Fragment>
+          {
+            pregameData.getNFLPregames.map(game => (
+              <Grid.Column>
+                <Link to={`/scoreboard/nfl/${game.eventId}`}>
+                  <span className="card" style={{"display": "block"}}>
+                    <NFLGame key={game.eventId} {...game} />
+                  </span>
+                </Link>
+              </Grid.Column>
+            ))
+          }
+        </Fragment>
+      </Grid.Row>
+    </Grid>
+
 
     <h1>Live Games</h1>
-    <Fragment>
-      {
-        livegameData.getNFLLivegames.map(game => (
-          <Link to={`/scoreboard/nfl/${game.eventId}`}>
-            <span className="card" class="noDecoration" style={{"display": "block"}}>
-              <NFLGame key={game.eventId} {...game} />
-            </span>
-          </Link>
-        ))
-      }
-    </Fragment>
+      <Grid columns="two">
+        <Grid.Row>
+          <Fragment>
+            {
+              livegameData.getNFLLivegames.map(game => (
+                <Grid.Column>
+                  <Link to={`/scoreboard/nfl/${game.eventId}`}>
+                    <span className="card" style={{"display": "block"}}>
+                      <NFLGame key={game.eventId} {...game} />
+                    </span>
+                  </Link>
+                </Grid.Column>
+              ))
+            }
+          </Fragment>
+        </Grid.Row>
+      </Grid>
 
     <h1>Completed Games</h1>
-    <Fragment>
-      {
-        postgameData.getNFLPostgames.map(game => (
-          <Link to={`/scoreboard/nfl/${game.eventId}`}>
-            <span className="card" style={{"display": "block"}}>
-              <NFLGame key={game.eventId} {...game} />
-            </span>
-          </Link>
-        ))
-      }
-    </Fragment>
+      <Grid columns="two">
+        <Grid.Row>
+          <Fragment>
+            {
+              postgameData.getNFLPostgames.map(game => (
+                <Grid.Column>
+                  <Link to={`/scoreboard/nfl/${game.eventId}`}>
+                    <span className="card" style={{"display": "block"}}>
+                      <NFLGame key={game.eventId} {...game} />
+                    </span>
+                  </Link>
+                </Grid.Column>
+              ))
+            }
+          </Fragment>
+        </Grid.Row>
+      </Grid>
+
     </div>
   )
 }
