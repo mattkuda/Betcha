@@ -25,7 +25,7 @@ add fields to a document based on the sport and league --> DONE - we use a switc
 
 3. Rethink the ctr functionality for line dancing that may occur.
 
-4. Add betting logic for postgame entries
+4. Add betting logic for postgame entries --> DONE, still needs to be tested
 
 5. Test this on other sport list entries (not just NFL) --> DONE
 
@@ -573,8 +573,12 @@ class GameService {
           else {
             contents.spread = result.spread;
             contents.overUnder = result.overUnder;
-            if (spread) { contents.spreadWinner = this.calculateSpreadWinner(); }
-            if (overUnder !== -1) { contents.ouResult = this.calculateOuResult(); }
+            if (result.spread) {
+              contents.spreadWinner = this.calculateSpreadWinner(game.competitions[0].competitors[0].score, game.competitions[0].competitors[1].score, game.competitions[0].competitors[0].team.abbreviation, game.competitions[0].competitors[1].team.abbreviation, result.spread);
+            }
+            if (result.overUnder !== -1) {
+              contents.ouResult = this.calculateOuResult((game.competitions[0].competitors[0].score + game.competitions[0].competitors[1].score), result.overUnder);
+            }
           }
         });
 
