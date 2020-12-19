@@ -79,6 +79,7 @@ function NCAAFScoreboard() {
 
 
     <h1>Live Games</h1>
+
       <Grid columns="two">
         <Grid.Row>
           <Fragment>
@@ -123,6 +124,7 @@ const FETCH_NCAAF_PREGAMES = gql`
 {
     getNCAAFPregames {
       id
+      eventId
       state
       stateDetails
       homeFullName
@@ -150,12 +152,15 @@ const FETCH_NCAAF_LIVEGAMES = gql`
 {
    getNCAAFLivegames {
     id
+    eventId
     state
     stateDetails
     homeFullName
     homeScore
     awayFullName
     awayScore
+    homeLogo
+    awayLogo
     time
     period
     lastPlay
@@ -176,6 +181,7 @@ const FETCH_NCAAF_POSTGAMES = gql`
 {
    getNCAAFPostgames {
     id
+    eventId
     state
     stateDetails
     homeFullName

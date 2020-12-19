@@ -63,8 +63,8 @@ module.exports = gql`
     yardLine: Int!,
     isRedZone: Boolean!,
     possession: String!,
-    awayTimeouts: Int!,
-    homeTimeouts: Int!
+    awayTimeouts: Int,
+    homeTimeouts: Int
   }
   type NCAAFLivegameMixedData {
     homeRank: Int!,
@@ -74,15 +74,15 @@ module.exports = gql`
     yardLine: Int!,
     isRedZone: Boolean!,
     possession: String!,
-    awayTimeouts: Int!,
-    homeTimeouts: Int!
+    awayTimeouts: Int,
+    homeTimeouts: Int
   }
   type NCAABMensLivegameMixedData {
     homeRank: Int!,
     awayRank: Int!,
     possession: String!,
-    awayTimeouts: Int!,
-    homeTimeouts: Int!
+    awayTimeouts: Int,
+    homeTimeouts: Int
   }
 
 
@@ -339,6 +339,7 @@ module.exports = gql`
     playId: String!,
     description: String!,
     eventId: ID!,
+    createdAt: String!
   }
 
   type FootballPlayData {
