@@ -59,7 +59,7 @@ function NFLScoreboard() {
 
   return (
     <div>
-  
+
     <h1>Upcoming Games</h1>
     <Grid columns="two">
       <Grid.Row>
@@ -194,6 +194,8 @@ const FETCH_NFL_POSTGAMES = gql`
     awayScore
     awayLines
     awayLogo
+    spreadWinner
+    ouResult
   }
 }
 `;

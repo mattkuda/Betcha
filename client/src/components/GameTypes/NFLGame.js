@@ -171,7 +171,8 @@ class NFLGame extends Component {
                     <p>{this.props.awayRecord}</p>
                   </Grid.Column>
                   <Grid.Column>
-                    <p>Betting results will go here!</p>
+                    <p>Cover: {this.props.spreadWinner}</p>
+                    <p>OU Result: {this.props.ouResult}</p>
                   </Grid.Column>
                   <Grid.Column>
                     <p>{this.props.homeRecord}</p>

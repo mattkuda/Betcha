@@ -194,6 +194,8 @@ const FETCH_NCAAF_POSTGAMES = gql`
     awayScore
     awayLines
     awayLogo
+    spreadWinner
+    ouResult
   }
 }
 `;

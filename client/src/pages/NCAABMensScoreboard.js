@@ -178,6 +178,8 @@ const FETCH_NCAABMENS_POSTGAMES = gql`
     awayScore
     awayLines
     awayLogo
+    spreadWinner
+    ouResult
     specificData {
       homeRank
       awayRank
