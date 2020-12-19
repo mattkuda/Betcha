@@ -39,13 +39,6 @@ module.exports = {
     }
   },
 
-<<<<<<< HEAD
-
-
-
-=======
-  
->>>>>>> ba51e7df032ce2e3a8a30bbc6e5cb5800dcad812
   Mutation: {
     async createPost(_, { body, betType, betAmount, gameId }, context) {
       const user = checkAuth(context);
