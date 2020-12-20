@@ -36,7 +36,7 @@ function PostCard({
           size="mini"
           src="https://react.semantic-ui.com/images/avatar/large/matthew.png"
         />
-        <Card.Header as={Link} to={`/posts/${id}`}>
+        <Card.Header as={Link} to={`/user/${username}`}>
           @{username} ·{" "}
           <div style={{ display: "inline-block", color: "gray" }}>
             {moment(createdAt).fromNow(true)} ago
@@ -51,6 +51,7 @@ function PostCard({
         {gameId.awayAbbreviation} @ {gameId.homeAbbreviation}, {betTimeFormat(gameId.startTime)}
         </Card.Description>
         <Card.Description>This is the body: {body}</Card.Description>
+        <Card.Description as={Link} to={`/posts/${id}`}>View More ...</Card.Description>
       </Card.Content>
       <Card.Content extra>
         <LikeButton user={user} post={{ id, likes, likeCount }} />

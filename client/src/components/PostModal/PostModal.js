@@ -102,6 +102,7 @@ function PostModal(props) {
           )}
           <><Form.Input
             placeholder="Why are you taking this bet?"
+            noValidate
             name="body"
             onChange={onChange}
             value={values.body}

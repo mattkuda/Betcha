@@ -28,7 +28,8 @@ export const betTimeFormat = (dateVal) => {
     return sHour + ":" + sMinute + " " + sAMPM;
   }
   //else, if tomorrow, say "Tomorrow" instead of the date
-  else if (newDate.setHours(0, 0, 0, 0) === todaysDate.setHours(0, 0, 0, 0)) {
+  var tomorrowDate = new Date(todaysDate.getFullYear(), todaysDate.getMonth(), todaysDate.getDate() + 1);
+  if (newDate.setHours(0, 0, 0, 0) === tomorrowDate.setHours(0, 0, 0, 0)){
     return "Tomorrow, " + sHour + ":" + sMinute + " " + sAMPM;
   }
   //else, display normally
@@ -40,3 +41,5 @@ export const betTimeFormat = (dateVal) => {
 function padValue(value) {
   return value < 10 ? "0" + value : value;
 }
+
+

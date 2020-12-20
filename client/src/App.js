@@ -12,6 +12,7 @@ import MenuBar from "./components/MenuBar";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import Profile from "./pages/Profile";
 import SinglePost from "./pages/SinglePost";
 import ScoreboardNav from "./components/ScoreboardNav";
 import ScoreboardHome from "./pages/ScoreboardHome";
@@ -32,6 +33,7 @@ function App() {
           <AuthRoute exact path="/login" component={Login} />
           <AuthRoute exact path="/register" component={Register} />
           <Route exact path="/posts/:postId" component={SinglePost} />
+          <Route exact path="/user/:usernameId" component={Profile} />
           <Route path="/scoreboard">
             <ScoreboardNav />
           </Route>
