@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import gql from "graphql-tag";
 import { useMutation } from "@apollo/react-hooks";
 
-import { Button, Icon, Confirm } from "semantic-ui-react";
+import { Button, Icon, Confirm, Dropdown } from "semantic-ui-react";
 import MyPopup from "../util/MyPopup";
 import { FETCH_POSTS_QUERY } from "../util/graphql";
 
@@ -41,14 +41,20 @@ function DeleteButton({ postId, commentId, callback }) {
   return (
     <>
       <MyPopup content={commentId ? "Delete comment" : "Delete post"}>
-        <Button
+        {/* <Button
           as="div"
           color="red"
           floated="right"
           onClick={() => setConfirmOpen(true)}
         >
           <Icon name="trash" style={{ margin: 0 }} />
-        </Button>
+        </Button> */}
+        <Dropdown as="div" floated="right" item text="More">
+          <Dropdown.Menu>
+            <Dropdown.Item onClick={() => setConfirmOpen(true)}>Delete</Dropdown.Item>
+            <Dropdown.Item onClick={() => console.log("Link copied!")}>Copy Link (todo)</Dropdown.Item>
+          </Dropdown.Menu>
+        </Dropdown>
       </MyPopup>
 
       <Confirm
