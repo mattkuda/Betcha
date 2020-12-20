@@ -169,26 +169,26 @@ module.exports = gql`
     state: String!
     stateDetails: String!
     sport: String!
-    league: String!
-    homeLogo: String!
-    awayLogo: String!
-    homeScore: String!
-    awayScore: String!
-    homeAbbreviation: String!
-    awayAbbreviation: String!
-    homeFullName: String!
-    awayFullName: String!
-    homeColor: String!
-    awayColor: String!
-    homeRecord: String!
-    awayRecord: String!
-    startTime: String!
-    broadcasts: [String]
-    time: String!
-    period: Int!
-    spread: String!
-    overUnder: String!
-    lastPlay: String!
+    league: String!,
+    homeLogo: String!,
+    awayLogo: String!,
+    homeScore: Int!,
+    awayScore: Int!,
+    homeAbbreviation: String!,
+    awayAbbreviation: String!,
+    homeFullName: String!,
+    awayFullName: String!,
+    homeColor: String!,
+    awayColor: String!,
+    homeRecord: String!,
+    awayRecord: String!,
+    startTime: String!,
+    broadcasts: [String],
+    time: String!,
+    period: Int!,
+    spread: String!,
+    overUnder: String!,
+    lastPlay: String!,
     specificData: NFLLivegameMixedData
   }
   type NCAAFLivegame {
@@ -197,26 +197,26 @@ module.exports = gql`
     state: String!
     stateDetails: String!
     sport: String!
-    league: String!
-    homeLogo: String!
-    awayLogo: String!
-    homeScore: String!
-    awayScore: String!
-    homeAbbreviation: String!
-    awayAbbreviation: String!
-    homeFullName: String!
-    awayFullName: String!
-    homeColor: String!
-    awayColor: String!
-    homeRecord: String!
-    awayRecord: String!
-    startTime: String!
-    broadcasts: [String]
-    time: String!
-    period: Int!
-    spread: String!
-    overUnder: String!
-    lastPlay: String!
+    league: String!,
+    homeLogo: String!,
+    awayLogo: String!,
+    homeScore: Int!,
+    awayScore: Int!,
+    homeAbbreviation: String!,
+    awayAbbreviation: String!,
+    homeFullName: String!,
+    awayFullName: String!,
+    homeColor: String!,
+    awayColor: String!,
+    homeRecord: String!,
+    awayRecord: String!,
+    startTime: String!,
+    broadcasts: [String],
+    time: String!,
+    period: Int!,
+    spread: String!,
+    overUnder: String!,
+    lastPlay: String!,
     specificData: NCAAFLivegameMixedData
   }
   type NCAABMensLivegame {
@@ -225,26 +225,26 @@ module.exports = gql`
     state: String!
     stateDetails: String!
     sport: String!
-    league: String!
-    homeLogo: String!
-    awayLogo: String!
-    homeScore: String!
-    awayScore: String!
-    homeAbbreviation: String!
-    awayAbbreviation: String!
-    homeFullName: String!
-    awayFullName: String!
-    homeColor: String!
-    awayColor: String!
-    homeRecord: String!
-    awayRecord: String!
-    startTime: String!
-    broadcasts: [String]
-    time: String!
-    period: Int!
-    spread: String!
-    overUnder: String!
-    lastPlay: String!
+    league: String!,
+    homeLogo: String!,
+    awayLogo: String!,
+    homeScore: Int!,
+    awayScore: Int!,
+    homeAbbreviation: String!,
+    awayAbbreviation: String!,
+    homeFullName: String!,
+    awayFullName: String!,
+    homeColor: String!,
+    awayColor: String!,
+    homeRecord: String!,
+    awayRecord: String!,
+    startTime: String!,
+    broadcasts: [String],
+    time: String!,
+    period: Int!,
+    spread: String!,
+    overUnder: String!,
+    lastPlay: String!,
     specificData: NCAABMensLivegameMixedData
   }
 
@@ -254,24 +254,24 @@ module.exports = gql`
     state: String!
     stateDetails: String!
     sport: String!
-    league: String!
-    homeLogo: String!
-    awayLogo: String!
-    homeScore: String!
-    awayScore: String!
-    homeAbbreviation: String!
-    awayAbbreviation: String!
-    homeFullName: String!
-    awayFullName: String!
-    homeColor: String!
-    awayColor: String!
-    homeRecord: String!
-    awayRecord: String!
-    homeLines: [Int]
-    awayLines: [Int]
-    spread: String!
-    overUnder: String!
-    spreadWinner: String
+    league: String!,
+    homeLogo: String!,
+    awayLogo: String!,
+    homeScore: Int!,
+    awayScore: Int!,
+    homeAbbreviation: String!,
+    awayAbbreviation: String!,
+    homeFullName: String!,
+    awayFullName: String!,
+    homeColor: String!,
+    awayColor: String!,
+    homeRecord: String!,
+    awayRecord: String!,
+    homeLines: [Int],
+    awayLines: [Int],
+    spread: String!,
+    overUnder: String!,
+    spreadWinner: String,
     ouResult: String
   }
   type NCAAFPostgame {
@@ -280,25 +280,25 @@ module.exports = gql`
     state: String!
     stateDetails: String!
     sport: String!
-    league: String!
-    homeLogo: String!
-    awayLogo: String!
-    homeScore: String!
-    awayScore: String!
-    homeAbbreviation: String!
-    awayAbbreviation: String!
-    homeFullName: String!
-    awayFullName: String!
-    homeColor: String!
-    awayColor: String!
-    homeRecord: String!
-    awayRecord: String!
-    homeLines: [Int]
-    awayLines: [Int]
-    spread: String!
-    overUnder: String!
-    spreadWinner: String
-    ouResult: String
+    league: String!,
+    homeLogo: String!,
+    awayLogo: String!,
+    homeScore: Int!,
+    awayScore: Int!,
+    homeAbbreviation: String!,
+    awayAbbreviation: String!,
+    homeFullName: String!,
+    awayFullName: String!,
+    homeColor: String!,
+    awayColor: String!,
+    homeRecord: String!,
+    awayRecord: String!,
+    homeLines: [Int],
+    awayLines: [Int],
+    spread: String!,
+    overUnder: String!,
+    spreadWinner: String,
+    ouResult: String,
     specificData: NCAAFPostgameMixedData
   }
   type NCAABMensPostgame {
@@ -307,25 +307,25 @@ module.exports = gql`
     state: String!
     stateDetails: String!
     sport: String!
-    league: String!
-    homeLogo: String!
-    awayLogo: String!
-    homeScore: String!
-    awayScore: String!
-    homeAbbreviation: String!
-    awayAbbreviation: String!
-    homeFullName: String!
-    awayFullName: String!
-    homeColor: String!
-    awayColor: String!
-    homeRecord: String!
-    awayRecord: String!
-    homeLines: [Int]
-    awayLines: [Int]
-    spread: String!
-    overUnder: String!
-    spreadWinner: String
-    ouResult: String
+    league: String!,
+    homeLogo: String!,
+    awayLogo: String!,
+    homeScore: Int!,
+    awayScore: Int!,
+    homeAbbreviation: String!,
+    awayAbbreviation: String!,
+    homeFullName: String!,
+    awayFullName: String!,
+    homeColor: String!,
+    awayColor: String!,
+    homeRecord: String!,
+    awayRecord: String!,
+    homeLines: [Int],
+    awayLines: [Int],
+    spread: String!,
+    overUnder: String!,
+    spreadWinner: String,
+    ouResult: String,
     specificData: NCAABMensPostgameMixedData
   }
 
