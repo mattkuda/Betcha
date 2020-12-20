@@ -29,6 +29,15 @@ module.exports = {
         throw new Error(err);
       }
     },
+    async getUserPosts(_, { username }) {
+      try {
+        const posts = await Post.find({username: username}).sort({ createdAt: -1 })
+        //FORMERLY const posts = await Post.find().sort({ createdAt: -1 }).populate('gameId').exec()
+        return posts;
+      } catch (err) {
+        throw new Error(err);
+      }
+    },
   },
 
   Post: {

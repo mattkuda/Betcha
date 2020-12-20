@@ -36,7 +36,6 @@ function GameCard(props) {
           <Image floated="left" size="mini" src={props.gameData.awayLogo} />
           {props.gameData.awayAbbreviation}
           <Button
-            floated="right"
             onClick={() =>
               handleClick(
                 props.gameData.eventId,
@@ -49,7 +48,6 @@ function GameCard(props) {
             {awaySpread}
           </Button>
           <Button
-            floated="right"
             onClick={() =>
               handleClick(
                 props.gameData.eventId,
@@ -69,7 +67,6 @@ function GameCard(props) {
           <Image floated="left" size="mini" src={props.gameData.homeLogo} />
           {props.gameData.homeAbbreviation}
           <Button
-            floated="right"
             onClick={() =>
               handleClick(
                 props.gameData.eventId,
@@ -82,7 +79,6 @@ function GameCard(props) {
             {homeSpread}
           </Button>
           <Button
-            floated="right"
             onClick={() =>
               handleClick(
                 props.gameData.eventId,

@@ -22,6 +22,26 @@ function generateToken(user) {
 }
 
 module.exports = {
+  Query: {
+    async getUser(_,{username}) {
+      try {
+
+        console.log("this is the username: " + username)
+
+        const user = await User.findOne({ username });
+
+        console.log("this is the user: " + user)
+        if (user) {
+          return user;
+        } else {
+          throw new Error("User not found");
+        }
+      } catch (err) {
+        console.log(err)
+        throw new Error(err);
+      }
+    },
+  },
   Mutation: {
     async login(_, { username, password }) {
       const { errors, valid } = validateLoginInput(username, password);
@@ -29,8 +49,11 @@ module.exports = {
       if (!valid) {
         throw new UserInputError("Errors.", { errors });
       }
+      console.log("this is the username: " + username)
 
       const user = await User.findOne({ username });
+
+      console.log("this is the user: " + user)
 
       if (!user) {
         errors.general = "User not found";
