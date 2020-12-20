@@ -284,8 +284,8 @@ class GameService {
           league: league,
           homeLogo: game.competitions[0].competitors[0].team.logo,
           awayLogo: game.competitions[0].competitors[1].team.logo,
-          homeScore: game.competitions[0].competitors[0].score,
-          awayScore: game.competitions[0].competitors[1].score,
+          homeScore: parseInt(game.competitions[0].competitors[0].score),
+          awayScore: parseInt(game.competitions[0].competitors[1].score),
           homeAbbreviation: game.competitions[0].competitors[0].team.abbreviation,
           awayAbbreviation: game.competitions[0].competitors[1].team.abbreviation,
           homeFullName: game.competitions[0].competitors[0].team.displayName,
@@ -409,8 +409,8 @@ class GameService {
         switch(league) {
           case 'nfl':
             Livegame.findOneAndUpdate({ eventId: game.id }, {
-              homeScore: game.competitions[0].competitors[0].score,
-              awayScore: game.competitions[0].competitors[1].score,
+              homeScore: parseInt(game.competitions[0].competitors[0].score),
+              awayScore: parseInt(game.competitions[0].competitors[1].score),
               time: game.competitions[0].status.displayClock,
               period: game.competitions[0].status.period,
               lastPlay: game.competitions[0].situation.lastPlay.text,
@@ -430,8 +430,8 @@ class GameService {
 
           case 'college-football':
             Livegame.findOneAndUpdate({ eventId: game.id }, {
-              homeScore: game.competitions[0].competitors[0].score,
-              awayScore: game.competitions[0].competitors[1].score,
+              homeScore: parseInt(game.competitions[0].competitors[0].score),
+              awayScore: parseInt(game.competitions[0].competitors[1].score),
               time: game.competitions[0].status.displayClock,
               period: game.competitions[0].status.period,
               lastPlay: game.competitions[0].situation.lastPlay.text,
@@ -454,8 +454,8 @@ class GameService {
           case 'mens-college-basketball':
 
               Livegame.findOneAndUpdate({ eventId: game.id }, {
-                homeScore: game.competitions[0].competitors[0].score,
-                awayScore: game.competitions[0].competitors[1].score,
+                homeScore: parseInt(game.competitions[0].competitors[0].score),
+                awayScore: parseInt(game.competitions[0].competitors[1].score),
                 time: game.competitions[0].status.displayClock,
                 period: game.competitions[0].status.period,
                 lastPlay: game.competitions[0].situation.lastPlay.text,
@@ -474,8 +474,8 @@ class GameService {
           case 'nba':
 
             Livegame.findOneAndUpdate({ eventId: game.id }, {
-              homeScore: game.competitions[0].competitors[0].score,
-              awayScore: game.competitions[0].competitors[1].score,
+              homeScore: parseInt(game.competitions[0].competitors[0].score),
+              awayScore: parseInt(game.competitions[0].competitors[1].score),
               time: game.competitions[0].status.displayClock,
               period: game.competitions[0].status.period,
               lastPlay: game.competitions[0].situation.lastPlay.text,
@@ -509,8 +509,8 @@ class GameService {
           switch(league) {
             case 'nfl':
               playData.specificData = {
-                homeScore: game.competitions[0].competitors[0].score,
-                awayScore: game.competitions[0].competitors[1].score,
+                homeScore: parseInt(game.competitions[0].competitors[0].score),
+                awayScore: parseInt(game.competitions[0].competitors[1].score),
                 time: game.competitions[0].status.displayClock,
                 quarter: game.competitions[0].status.period,
                 down: game.competitions[0].situation.down,
@@ -521,8 +521,8 @@ class GameService {
               break;
             case 'college-football':
               playData.specificData = {
-                homeScore: game.competitions[0].competitors[0].score,
-                awayScore: game.competitions[0].competitors[1].score,
+                homeScore: parseInt(game.competitions[0].competitors[0].score),
+                awayScore: parseInt(game.competitions[0].competitors[1].score),
                 time: game.competitions[0].status.displayClock,
                 quarter: game.competitions[0].status.period,
                 down: game.competitions[0].situation.down,
@@ -535,8 +535,8 @@ class GameService {
             //live test to add more logic to this
             case 'mens-college-basketball':
               playData.specificData = {
-                homeScore: game.competitions[0].competitors[0].score,
-                awayScore: game.competitions[0].competitors[1].score,
+                homeScore: parseInt(game.competitions[0].competitors[0].score),
+                awayScore: parseInt(game.competitions[0].competitors[1].score),
                 time: game.competitions[0].status.displayClock,
                 half: game.competitions[0].status.period,
                 possession: possessionTeam
@@ -545,8 +545,8 @@ class GameService {
 
             case 'nba':
                 playData.specificData = {
-                  homeScore: game.competitions[0].competitors[0].score,
-                  awayScore: game.competitions[0].competitors[1].score,
+                  homeScore: parseInt(game.competitions[0].competitors[0].score),
+                  awayScore: parseInt(game.competitions[0].competitors[1].score),
                   time: game.competitions[0].status.displayClock,
                   quarter: game.competitions[0].status.period,
                   possession: possessionTeam
@@ -583,8 +583,8 @@ class GameService {
           league: league,
           homeLogo: game.competitions[0].competitors[0].team.logo,
           awayLogo: game.competitions[0].competitors[1].team.logo,
-          homeScore: game.competitions[0].competitors[0].score,
-          awayScore: game.competitions[0].competitors[1].score,
+          homeScore: parseInt(game.competitions[0].competitors[0].score),
+          awayScore: parseInt(game.competitions[0].competitors[1].score),
           homeAbbreviation: game.competitions[0].competitors[0].team.abbreviation,
           awayAbbreviation: game.competitions[0].competitors[1].team.abbreviation,
           homeFullName: game.competitions[0].competitors[0].team.displayName,
@@ -606,10 +606,10 @@ class GameService {
           contents.spread = result.spread;
           contents.overUnder = result.overUnder;
           if (result.spread.length > 0) {
-            contents.spreadWinner = this.calculateSpreadWinner(game.competitions[0].competitors[0].score, game.competitions[0].competitors[1].score, game.competitions[0].competitors[0].team.abbreviation, game.competitions[0].competitors[1].team.abbreviation, result.spread);
+            contents.spreadWinner = this.calculateSpreadWinner(parseInt(game.competitions[0].competitors[0].score), parseInt(game.competitions[0].competitors[1].score), game.competitions[0].competitors[0].team.abbreviation, game.competitions[0].competitors[1].team.abbreviation, result.spread);
           }
           if (result.overUnder !== -1) {
-            contents.ouResult = this.calculateOuResult((game.competitions[0].competitors[0].score + game.competitions[0].competitors[1].score), result.overUnder);
+            contents.ouResult = this.calculateOuResult( (parseInt(game.competitions[0].competitors[0].score) + parseInt(game.competitions[0].competitors[1].score) ), result.overUnder);
           }
         }
 
