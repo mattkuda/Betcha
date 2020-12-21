@@ -7,6 +7,15 @@ const Play = require("../../models/Play");
 module.exports = {
   Query: {
 
+    async getAllPregames() {
+      try {
+        let pregames = await Pregame.find();
+        return pregames;
+      } catch (err) {
+        throw new Error(err);
+      }
+    },
+
 
     async getNFLPregames() {
       try {
@@ -33,14 +42,8 @@ module.exports = {
       }
     },
 
-    async getAllPregames() {
-      try {
-        let pregames = await Pregame.find();
-        return pregames;
-      } catch (err) {
-        throw new Error(err);
-      }
-    },
+
+
     async getNCAAFPregames() {
       try {
         let pregames = await Pregame.find({league: "college-football"});
@@ -91,6 +94,35 @@ module.exports = {
         throw new Error(err);
       }
     },
+
+
+    async getNBAPregames() {
+      try {
+        let pregames = await Pregame.find({league: "nba"});
+        return pregames;
+      } catch (err) {
+        throw new Error(err);
+      }
+    },
+    async getNBALivegames() {
+      try {
+        const livegames = await Livegame.find({league: "nba"});
+        return livegames;
+      } catch (err) {
+        throw new Error(err);
+      }
+    },
+    async getNBAPostgames() {
+      try {
+        const postgames = await Postgame.find({league: "nba"});
+        return postgames;
+      } catch (err) {
+        throw new Error(err);
+      }
+    },
+
+
+
     async getPlaysInNFLGame(eventId) {
       try {
         const plays = await Play.find({eventId: eventId});
@@ -98,6 +130,6 @@ module.exports = {
       } catch (err) {
         throw new Error(err);
       }
-    }
+    },
   }
 };

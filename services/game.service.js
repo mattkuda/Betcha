@@ -14,28 +14,6 @@ const Play = require('../models/Play');
 const fetch = require('node-fetch');
 
 
-/*
-
-TODO:
-
-1a. Change to state: game.status.type.state (pre/in/post) --> DONE
-
-2. Get the addedContents() function written so we can dynamically
-add fields to a document based on the sport and league --> DONE - we use a switch case block instead
-
-3. Rethink the ctr functionality for line dancing that may occur.
-
-4. Add betting logic for postgame entries --> DONE, still needs to be tested
-
-5. Test this on other sport list entries (not just NFL) --> DONE
-
-6. Look at ways to make this faster...can we reach out to the ESPN API and process
-the data in parallel? Or is this something we have to do sequentially? Run speed tests
-on different methods to find the best one.
-
-*/
-
-
 class GameService {
   constructor() {
     this.ctr = 1;
@@ -189,8 +167,6 @@ class GameService {
           awayFullName: game.competitions[0].competitors[1].team.displayName,
           homeColor: game.competitions[0].competitors[0].team.color,
           awayColor: game.competitions[0].competitors[1].team.color,
-          homeRecord: game.competitions[0].competitors[0].records[0].summary,
-          awayRecord: game.competitions[0].competitors[1].records[0].summary,
           startTime: game.date,
           spread: game.competitions[0].odds[0].details,
           overUnder: game.competitions[0].odds[0].overUnder
@@ -198,6 +174,13 @@ class GameService {
 
         if (game.competitions[0].broadcasts.length > 0) {
           contents.broadcasts = game.competitions[0].broadcasts[0].names
+        }
+
+        if (this.elementExists(game.competitions[0].competitors[0], "records")) {
+          contents.homeRecord = game.competitions[0].competitors[0].records[0].summary;
+        }
+        if (this.elementExists(game.competitions[0].competitors[1], "records")) {
+          contents.awayRecord = game.competitions[0].competitors[1].records[0].summary;
         }
 
         switch(league) {
