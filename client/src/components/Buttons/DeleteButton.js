@@ -3,8 +3,8 @@ import gql from "graphql-tag";
 import { useMutation } from "@apollo/react-hooks";
 
 import { Button, Icon, Confirm, Dropdown } from "semantic-ui-react";
-import MyPopup from "../util/MyPopup";
-import { FETCH_POSTS_QUERY } from "../util/graphql";
+import MyPopup from "../../util/MyPopup";
+import { FETCH_POSTS_QUERY } from "../../util/graphql";
 
 function DeleteButton({ postId, commentId, callback }) {
   const [confirmOpen, setConfirmOpen] = useState(false);

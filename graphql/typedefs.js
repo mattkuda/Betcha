@@ -33,6 +33,20 @@ module.exports = gql`
     token: String!
     username: String!
     createdAt: String!
+    followers: [Follower]!
+    following: [Following]!
+    followersCount: Int!
+    followingCount: Int!
+  }
+  type Follower{
+    id: ID!
+    followerId: ID!
+    createdAt: String!
+  }
+  type Following{
+    id: ID!
+    followeeId: ID!
+    createdAt: String!
   }
 
   type React {
@@ -396,8 +410,8 @@ module.exports = gql`
     awayFullName: String!
     homeColor: String!
     awayColor: String!
-    homeRecord: String!
-    awayRecord: String!
+    homeRecord: String
+    awayRecord: String
     startTime: String!
     broadcasts: [String]
     spread: String
@@ -465,6 +479,7 @@ module.exports = gql`
     createComment(postId: ID!, body: String!): Post!
     deleteComment(postId: ID!, commentId: ID!): Post!
     likePost(postId: ID!): Post!
+    followUser(followeeId: ID!): User!
     createReact(body: String!, playId: String!): React!
   }
 

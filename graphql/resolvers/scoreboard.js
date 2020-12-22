@@ -36,6 +36,7 @@ module.exports = {
     async getAllPregames() {
       try {
         let pregames = await Pregame.find();
+        console.log("getAllPregames result: ")
         return pregames;
       } catch (err) {
         throw new Error(err);
