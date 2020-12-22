@@ -47,6 +47,14 @@ function ScoreboardNav() {
           as={Link}
           to="/scoreboard/ncaabmens"
         />
+        <Menu.Item
+          name="nba"
+          content="NBA"
+          active={activeItem === "nba"}
+          onClick={handleItemClick}
+          as={Link}
+          to="/scoreboard/nba"
+        />
       </Menu>
   )
 }

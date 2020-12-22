@@ -37,6 +37,14 @@ module.exports = {
         throw new Error(err);
       }
     },
+    async getPlaysInNBAGame(_, { gameId }) {
+      try {
+        let plays = await Play.find({eventId: gameId});
+        return plays;
+      } catch (err) {
+        throw new Error(err);
+      }
+    },
     async getPlaysInNFLGameInPeriod(_, { gameId, period }) {
       try {
         //may want to add a check for invalid period entry
@@ -57,6 +65,14 @@ module.exports = {
     async getPlaysInNCAABMensGameInPeriod(_, { gameId, period }) {
       try {
         let plays = await Play.find({eventId: gameId, 'specificData.half': period}).sort({ createdAt: -1 });
+        return plays;
+      } catch (err) {
+        throw new Error(err);
+      }
+    },
+    async getPlaysInNBAGameInPeriod(_, { gameId, period }) {
+      try {
+        let plays = await Play.find({eventId: gameId, 'specificData.quarter': period}).sort({ createdAt: -1 });
         return plays;
       } catch (err) {
         throw new Error(err);

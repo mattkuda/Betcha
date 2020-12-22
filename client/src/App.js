@@ -19,9 +19,11 @@ import ScoreboardHome from "./pages/ScoreboardHome";
 import NFLScoreboard from "./pages/NFLScoreboard";
 import NCAAFScoreboard from "./pages/NCAAFScoreboard";
 import NCAABMensScoreboard from "./pages/NCAABMensScoreboard";
+import NBAScoreboard from "./pages/NBAScoreboard";
 import NFLGameDetails from "./components/NFLGameDetails";
 import NCAAFGameDetails from "./components/NCAAFGameDetails";
 import NCAABMensGameDetails from "./components/NCAABMensGameDetails";
+import NBAGameDetails from "./components/NBAGameDetails";
 
 function App() {
   return (
@@ -41,9 +43,11 @@ function App() {
           <Route exact path="/scoreboard/nfl" component={NFLScoreboard} />
           <Route exact path="/scoreboard/ncaaf" component={NCAAFScoreboard} />
           <Route exact path="/scoreboard/ncaabmens" component={NCAABMensScoreboard} />
+          <Route exact path="/scoreboard/nba" component={NBAScoreboard} />
           <Route exact path="/scoreboard/nfl/:eventId" component={NFLGameDetails} />
           <Route exact path="/scoreboard/ncaaf/:eventId" component={NCAAFGameDetails} />
           <Route exact path="/scoreboard/ncaabmens/:eventId" component={NCAABMensGameDetails} />
+          <Route exact path="/scoreboard/nba/:eventId" component={NBAGameDetails} />
         </Container>
       </Router>
     </AuthProvider>

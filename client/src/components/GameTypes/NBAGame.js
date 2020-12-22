@@ -16,7 +16,7 @@ TODO:
 */
 
 
-class NCAABMensGame extends Component {
+class NBAGame extends Component {
 
   gameState = this.props.state;
   localStartTime = new Date(Date.parse(this.props.startTime));
@@ -206,4 +206,4 @@ class NCAABMensGame extends Component {
   }
 }
 
-export default NCAABMensGame;
+export default NBAGame;
