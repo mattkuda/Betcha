@@ -1,50 +1,50 @@
-const React = require("../../models/React");
+const Reaction = require("../../models/Reaction");
 const User = require("../../models/User");
 const Play = require("../../models/Play");
 const checkAuth = require("../../util/check-auth");
 
 module.exports = {
   Query: {
-    async getAllReacts() {
+    async getAllReactions() {
       try {
-        let reacts = await React.find({});
-        return reacts;
+        let reactions = await Reaction.find({});
+        return reactions;
       } catch (err) {
         throw new Error(err);
       }
     },
-    async getReactsForPlay(_, { playId }) {
+    async getReactionsForPlay(_, { playId }) {
       try {
-        let reacts = await React.find({playId: playId});
-        return reacts;
+        let reactions = await Reaction.find({playId: playId});
+        return reactions;
       } catch (err) {
         throw new Error(err);
       }
     },
-    async getReactsForUser(_, { userId }) {
+    async getReactionsForUser(_, { userId }) {
       try {
-        let reacts = await React.find({userId: userId});
-        return reacts;
+        let reactions = await Reaction.find({userId: userId});
+        return reactions;
       } catch (err) {
         throw new Error(err);
       }
     }
   },
   Mutation: {
-    async createReact(_, { body, playId }, context) {
+    async createReaction(_, { body, playId }, context) {
       const user = checkAuth(context);
 
-      const newReact = new React({
+      const newReaction = new Reaction({
         userId: user.id,
         playId: playId,
         body: body,
         createdAt: new Date().toISOString(),
       });
 
-      return newReact.save();
+      return newReaction.save();
     }
   },
-  React: {
+  Reaction: {
     async user(parent) {
       let user = await User.findById(parent.userId);
       //console.log(user);

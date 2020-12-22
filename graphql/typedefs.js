@@ -35,7 +35,7 @@ module.exports = gql`
     createdAt: String!
   }
 
-  type React {
+  type Reaction {
     id: ID!
     user: User!
     play: Play!
@@ -544,9 +544,9 @@ module.exports = gql`
     getPlaysInNCAAFGameInPeriod(gameId: String!, period: Int!): [FootballPlay]
     getPlaysInNCAABMensGameInPeriod(gameId: String!, period: Int!): [NCAABMensPlay]
     getPlaysInNBAGameInPeriod(gameId: String!, period: Int!): [NBAPlay]
-    getAllReacts: [React]
-    getReactsForPlay(playId: String!): [React]
-    getReactsForUser(userId: String!): [React]
+    getAllReactions: [Reaction]
+    getReactionsForPlay(playId: String!): [Reaction]
+    getReactionsForUser(userId: String!): [Reaction]
   }
 
   type Mutation {
@@ -562,7 +562,7 @@ module.exports = gql`
     createComment(postId: ID!, body: String!): Post!
     deleteComment(postId: ID!, commentId: ID!): Post!
     likePost(postId: ID!): Post!
-    createReact(body: String!, playId: String!): React!
+    createReaction(body: String!, playId: String!): Reaction!
   }
 
   type Subscription {

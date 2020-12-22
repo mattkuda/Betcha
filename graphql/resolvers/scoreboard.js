@@ -16,7 +16,6 @@ module.exports = {
       }
     },
 
-
     async getNFLPregames() {
       try {
         let pregames = await Pregame.find({league: "nfl"});
