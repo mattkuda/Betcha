@@ -1,6 +1,5 @@
 const postsResolvers = require("./posts");
 const leaguesResolvers = require("./leagues");
-const usersResolvers = require("./users");
 const commentsResolvers = require("./comments");
 const scoreboardResolvers = require("./scoreboard");
 const playsResolvers = require("./plays");
@@ -15,6 +14,11 @@ module.exports = {
     commentCount: (parent) => parent.comments.length,
     ...postResolvers.Post
   },
+  User: {
+    followersCount: (parent) => parent.followers.length,
+    followingCount: (parent) => parent.following.length,
+    ...userResolvers.User,
+  },
   Query: {
     ...postsResolvers.Query,
     ...userResolvers.Query,
@@ -24,7 +28,7 @@ module.exports = {
     ...reactionResolvers.Query
   },
   Mutation: {
-    ...usersResolvers.Mutation,
+    ...userResolvers.Mutation,
     ...postsResolvers.Mutation,
     ...commentsResolvers.Mutation,
     ...reactionResolvers.Mutation

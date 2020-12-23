@@ -1,10 +1,12 @@
-import React, { useState, Fragment } from "react";
+import React, { useState, useContext, Fragment } from "react";
 import { useQuery } from "@apollo/react-hooks";
 import { Link, useParams } from 'react-router-dom';
 import gql from "graphql-tag";
-import { Input, Menu } from 'semantic-ui-react';
+import { Input, Menu, Grid, Modal, Button } from 'semantic-ui-react';
 //import { HashLink as Link } from 'react-router-hash-link';
 import NFLGame from "../components/GameTypes/NFLGame";
+import { AuthContext } from "../context/auth";
+import ReactionModal from "./ReactionModal/ReactionModal";
 
 
 /*
@@ -34,6 +36,10 @@ function NFLGameDetails(props) {
   const path = pathname === "/" ? "home" : pathname.substr(1);
   const [activeItem, setActiveItem] = useState(path);
   const handleItemClick = (e, { name }) => setActiveItem(name);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [currentPlay, setCurrentPlay] = useState(null);
+
+  const { user } = useContext(AuthContext);
 
   let myGameId = props.match.params.eventId;
   let myPeriod = 1;
@@ -79,43 +85,98 @@ function NFLGameDetails(props) {
   return (
     <div>
 
+    <Modal open={modalOpen} onClose={() => setModalOpen(false)} closeIcon dimmer='blurring' style={{height: '90%'}}>
+      <Modal.Header>Play Reaction</Modal.Header>
+      <Modal.Content image scrolling>
+        <ReactionModal handleClose={(e) => setModalOpen(false)} play={currentPlay} />
+      </Modal.Content>
+    </Modal>
+
     <h1>Plays In Game</h1>
 
     <h3>Q4</h3>
     <Fragment>
       {
         periodFourData.getPlaysInNFLGameInPeriod.map(play => (
-          <p>{play.specificData.time}: {play.description} ({play.specificData.awayScore} - {play.specificData.homeScore})</p>
+          <Grid celled>
+            <Grid.Row>
+            <Grid.Column width={14}>
+              <p>{play.specificData.time}: {play.description} ({play.specificData.awayScore} - {play.specificData.homeScore})</p>
+            </Grid.Column>
+            <Grid.Column width={2}>
+              {user ? <Button onClick={() => {
+                setModalOpen(true);
+                setCurrentPlay(play);
+              }}>React</Button>: <Button as={Link} to="/login">React</Button>}
+            </Grid.Column>
+            </Grid.Row>
+          </Grid>
         ))
       }
     </Fragment>
 
     <h3>Q3</h3>
-    <Fragment>
-      {
-        periodThreeData.getPlaysInNFLGameInPeriod.map(play => (
-          <p>{play.specificData.time}: {play.description} ({play.specificData.awayScore} - {play.specificData.homeScore})</p>
-        ))
-      }
-    </Fragment>
+      <Fragment>
+        {
+          periodThreeData.getPlaysInNFLGameInPeriod.map(play => (
+            <Grid celled>
+              <Grid.Row>
+              <Grid.Column width={14}>
+                <p>{play.specificData.time}: {play.description} ({play.specificData.awayScore} - {play.specificData.homeScore})</p>
+              </Grid.Column>
+              <Grid.Column width={2}>
+                {user ? <Button onClick={() => {
+                  setModalOpen(true);
+                  setCurrentPlay(play);
+                }}>React</Button>: <Button as={Link} to="/login">React</Button>}
+              </Grid.Column>
+              </Grid.Row>
+            </Grid>
+          ))
+        }
+      </Fragment>
 
     <h3>Q2</h3>
-    <Fragment>
-      {
-        periodTwoData.getPlaysInNFLGameInPeriod.map(play => (
-          <p>{play.specificData.time}: {play.description} ({play.specificData.awayScore} - {play.specificData.homeScore})</p>
-        ))
-      }
-    </Fragment>
+      <Fragment>
+        {
+          periodTwoData.getPlaysInNFLGameInPeriod.map(play => (
+            <Grid celled>
+              <Grid.Row>
+              <Grid.Column width={14}>
+                <p>{play.specificData.time}: {play.description} ({play.specificData.awayScore} - {play.specificData.homeScore})</p>
+              </Grid.Column>
+              <Grid.Column width={2}>
+                {user ? <Button onClick={() => {
+                  setModalOpen(true);
+                  setCurrentPlay(play);
+                }}>React</Button>: <Button as={Link} to="/login">React</Button>}
+              </Grid.Column>
+              </Grid.Row>
+            </Grid>
+          ))
+        }
+      </Fragment>
 
     <h3>Q1</h3>
-    <Fragment>
-      {
-        periodOneData.getPlaysInNFLGameInPeriod.map(play => (
-          <p>{play.specificData.time}: {play.description} ({play.specificData.awayScore} - {play.specificData.homeScore})</p>
-        ))
-      }
-    </Fragment>
+      <Fragment>
+        {
+          periodOneData.getPlaysInNFLGameInPeriod.map(play => (
+            <Grid celled>
+              <Grid.Row>
+              <Grid.Column width={14}>
+                <p>{play.specificData.time}: {play.description} ({play.specificData.awayScore} - {play.specificData.homeScore})</p>
+              </Grid.Column>
+              <Grid.Column width={2}>
+                {user ? <Button onClick={() => {
+                  setModalOpen(true);
+                  setCurrentPlay(play);
+                }}>React</Button>: <Button as={Link} to="/login">React</Button>}
+              </Grid.Column>
+              </Grid.Row>
+            </Grid>
+          ))
+        }
+      </Fragment>
     </div>
   )
 }
@@ -123,6 +184,7 @@ function NFLGameDetails(props) {
 const FETCH_PLAYS_IN_NFL_GAME_IN_PERIOD = gql`
   query($myGameId: String!, $myPeriod: Int!) {
     getPlaysInNFLGameInPeriod(gameId: $myGameId, period: $myPeriod) {
+      playId
       description
       specificData {
         homeScore

@@ -34,7 +34,7 @@ function Home() {
         <Grid.Row>
         {user ? <Button onClick={(e) => setModalOpen(true)}>Share Bet</Button>: <Button as={Link} to="/login">Share Bet</Button>}
           
-          <Button onClick={(e) => console.log(posts)}>Console Post</Button>
+          <Button onClick={(e) => console.log(posts)}>Console Posts</Button>
         </Grid.Row>
         <Grid.Row>
           {/* {user && (

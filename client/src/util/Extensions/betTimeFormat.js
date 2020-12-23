@@ -1,6 +1,5 @@
 export const betTimeFormat = (dateVal) => {
   var newDate = new Date(dateVal);
-  console.log(newDate);
 
   var sMonth = newDate.getMonth() + 1;
   var sDay = newDate.getDate();

@@ -1,6 +1,7 @@
 const { AuthenticationError } = require("apollo-server");
 
 const Post = require("../../models/Post");
+const User = require("../../models/User");
 const gamePre = require("../../models/game.pre");
 const BetInfoPre = require("../../models/game.pre.js");
 
@@ -8,9 +9,23 @@ const checkAuth = require("../../util/check-auth");
 
 module.exports = {
   Query: {
-    async getPosts() {
+    async getPosts(_, {}, context) {
       try {
-        const posts = await Post.find().sort({ createdAt: -1 })
+        // GETTING POSTS FROM ONLY PPL YOU FOLLOW
+
+        
+        const {id} = checkAuth(context);
+        const userME = await User.findById(id);
+        //Get array ids of all ppl you follow
+        const followingIds = userME.following.map(f => f.followeeId);
+
+        //Only get posts from ppl that are in that array
+        const posts = await Post.find({ user: { $in: followingIds } }).sort({ createdAt: -1 })
+
+        //user
+        ///const posts = await Post.find().sort({ createdAt: -1 })
+
+        
         //FORMERLY const posts = await Post.find().sort({ createdAt: -1 }).populate('gameId').exec()
         return posts;
       } catch (err) {
@@ -43,7 +58,6 @@ module.exports = {
   Post: {
     async gameId(eventIdent) {
       let gameId = await gamePre.find({eventId: eventIdent.gameId}).then(games => games[0]);
-      console.log("Here is the game we're attching to the post: " + gameId);
       return gameId;
     }
   },

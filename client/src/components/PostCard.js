@@ -5,8 +5,8 @@ import moment from "moment";
 import MyPopup from "../util/MyPopup";
 
 import { AuthContext } from "../context/auth";
-import LikeButton from "./LikeButton";
-import DeleteButton from "./DeleteButton";
+import LikeButton from "./Buttons/LikeButton";
+import DeleteButton from "./Buttons/DeleteButton";
 
 import { FETCH_POSTS_QUERY } from "../util/graphql";
 import { betDescFormat } from "../util/Extensions/betDescFormat";

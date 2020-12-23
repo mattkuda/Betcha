@@ -1,8 +1,4 @@
 export const betDescFormat = (betType, betAmount, gameData) => {
-  console.log(betType);
-  console.log(betAmount);
-  console.log(gameData);
-  console.log(gameData.homeAbbreviation);
   let rValue = new String();
 
   if (betType === "HOME") {
@@ -26,8 +22,6 @@ export const betDescFormat = (betType, betAmount, gameData) => {
 
 export const betMatchFormat = (gameData) => {
  
-  console.log(gameData);
-  console.log(gameData.homeAbbreviation);
   let rValue = new String();
 
   rValue = gameData.awayAbbreviation + " @ " + gameData.homeAbbreviation;

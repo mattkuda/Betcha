@@ -13,6 +13,7 @@ import {
 import moment from "moment";
 
 import PostCard from "../components/PostCard";
+import FollowButton from "../components/Buttons/FollowButton";
 import { AuthContext } from "../context/auth";
 import MyPopup from "../util/MyPopup";
 import { betDescFormat } from "../util/Extensions/betDescFormat";
@@ -34,15 +35,20 @@ function Profile(props) {
     },
   });
 
-  const [follow, setFollow] = useState("");
-
   //Depends on whether we have data from query yet
   let userMarkup;
 
   if (!getUser || !getUserPosts) {
     userMarkup = <p>Loading user...</p>;
   } else {
-    const { username, createdAt } = getUser;
+    const {
+      id,
+      username,
+      createdAt,
+      followingCount,
+      followersCount,
+      followers,
+    } = getUser;
     const posts = getUserPosts;
 
     userMarkup = (
@@ -59,22 +65,28 @@ function Profile(props) {
             <Card fluid>
               <Card.Content>
                 <Card.Header>@{username}</Card.Header>
-                <Card.Meta>Joined {moment(createdAt).format("MMMM Do, YYYY")}</Card.Meta>
+                <Card.Meta>
+                  <FollowButton user={user} followeeUser={{ id, followers }} />
+                </Card.Meta>
+                <Card.Meta>
+                  <Icon fitted name="calendar alternate outline" /> Joined{" "}
+                  {moment(createdAt).format("MMMM Do, YYYY")}
+                </Card.Meta>
+                <Card.Meta>
+                  Following: {followingCount} Followers: {followersCount}
+                </Card.Meta>
               </Card.Content>
             </Card>
           </Grid.Column>
         </Grid.Row>
         <Grid.Row>
-
-        {posts &&
-                posts.map((post) => (
-                  <Grid.Column key={post.id} style={{ marginBottom: 20 }}>
-                    <PostCard post={post} />
-                  </Grid.Column>
-                ))}
+          {posts &&
+            posts.map((post) => (
+              <Grid.Column key={post.id} style={{ marginBottom: 20 }}>
+                <PostCard post={post} />
+              </Grid.Column>
+            ))}
         </Grid.Row>
-
-        
       </Grid>
     );
   }
@@ -85,8 +97,17 @@ function Profile(props) {
 const FETCH_PROFILE_QUERY = gql`
   query($profileUsername: String!) {
     getUser(username: $profileUsername) {
+      id
       username
       createdAt
+      followers {
+        followerId
+      }
+      following {
+        followeeId
+      }
+      followingCount
+      followersCount
     }
   }
 `;

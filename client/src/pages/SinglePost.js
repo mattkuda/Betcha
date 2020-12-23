@@ -12,9 +12,9 @@ import {
 } from "semantic-ui-react";
 import moment from "moment";
 
-import LikeButton from "../components/LikeButton";
+import LikeButton from "../components/Buttons/LikeButton";
 import { AuthContext } from "../context/auth";
-import DeleteButton from "../components/DeleteButton";
+import DeleteButton from "../components/Buttons/DeleteButton";
 import MyPopup from "../util/MyPopup";
 import { betDescFormat } from "../util/Extensions/betDescFormat";
 import { betTimeFormat } from "../util/Extensions/betTimeFormat";

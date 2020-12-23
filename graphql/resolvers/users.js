@@ -8,13 +8,14 @@ const {
 } = require("../../util/validators");
 const { SECRET_KEY } = require("../../config");
 const User = require("../../models/User");
+const checkAuth = require("../../util/check-auth");
 
 function generateToken(user) {
   return jwt.sign(
     {
       id: user.id,
       email: user.email,
-      username: user.username,
+      username: user.username
     },
     SECRET_KEY,
     { expiresIn: "1h" }
@@ -23,21 +24,17 @@ function generateToken(user) {
 
 module.exports = {
   Query: {
-    async getUser(_,{username}) {
+    async getUser(_, { username }) {
       try {
-
-        console.log("this is the username: " + username)
-
         const user = await User.findOne({ username });
 
-        console.log("this is the user: " + user)
         if (user) {
           return user;
         } else {
           throw new Error("User not found");
         }
       } catch (err) {
-        console.log(err)
+        console.log(err);
         throw new Error(err);
       }
     },
@@ -49,11 +46,8 @@ module.exports = {
       if (!valid) {
         throw new UserInputError("Errors.", { errors });
       }
-      console.log("this is the username: " + username)
 
       const user = await User.findOne({ username });
-
-      console.log("this is the user: " + user)
 
       if (!user) {
         errors.general = "User not found";
@@ -117,6 +111,44 @@ module.exports = {
         id: res._id,
         token,
       };
+    },
+    //FOLLOW and UNFOLLOW
+    async followUser(_, { followeeId }, context) {
+      
+      const { id } = checkAuth(context);
+
+
+      const user = await User.findById(followeeId);
+      const userME = await User.findById(id);
+
+      if (user) {
+        if (user.followers.find((follower) => follower.followerId.equals(id))) {
+          //User already followed ==> unfollow them
+          user.followers = user.followers.filter(
+            (follower) => !follower.followerId.equals(id)
+          );
+          userME.following = userME.following.filter(
+            (followee) => !followee.followeeId.equals(followeeId)
+          );
+        } else {
+          //Not yet followed ==> follow them
+          //Add to OTHER's followers
+          user.followers.push({
+            followerId: id,
+            createdAt: new Date().toISOString(),
+          });
+          //Add to YOUR following
+          userME.following.push({
+            followeeId: followeeId,
+            createdAt: new Date().toISOString(),
+          });
+        }
+
+        await user.save();
+        await userME.save();
+
+        return user;
+      } else throw new UserInputError("User not found.");
     },
   },
 };

@@ -5,7 +5,6 @@ import { useMutation } from "@apollo/react-hooks";
 
 import { useForm } from "../../util/hooks";
 
-
 import LeagueSelection from "./LeagueStuff/LeagueSelection";
 import GameSelection from "./GameStuff/GameSelection";
 import BetSelection from "./BetStuff/BetSelection";
@@ -20,7 +19,7 @@ function PostModal(props) {
     betAmount: "",
     gameId: "",
     xdefBetAmount: "",
-    xleagueId: ""
+    xleagueId: "",
   });
 
   const [createPost, { error }] = useMutation(CREATE_POST_MUTATION, {
@@ -44,7 +43,6 @@ function PostModal(props) {
     },
     //Added this so the page doesnt break
     onError(err) {
-
       return err;
     },
   });
@@ -72,7 +70,6 @@ function PostModal(props) {
   function selectxdefBetAmount(pickedxdefBetAmount) {
     values.xdefBetAmount = pickedxdefBetAmount;
     values.betAmount = pickedxdefBetAmount.toString();
-
   }
 
   return (
@@ -86,7 +83,12 @@ function PostModal(props) {
           )}
 
           {values.xleagueId !== "" && values.gameId === "" ? (
-            <GameSelection league={values.xleagueId} chooseGameId={selectGameId} chooseBetType={selectBetType} chooseBetAmount={selectxdefBetAmount} />
+            <GameSelection
+              league={values.xleagueId}
+              chooseGameId={selectGameId}
+              chooseBetType={selectBetType}
+              chooseBetAmount={selectxdefBetAmount}
+            />
           ) : (
             <div>
               <p>The gameId is {values.gameId}</p>
@@ -96,31 +98,50 @@ function PostModal(props) {
           )}
 
           {values.xleagueId !== "" && values.gameId !== "" ? (
-            <BetSelection defValue={values.xdefBetAmount} chooseBetAmount={selectBetAmount} betValue = {values.betAmount} />
+            <>
+              <BetSelection
+                defValue={values.xdefBetAmount}
+                chooseBetAmount={selectBetAmount}
+                betValue={values.betAmount}
+              />
+              <Form.Input
+                placeholder="Why are you taking this bet?"
+                noValidate
+                name="body"
+                onChange={onChange}
+                value={values.body}
+                error={error ? true : false}
+              />
+              <Button
+                type="submit"
+                color="teal"
+                onClick={() => console.log(values)}
+              >
+                Submit
+              </Button>
+            </>
           ) : (
             <></>
           )}
-          <><Form.Input
-            placeholder="Why are you taking this bet?"
-            noValidate
-            name="body"
-            onChange={onChange}
-            value={values.body}
-            error={error ? true : false}
-          />
-          <Button type="submit" color="teal" onClick={() => console.log(values)}>
-            Submit
-          </Button></>
         </Form.Field>
       </Form>
-     
     </>
   );
 }
 
 const CREATE_POST_MUTATION = gql`
-  mutation createPost($body: String!, $betType: String!, $betAmount: String!, $gameId: String!){
-    createPost(body: $body, betType: $betType, betAmount: $betAmount, gameId: $gameId){
+  mutation createPost(
+    $body: String!
+    $betType: String!
+    $betAmount: String!
+    $gameId: String!
+  ) {
+    createPost(
+      body: $body
+      betType: $betType
+      betAmount: $betAmount
+      gameId: $gameId
+    ) {
       id
       body
       betType
