@@ -18,7 +18,8 @@ module.exports = {
         const userME = await User.findById(id);
         //Get array ids of all ppl you follow
         const followingIds = userME.following.map(f => f.followeeId);
-
+        //ADD YOURSELF TO THE FEED
+        followingIds.push(id);
         //Only get posts from ppl that are in that array
         const posts = await Post.find({ user: { $in: followingIds } }).sort({ createdAt: -1 })
 

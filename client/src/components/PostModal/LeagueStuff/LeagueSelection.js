@@ -3,7 +3,7 @@ import { useQuery } from "@apollo/react-hooks";
 import { Grid, Transition, Modal, Button } from "semantic-ui-react";
 
 import { AuthContext } from "../../../context/auth";
-import PostCard from "../../PostCard";
+import PostCard from "../../PostCard/PostCard";
 import PostForm from "../../PostForm";
 import PostModal from "../PostModal";
 import { FETCH_POSTS_QUERY } from "../../../util/graphql";

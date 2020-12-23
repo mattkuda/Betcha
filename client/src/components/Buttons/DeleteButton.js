@@ -38,6 +38,12 @@ function DeleteButton({ postId, commentId, callback }) {
     },
   });
 
+  
+
+  const copyCodeToClipboard = () => {
+    console.log("TODO LINK COPIED")
+  }
+
   return (
     <>
       <MyPopup content={commentId ? "Delete comment" : "Delete post"}>
@@ -52,7 +58,7 @@ function DeleteButton({ postId, commentId, callback }) {
         <Dropdown as="div" floated="right" item text="More">
           <Dropdown.Menu>
             <Dropdown.Item onClick={() => setConfirmOpen(true)}>Delete</Dropdown.Item>
-            <Dropdown.Item onClick={() => console.log("Link copied!")}>Copy Link (todo)</Dropdown.Item>
+            <Dropdown.Item onClick={() => copyCodeToClipboard()}>Copy Link (todo)</Dropdown.Item>
           </Dropdown.Menu>
         </Dropdown>
       </MyPopup>
