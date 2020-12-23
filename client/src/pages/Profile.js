@@ -12,7 +12,7 @@ import {
 } from "semantic-ui-react";
 import moment from "moment";
 
-import PostCard from "../components/PostCard";
+import PostCard from "../components/PostCard/PostCard";
 import FollowButton from "../components/Buttons/FollowButton";
 import { AuthContext } from "../context/auth";
 import MyPopup from "../util/MyPopup";

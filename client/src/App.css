@@ -1,11 +1,11 @@
-.page-title{
+.page-title {
   display: block !important;
   text-align: center;
   font-size: 2rem;
   margin-top: 10px;
 }
 
-.form-container{
+.form-container {
   width: 400px;
   margin: auto;
 }
@@ -15,3 +15,7 @@
   background-color: #00b5ad;
 }
 
+.ui.link:focus,
+.ui.links .link:focus{
+  text-decoration: none;
+}
