@@ -1,12 +1,12 @@
-//Defines our MongoDB live game model
+//Defines our MongoDB postgame model
 
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 //will need to set gameId as something separate from _id
 
-const gameLiveSchema = new Schema({
-  eventId: String,
+const postgameSchema = new Schema({
+  gameId: String,
   state: String,
   stateDetails: String,
   sport: String,
@@ -23,14 +23,13 @@ const gameLiveSchema = new Schema({
   awayColor: String,
   homeRecord: String,
   awayRecord: String,
-  startTime: String,
-  broadcasts: [String],
-  time: String,
-  period: Number,
+  homeLines: [Number],
+  awayLines: [Number],
   spread: String,
-  overUnder: String,
-  lastPlay: String,
+  overUnder: Number,
+  spreadWinner: String,
+  ouResult: String,
   specificData: mongoose.Mixed
 }, { strict: false });
 
-module.exports = mongoose.model('gameLive', gameLiveSchema);
+module.exports = mongoose.model('Postgame', postgameSchema);

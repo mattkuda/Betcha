@@ -1,7 +1,7 @@
 
-const Pregame = require("../../models/game.pre");
-const Livegame = require("../../models/game.live");
-const Postgame = require("../../models/game.post");
+const Pregame = require("../../models/Pregame");
+const Livegame = require("../../models/Livegame");
+const Postgame = require("../../models/Postgame");
 const Play = require("../../models/Play");
 
 module.exports = {
@@ -115,17 +115,6 @@ module.exports = {
       try {
         const postgames = await Postgame.find({league: "nba"});
         return postgames;
-      } catch (err) {
-        throw new Error(err);
-      }
-    },
-
-
-
-    async getPlaysInNFLGame(eventId) {
-      try {
-        const plays = await Play.find({eventId: eventId});
-        return plays;
       } catch (err) {
         throw new Error(err);
       }

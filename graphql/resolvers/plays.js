@@ -1,7 +1,8 @@
 
 const Play = require("../../models/Play");
-const Livegame = require("../../models/game.live");
-const Postgame = require("../../models/game.post");
+const Livegame = require("../../models/Livegame");
+const Postgame = require("../../models/Postgame");
+const Reaction = require("../../models/Reaction");
 
 module.exports = {
   Query: {
@@ -13,70 +14,38 @@ module.exports = {
         throw new Error(err);
       }
     },
-    async getPlaysInNFLGame(_, { gameId }) {
+    async getPlaysInGame(_, { gameId }) {
       try {
-        let plays = await Play.find({eventId: gameId});
+        let plays = await Play.find({gameId: gameId});
         return plays;
       } catch (err) {
         throw new Error(err);
       }
     },
-    async getPlaysInNCAAFGame(_, { gameId }) {
-      try {
-        let plays = await Play.find({eventId: gameId});
-        return plays;
-      } catch (err) {
-        throw new Error(err);
-      }
-    },
-    async getPlaysInNCAABMensGame(_, { gameId }) {
-      try {
-        let plays = await Play.find({eventId: gameId});
-        return plays;
-      } catch (err) {
-        throw new Error(err);
-      }
-    },
-    async getPlaysInNBAGame(_, { gameId }) {
-      try {
-        let plays = await Play.find({eventId: gameId});
-        return plays;
-      } catch (err) {
-        throw new Error(err);
-      }
-    },
-    async getPlaysInNFLGameInPeriod(_, { gameId, period }) {
+    async getPlaysInGameInPeriod(_, { gameId, period }) {
       try {
         //may want to add a check for invalid period entry
-        let plays = await Play.find({eventId: gameId, 'specificData.quarter': period}).sort({ createdAt: -1 });
+        let plays = await Play.find({gameId: gameId, 'specificData.period': period}).sort({ createdAt: -1 });
         return plays;
       } catch (err) {
         throw new Error(err);
       }
     },
-    async getPlaysInNCAAFGameInPeriod(_, { gameId, period }) {
-      try {
-        let plays = await Play.find({eventId: gameId, 'specificData.quarter': period}).sort({ createdAt: -1 });
-        return plays;
-      } catch (err) {
-        throw new Error(err);
+  },
+  Play: {
+    async game(parent) {
+      let game = await Livegame.find({gameId: parent.gameId});
+      if (game) {
+        return game;
+      }
+      else {
+        let game = await Postgame.find({gameId: parent.gameId});
+        return game;
       }
     },
-    async getPlaysInNCAABMensGameInPeriod(_, { gameId, period }) {
-      try {
-        let plays = await Play.find({eventId: gameId, 'specificData.half': period}).sort({ createdAt: -1 });
-        return plays;
-      } catch (err) {
-        throw new Error(err);
-      }
-    },
-    async getPlaysInNBAGameInPeriod(_, { gameId, period }) {
-      try {
-        let plays = await Play.find({eventId: gameId, 'specificData.quarter': period}).sort({ createdAt: -1 });
-        return plays;
-      } catch (err) {
-        throw new Error(err);
-      }
-    },
+    async reactions(parent) {
+      let reactions = await Reaction.find({playId: parent.playId});
+      return reactions;
+    }
   }
 };

@@ -5,8 +5,8 @@ const Schema = mongoose.Schema;
 
 //will need to set gameId as something separate from _id
 
-const gamePreSchema = new Schema({
-  eventId: String,
+const pregameSchema = new Schema({
+  gameId: String,
   state: String,
   stateDetails: String,
   sport: String,
@@ -24,8 +24,8 @@ const gamePreSchema = new Schema({
   startTime: String,
   broadcasts: [String],
   spread: String,
-  overUnder: String,
+  overUnder: Number,
   specificData: mongoose.Mixed
 }, { strict: false });
 
-module.exports = mongoose.model('gamePre', gamePreSchema);
+module.exports = mongoose.model('Pregame', pregameSchema);
