@@ -99,7 +99,7 @@ module.exports = gql`
     broadcasts: [String]
     spread: String!
     overUnder: Float!
-    specificData: MixedPregameData!
+    specificData: MixedPregameData
   }
 
   type Livegame {
@@ -128,7 +128,7 @@ module.exports = gql`
     spread: String!
     overUnder: Float!
     lastPlay: String!
-    specificData: MixedLivegameData!
+    specificData: MixedLivegameData
   }
 
   type Postgame {
@@ -156,7 +156,7 @@ module.exports = gql`
     overUnder: Float!
     spreadWinner: String!
     ouResult: String!
-    specificData: MixedPostgameData!
+    specificData: MixedPostgameData
   }
 
   type StaticGameInfo {
@@ -234,18 +234,9 @@ module.exports = gql`
     getActiveLeagues: [League]
     getPost(postId: ID!): Post
     getAllPregames: [Pregame]
-    getNFLPregames: [Pregame]
-    getNFLLivegames: [Livegame]
-    getNFLPostgames: [Postgame]
-    getNCAAFPregames: [Pregame]
-    getNCAAFLivegames: [Livegame]
-    getNCAAFPostgames: [Postgame]
-    getNCAABMensPregames: [Pregame]
-    getNCAABMensLivegames: [Livegame]
-    getNCAABMensPostgames: [Postgame]
-    getNBAPregames: [Pregame]
-    getNBALivegames: [Livegame]
-    getNBAPostgames: [Postgame]
+    getPregamesByLeague(league: String!): [Pregame]
+    getLivegamesByLeague(league: String!): [Livegame]
+    getPostgamesByLeague(league: String!): [Postgame]
     getPlay(playId: String!): Play
     getPlaysInGame(gameId: String!): [Play]
     getPlaysInGameInPeriod(gameId: String!, period: Int!): [Play]

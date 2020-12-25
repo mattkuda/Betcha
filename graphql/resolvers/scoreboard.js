@@ -6,7 +6,6 @@ const Play = require("../../models/Play");
 
 module.exports = {
   Query: {
-
     async getAllPregames() {
       try {
         let pregames = await Pregame.find();
@@ -15,105 +14,25 @@ module.exports = {
         throw new Error(err);
       }
     },
-
-    async getNFLPregames() {
+    async getPregamesByLeague(_, { league }) {
       try {
-        let pregames = await Pregame.find({league: "nfl"});
+        let pregames = await Pregame.find({league: league});
         return pregames;
       } catch (err) {
         throw new Error(err);
       }
     },
-    async getNFLLivegames() {
+    async getLivegamesByLeague(_, { league }) {
       try {
-        const livegames = await Livegame.find({league: "nfl"});
+        const livegames = await Livegame.find({league: league});
         return livegames;
       } catch (err) {
         throw new Error(err);
       }
     },
-    async getNFLPostgames() {
+    async getPostgamesByLeague(_, { league }) {
       try {
-        const postgames = await Postgame.find({league: "nfl"});
-        return postgames;
-      } catch (err) {
-        throw new Error(err);
-      }
-    },
-
-
-
-    async getNCAAFPregames() {
-      try {
-        let pregames = await Pregame.find({league: "college-football"});
-        return pregames;
-      } catch (err) {
-        throw new Error(err);
-      }
-    },
-    async getNCAAFLivegames() {
-      try {
-        const livegames = await Livegame.find({league: "college-football"});
-        return livegames;
-      } catch (err) {
-        throw new Error(err);
-      }
-    },
-    async getNCAAFPostgames() {
-      try {
-        const postgames = await Postgame.find({league: "college-football"});
-        return postgames;
-      } catch (err) {
-        throw new Error(err);
-      }
-    },
-
-
-    async getNCAABMensPregames() {
-      try {
-        let pregames = await Pregame.find({league: "mens-college-basketball"});
-        return pregames;
-      } catch (err) {
-        throw new Error(err);
-      }
-    },
-    async getNCAABMensLivegames() {
-      try {
-        const livegames = await Livegame.find({league: "mens-college-basketball"});
-        return livegames;
-      } catch (err) {
-        throw new Error(err);
-      }
-    },
-    async getNCAABMensPostgames() {
-      try {
-        const postgames = await Postgame.find({league: "mens-college-basketball"});
-        return postgames;
-      } catch (err) {
-        throw new Error(err);
-      }
-    },
-
-
-    async getNBAPregames() {
-      try {
-        let pregames = await Pregame.find({league: "nba"});
-        return pregames;
-      } catch (err) {
-        throw new Error(err);
-      }
-    },
-    async getNBALivegames() {
-      try {
-        const livegames = await Livegame.find({league: "nba"});
-        return livegames;
-      } catch (err) {
-        throw new Error(err);
-      }
-    },
-    async getNBAPostgames() {
-      try {
-        const postgames = await Postgame.find({league: "nba"});
+        const postgames = await Postgame.find({league: league});
         return postgames;
       } catch (err) {
         throw new Error(err);

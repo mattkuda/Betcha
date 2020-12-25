@@ -16,14 +16,8 @@ import Profile from "./pages/Profile";
 import SinglePost from "./pages/SinglePost";
 import ScoreboardNav from "./components/ScoreboardNav";
 import ScoreboardHome from "./pages/ScoreboardHome";
-import NFLScoreboard from "./pages/NFLScoreboard";
-import NCAAFScoreboard from "./pages/NCAAFScoreboard";
-import NCAABMensScoreboard from "./pages/NCAABMensScoreboard";
-import NBAScoreboard from "./pages/NBAScoreboard";
-import NFLGameDetails from "./components/NFLGameDetails";
-import NCAAFGameDetails from "./components/NCAAFGameDetails";
-import NCAABMensGameDetails from "./components/NCAABMensGameDetails";
-import NBAGameDetails from "./components/NBAGameDetails";
+import LeagueScoreboard from "./pages/LeagueScoreboard";
+import GameDetails from "./pages/GameDetails";
 
 function App() {
   return (
@@ -40,14 +34,19 @@ function App() {
             <ScoreboardNav />
           </Route>
           <Route exact path="/scoreboard" component={ScoreboardHome} />
-          <Route exact path="/scoreboard/nfl" component={NFLScoreboard} />
-          <Route exact path="/scoreboard/ncaaf" component={NCAAFScoreboard} />
-          <Route exact path="/scoreboard/ncaabmens" component={NCAABMensScoreboard} />
-          <Route exact path="/scoreboard/nba" component={NBAScoreboard} />
-          <Route exact path="/scoreboard/nfl/:eventId" component={NFLGameDetails} />
-          <Route exact path="/scoreboard/ncaaf/:eventId" component={NCAAFGameDetails} />
-          <Route exact path="/scoreboard/ncaabmens/:eventId" component={NCAABMensGameDetails} />
-          <Route exact path="/scoreboard/nba/:eventId" component={NBAGameDetails} />
+          <Route exact path="/scoreboard/nfl">
+            <LeagueScoreboard league="nfl" />
+          </Route>
+          <Route exact path="/scoreboard/college-football">
+            <LeagueScoreboard league="college-football" />
+          </Route>
+          <Route exact path="/scoreboard/mens-college-basketball">
+            <LeagueScoreboard league="mens-college-basketball" />
+          </Route>
+          <Route exact path="/scoreboard/nba">
+            <LeagueScoreboard league="nba" />
+          </Route>
+          <Route exact path="/scoreboard/:league/:gameId" component={GameDetails} />
         </Container>
       </Router>
     </AuthProvider>

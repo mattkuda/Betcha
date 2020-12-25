@@ -16,7 +16,7 @@ module.exports = {
     },
     async getPlaysInGame(_, { gameId }) {
       try {
-        let plays = await Play.find({gameId: gameId});
+        let plays = await Play.find({gameId: gameId}).sort({createdAt: -1});
         return plays;
       } catch (err) {
         throw new Error(err);

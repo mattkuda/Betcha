@@ -37,7 +37,7 @@ function ScoreboardNav() {
           active={activeItem === "ncaaf"}
           onClick={handleItemClick}
           as={Link}
-          to="/scoreboard/ncaaf"
+          to="/scoreboard/college-football"
         />
         <Menu.Item
           name="ncaabmens"
@@ -45,7 +45,7 @@ function ScoreboardNav() {
           active={activeItem === "ncaabmens"}
           onClick={handleItemClick}
           as={Link}
-          to="/scoreboard/ncaabmens"
+          to="/scoreboard/mens-college-basketball"
         />
         <Menu.Item
           name="nba"
