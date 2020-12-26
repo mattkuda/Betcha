@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Input, Menu, Stackable, Grid, Container, Image } from 'semantic-ui-react';
+import { Input, Menu, Stackable, Grid, Container, Image, Icon } from 'semantic-ui-react';
 import './game.css';
 
 
@@ -92,8 +92,26 @@ class NFLGame extends Component {
                     <Image centered verticalAlign='middle' src={this.props.awayLogo} size='tiny'/>
                   </Grid.Column>
                   <Grid.Column>
-                    <p>{this.props.period}</p>
-                    <p>{this.props.time}</p>
+                  <Grid columns={3}>
+                    <Grid.Column>
+                      {this.props.specificData.possession === this.props.awayAbbreviation ? (
+                        <Icon fitted name="caret left" />
+                      ) : (
+                        <div></div>
+                      )}
+                    </Grid.Column>
+                    <Grid.Column>
+                      <p>Q{this.props.period}</p>
+                      <p>{this.props.time}</p>
+                    </Grid.Column>
+                    <Grid.Column>
+                      {this.props.specificData.possession === this.props.homeAbbreviation ? (
+                        <Icon fitted name="caret right" />
+                      ) : (
+                        <div></div>
+                      )}
+                    </Grid.Column>
+                  </Grid>
                   </Grid.Column>
                   <Grid.Column>
                   <Image centered verticalAlign='middle' src={this.props.homeLogo} size='tiny'/>
