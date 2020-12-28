@@ -53,6 +53,14 @@ class GameService {
   Function to determine which team covered the spread.
   */
   calculateSpreadWinner(homeScore, awayScore, homeAbbreviation, awayAbbreviation, spread) {
+
+    //corner case - checking if the game was a pick-em
+    if (spread === "EVEN") {
+      if (homeScore > awayScore) { return homeAbbreviation; }
+      if (awayScore > homeScore) { return awayAbbreviation; }
+      return "P";
+    }
+
     const parseSpread = spread.split(" ");
     const favoredTeam = parseSpread[0];
     const favoredAmount = parseFloat(parseSpread[1].substring(1));
@@ -124,7 +132,7 @@ class GameService {
         this.ctr = 1;
       }
     },
-      30000
+      10000
     );
   }
 
@@ -187,6 +195,7 @@ class GameService {
   */
   async updatePregames(games, sport, league) {
     let updatePregames = new Boolean(this.ctr === 20);
+    if (updatePregames == true) { console.log("Updating pregames odds for "+league + " games..."); }
     for (const game of games) {
       const gameExists = await Pregame.exists({ gameId: game.id });
 
@@ -258,7 +267,7 @@ class GameService {
 
       //case 2 - game already exists within DB, check for updates
       else {
-        if (updatePregames && this.elementExists(game.competitions[0], "odds")) {
+        if (updatePregames == true && this.elementExists(game.competitions[0], "odds")) {
           Pregame.findOneAndUpdate({ gameId: game.id }, {
             spread: game.competitions[0].odds[0].details,
             overUnder: parseFloat(game.competitions[0].odds[0].overUnder)
@@ -305,8 +314,8 @@ class GameService {
           league: league,
           homeLogo: game.competitions[0].competitors[0].team.logo,
           awayLogo: game.competitions[0].competitors[1].team.logo,
-          homeScore: parseInt(game.competitions[0].competitors[0].score),
-          awayScore: parseInt(game.competitions[0].competitors[1].score),
+          homeScore: 0,
+          awayScore: 0,
           homeAbbreviation: game.competitions[0].competitors[0].team.abbreviation,
           awayAbbreviation: game.competitions[0].competitors[1].team.abbreviation,
           homeFullName: game.competitions[0].competitors[0].team.displayName,

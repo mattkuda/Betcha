@@ -27,7 +27,7 @@ function LeagueScoreboard(props) {
   });
   const { loading: NFLlivegameLoading, error: NFLlivegameError, data: NFLlivegameData } = useQuery(FETCH_NFL_LIVEGAMES, {
     variables: { myLeague },
-    pollInterval: 30000,
+    pollInterval: 10000,
     skip: (myLeague !== "nfl")
   });
   const { loading: NFLpostgameLoading, error: NFLpostgameError, data: NFLpostgameData } = useQuery(FETCH_NFL_POSTGAMES, {
@@ -401,7 +401,6 @@ function LeagueScoreboard(props) {
   }
 
   return null;
-
 
 }
 

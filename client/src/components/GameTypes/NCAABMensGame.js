@@ -93,21 +93,13 @@ class NCAABMensGame extends Component {
                   <Grid.Column>
                   <Grid columns={3}>
                     <Grid.Column>
-                      {this.props.specificData.possession === this.props.awayAbbreviation ? (
-                        <Icon fitted name="caret left" />
-                      ) : (
-                        <div></div>
-                      )}
+                      <div></div>
                     </Grid.Column>
                     <Grid.Column>
                       <p>{this.props.period}H</p>
                     </Grid.Column>
                     <Grid.Column>
-                      {this.props.specificData.possession === this.props.homeAbbreviation ? (
-                        <Icon fitted name="caret right" />
-                      ) : (
-                        <div></div>
-                      )}
+                      <div></div>
                     </Grid.Column>
                   </Grid>
                   </Grid.Column>
