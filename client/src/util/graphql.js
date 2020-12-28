@@ -7,7 +7,7 @@ export const FETCH_POSTS_QUERY = gql`
       body
       betType
       betAmount
-      gameId {
+      game {
         homeFullName
         awayFullName
         homeRecord
@@ -526,7 +526,7 @@ export const FETCH_ALL_PREGAMES = gql`
   {
     getAllPregames {
       id
-      eventId
+      gameId
       league
       homeFullName
       awayFullName

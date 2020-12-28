@@ -36,9 +36,9 @@ function ScoreboardHome() {
               { user ? (
                 data.getUserPosts.map(post => (
                   <Grid.Column>
-                    <Link to={`/scoreboard/${post.gameId.eventId}`}>
+                    <Link to={`/scoreboard/${post.game.gameId}`}>
                       <span className="card" style={{"display": "block"}}>
-                        <Game key={post.gameId.eventId} {...post.gameId} />
+                        <Game key={post.game.gameId} {...post.game} />
                       </span>
                     </Link>
                   </Grid.Column>
