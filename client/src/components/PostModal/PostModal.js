@@ -146,7 +146,7 @@ const CREATE_POST_MUTATION = gql`
       body
       betType
       betAmount
-      gameId {
+      game {
         homeFullName
         awayFullName
         homeRecord

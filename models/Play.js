@@ -6,7 +6,7 @@ const Schema = mongoose.Schema;
 const playSchema = new Schema({
   playId: String,
   description: String,
-  eventId: String,
+  gameId: String,
   createdAt: String,
   specificData: mongoose.Mixed
 }, { strict: false });

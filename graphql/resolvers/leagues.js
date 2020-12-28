@@ -1,8 +1,5 @@
 const { AuthenticationError } = require("apollo-server");
-
 const League = require("../../models/League"); //TODO
-const BetInfoPre = require("../../models/game.pre.js");
-
 const checkAuth = require("../../util/check-auth");
 
 module.exports = {

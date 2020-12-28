@@ -2,8 +2,7 @@ const { AuthenticationError } = require("apollo-server");
 
 const Post = require("../../models/Post");
 const User = require("../../models/User");
-const gamePre = require("../../models/game.pre");
-const BetInfoPre = require("../../models/game.pre.js");
+const Pregame = require("../../models/Pregame");
 
 const checkAuth = require("../../util/check-auth");
 
@@ -13,7 +12,7 @@ module.exports = {
       try {
         // GETTING POSTS FROM ONLY PPL YOU FOLLOW
 
-        
+
         const {id} = checkAuth(context);
         const userME = await User.findById(id);
         //Get array ids of all ppl you follow
@@ -26,7 +25,7 @@ module.exports = {
         //user
         ///const posts = await Post.find().sort({ createdAt: -1 })
 
-        
+
         //FORMERLY const posts = await Post.find().sort({ createdAt: -1 }).populate('gameId').exec()
         return posts;
       } catch (err) {
@@ -57,9 +56,9 @@ module.exports = {
   },
 
   Post: {
-    async gameId(eventIdent) {
-      let gameId = await gamePre.find({eventId: eventIdent.gameId}).then(games => games[0]);
-      return gameId;
+    async game(parent) {
+      let game = await Pregame.find({gameId: parent.gameId}).then(games => games[0]);
+      return game;
     }
   },
 

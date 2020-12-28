@@ -38,7 +38,7 @@ function GameCard(props) {
           <Button
             onClick={() =>
               handleClick(
-                props.gameData.eventId,
+                props.gameData.gameId,
                 "AWAY",
                 parseFloat(awaySpread.replace("+", ""))
               )
@@ -50,7 +50,7 @@ function GameCard(props) {
           <Button
             onClick={() =>
               handleClick(
-                props.gameData.eventId,
+                props.gameData.gameId,
                 "OVER",
                 parseFloat(props.gameData.overUnder)
               )
@@ -69,7 +69,7 @@ function GameCard(props) {
           <Button
             onClick={() =>
               handleClick(
-                props.gameData.eventId,
+                props.gameData.gameId,
                 "HOME",
                 parseFloat(homeSpread.replace("+", ""))
               )
@@ -81,7 +81,7 @@ function GameCard(props) {
           <Button
             onClick={() =>
               handleClick(
-                props.gameData.eventId,
+                props.gameData.gameId,
                 "UNDER",
                 parseFloat(props.gameData.overUnder)
               )
@@ -93,7 +93,7 @@ function GameCard(props) {
         </div>
       </Card.Content>
       {betTimeFormat(props.gameData.startTime)}
-  
+
     </Card>
   );
 }
