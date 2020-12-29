@@ -1,11 +1,11 @@
 import React from "react";
 import { Input, Menu, Stackable, Grid, Container, Image } from 'semantic-ui-react';
 import './game.css';
+import { betTimeFormat } from "../../util/Extensions/betTimeFormat";
 
 function Game(props) {
 
   let gameState = props.state;
-  let localStartTime = new Date(Date.parse(props.startTime));
 
   if (gameState === 'pre') {
       return (
@@ -18,10 +18,7 @@ function Game(props) {
                     <Image centered verticalAlign='middle' src={props.awayLogo} size='tiny'/>
                   </Grid.Column>
                   <Grid.Column>
-                    {!props.specificData ? (<div></div>) : (
-                      <p>{props.specificData.weatherDescription}</p>
-                    )}
-                    <p>{localStartTime.toString()}</p>
+                    <p>{betTimeFormat(props.startTime)}</p>
                   </Grid.Column>
                   <Grid.Column>
                   <Image centered verticalAlign='middle' src={props.homeLogo} size='tiny'/>
@@ -87,7 +84,7 @@ function Game(props) {
                   <p>{props.awayScore}</p>
                   </Grid.Column>
                   <Grid.Column>
-                    <p>{props.specificData.down} and {props.specificData.distance} at the {props.specificData.yardLine}</p>
+                    <p></p>
                   </Grid.Column>
                   <Grid.Column>
                     <p>{props.homeAbbreviation}</p>
