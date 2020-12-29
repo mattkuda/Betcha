@@ -2,7 +2,8 @@ import React, { useState, useContext } from "react";
 import { Menu } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 
-import { AuthContext } from "../context/auth";
+import { AuthContext } from "../../context/auth";
+import SearchBar from "./SearchBar";
 
 function MenuBar() {
   const { user, logout } = useContext(AuthContext);
@@ -30,12 +31,12 @@ function MenuBar() {
         to="/scoreboard"
       />
 
-      <Menu.Menu position="right">
-        <Menu.Item
-          name="logout"
-          onClick={logout}
-        />
+      <Menu.Item style={{ margin: "0 0 3px 0", padding: "0 0 0 0" }}>
+        <SearchBar />
+      </Menu.Item>
 
+      <Menu.Menu position="right">
+        <Menu.Item name="logout" onClick={logout} />
       </Menu.Menu>
     </Menu>
   ) : (
@@ -72,7 +73,7 @@ function MenuBar() {
         />
       </Menu.Menu>
     </Menu>
-  )
+  );
 
   return menuBar;
 }

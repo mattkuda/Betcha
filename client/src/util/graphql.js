@@ -7,7 +7,7 @@ export const FETCH_POSTS_QUERY = gql`
       body
       betType
       betAmount
-      game {
+      gameId {
         homeFullName
         awayFullName
         homeRecord

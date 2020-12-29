@@ -31,10 +31,8 @@ function PostCard({
   const { user } = useContext(AuthContext);
 
   return (
-    <Card  fluid floated="right" style={{ width: "100%" }} >
-    
+    <Card fluid floated="right" style={{ width: "100%" }}>
       <Card.Content>
-      
         <div style={{ display: "inline-block", width: "auto", height: "100%" }}>
           <div>
             <img
@@ -44,26 +42,32 @@ function PostCard({
             ></img>
           </div>
         </div>
-        <div class="pc-header">
+        <div className="pc-header">
           <Link to={`/user/${username}`}>@{username}</Link>
           <div
             style={{ display: "inline-block", color: "gray", float: "right" }}
           >
             {moment(createdAt).fromNow(true)} ago
           </div>
-          <div className="pc-bet">
-            {betDescFormat(betType, betAmount, gameId)} ·{" "}
-            <div
-              style={{
-                display: "inline-block",
-                fontWeight: "normal",
-                fontStyle: "italic",
-              }}
-            >
-              {gameId.awayAbbreviation} @ {gameId.homeAbbreviation},{" "}
-              {betTimeFormat(gameId.startTime)}
+
+          {gameId == null ? (
+            <div className="pc-bet">Failed to load game data :-(</div>
+          ) : (
+            <div className="pc-bet">
+              {betDescFormat(betType, betAmount, gameId)} ·{" "}
+              <div
+                style={{
+                  display: "inline-block",
+                  fontWeight: "normal",
+                  fontStyle: "italic",
+                }}
+              >
+                {gameId.awayAbbreviation} @ {gameId.homeAbbreviation},{" "}
+                {betTimeFormat(gameId.startTime)}
+              </div>
             </div>
-          </div>
+          )}
+
           <div className="pc-betBody">{body}</div>
           <div className="pc-buttons">
             <LikeButton user={user} post={{ id, likes, likeCount }} />
@@ -77,13 +81,20 @@ function PostCard({
                 </Label>
               </Button>
             </MyPopup>
-            {user && user.username === username && <div
-            style={{ display: "inline-block", color: "gray", float: "right" }}
-          ><DeleteButton postId={id} /></div>}
+            {user && user.username === username && (
+              <div
+                style={{
+                  display: "inline-block",
+                  color: "gray",
+                  float: "right",
+                }}
+              >
+                <DeleteButton postId={id} />
+              </div>
+            )}
           </div>
         </div>
       </Card.Content>
- 
     </Card>
   );
 }

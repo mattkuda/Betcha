@@ -11,20 +11,20 @@ module.exports = {
     async getPosts(_, {}, context) {
       try {
         // GETTING POSTS FROM ONLY PPL YOU FOLLOW
-
-
-        const {id} = checkAuth(context);
+        
+        const { id } = checkAuth(context);
         const userME = await User.findById(id);
         //Get array ids of all ppl you follow
-        const followingIds = userME.following.map(f => f.followeeId);
+        const followingIds = userME.following.map((f) => f.followeeId);
         //ADD YOURSELF TO THE FEED
         followingIds.push(id);
         //Only get posts from ppl that are in that array
-        const posts = await Post.find({ user: { $in: followingIds } }).sort({ createdAt: -1 })
+        const posts = await Post.find({ user: { $in: followingIds } }).sort({
+          createdAt: -1,
+        });
 
         //user
         ///const posts = await Post.find().sort({ createdAt: -1 })
-
 
         //FORMERLY const posts = await Post.find().sort({ createdAt: -1 }).populate('gameId').exec()
         return posts;
@@ -46,7 +46,9 @@ module.exports = {
     },
     async getUserPosts(_, { username }) {
       try {
-        const posts = await Post.find({username: username}).sort({ createdAt: -1 })
+        const posts = await Post.find({ username: username }).sort({
+          createdAt: -1,
+        });
         //FORMERLY const posts = await Post.find().sort({ createdAt: -1 }).populate('gameId').exec()
         return posts;
       } catch (err) {
@@ -56,30 +58,33 @@ module.exports = {
   },
 
   Post: {
-    async game(parent) {
-      let game = await Pregame.find({gameId: parent.gameId}).then(games => games[0]);
+    async gameId(parent) {
+      let game = await Pregame.find({ gameId: parent.gameId }).then(
+        (games) => games[0]
+      );
+
       return game;
-    }
+    },
   },
 
   Mutation: {
     async createPost(_, { body, betType, betAmount, gameId }, context) {
       const user = checkAuth(context);
 
-      if (body.trim() === '') {
-        throw new Error('Post body must not be empty');
+      if (body.trim() === "") {
+        throw new Error("Post body must not be empty");
       }
 
-      if (betType.trim() === '') {
-        throw new Error('Post betType must not be empty');
+      if (betType.trim() === "") {
+        throw new Error("Post betType must not be empty");
       }
 
-      if (betAmount.trim() === '') {
-        throw new Error('Post betAmount must not be empty');
+      if (betAmount.trim() === "") {
+        throw new Error("Post betAmount must not be empty");
       }
 
-      if (gameId.trim() === '') {
-        throw new Error('Post gameId must not be empty');
+      if (gameId.trim() === "") {
+        throw new Error("Post gameId must not be empty");
       }
 
       //If we get here, that means no error was thrown during the checkAuth phase

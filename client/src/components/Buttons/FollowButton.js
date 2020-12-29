@@ -27,7 +27,7 @@ function FollowButton({ user, followeeUser: {id, followers} }) {
         Following <Icon fitted name="checkmark" />
       </Button>
     ) : (
-      <Button as="div" onClick={console.log("the id of followee: " + id)}  onClick={followUser} color="teal" basic>
+      <Button as="div" onClick={followUser} color="teal" basic>
         Follow <Icon fitted name="plus" />
       </Button>
     )
@@ -38,7 +38,7 @@ function FollowButton({ user, followeeUser: {id, followers} }) {
   );
 
   return (
-      user.id !== id ? <MyPopup content={followed ? "Following" : "Follow"}>{FollowButton}</MyPopup> : <></>
+      user && user.id !== id ? <MyPopup content={followed ? "Following" : "Follow"}>{FollowButton}</MyPopup> : <></>
       
   
   );

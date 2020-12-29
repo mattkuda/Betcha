@@ -9,6 +9,7 @@ import {
   Button,
   Icon,
   Label,
+  Modal
 } from "semantic-ui-react";
 import moment from "moment";
 
@@ -18,6 +19,8 @@ import { AuthContext } from "../context/auth";
 import MyPopup from "../util/MyPopup";
 import { betDescFormat } from "../util/Extensions/betDescFormat";
 import { betTimeFormat } from "../util/Extensions/betTimeFormat";
+import { Link } from "react-router-dom";
+import EditInfoModal from "../components/Profile Stuff/EditInfoModal";
 
 function Profile(props) {
   const profileUsername = props.match.params.usernameId;
@@ -35,15 +38,20 @@ function Profile(props) {
     },
   });
 
+  const [modalOpen, setModalOpen] = useState(false);
+
   //Depends on whether we have data from query yet
   let userMarkup;
 
-  if (!getUser || !getUserPosts) {
+  // if (!getUser || !getUserPosts) {  
+  if (!getUser || !getUserPosts) { //todo fix
     userMarkup = <p>Loading user...</p>;
   } else {
     const {
       id,
       username,
+      location,
+      website,
       createdAt,
       followingCount,
       followersCount,
@@ -52,42 +60,84 @@ function Profile(props) {
     const posts = getUserPosts;
 
     userMarkup = (
-      <Grid>
-        <Grid.Row>
-          <Grid.Column width={2}>
-            <Image
-              src="https://react.semantic-ui.com/images/avatar/large/matthew.png"
-              size="small"
-              float="right"
-            />
-          </Grid.Column>
-          <Grid.Column width={10}>
-            <Card fluid>
-              <Card.Content>
-                <Card.Header>@{username}</Card.Header>
-                <Card.Meta>
-                  <FollowButton user={user} followeeUser={{ id, followers }} />
-                </Card.Meta>
-                <Card.Meta>
-                  <Icon fitted name="calendar alternate outline" /> Joined{" "}
-                  {moment(createdAt).format("MMMM Do, YYYY")}
-                </Card.Meta>
-                <Card.Meta>
-                  Following: {followingCount} Followers: {followersCount}
-                </Card.Meta>
-              </Card.Content>
-            </Card>
-          </Grid.Column>
-        </Grid.Row>
-        <Grid.Row>
-          {posts &&
-            posts.map((post) => (
-              <Grid.Column key={post.id} style={{ marginBottom: 20 }}>
-                <PostCard post={post} />
-              </Grid.Column>
-            ))}
-        </Grid.Row>
-      </Grid>
+      <>
+        <Modal
+          open={modalOpen}
+          onClose={() => setModalOpen(false)}
+          closeIcon
+          dimmer="blurring"
+          style={{ height: "90%" }}
+        >
+          <Modal.Header>Edit Profile</Modal.Header>
+          <Modal.Content image scrolling>
+            <EditInfoModal handleClose={(e) => setModalOpen(false)} testBio={"test bio"}/>
+          </Modal.Content>
+        </Modal>
+        <Grid>
+          <Grid.Row>
+            <Grid.Column width={2}>
+              <Image
+                src="https://react.semantic-ui.com/images/avatar/large/matthew.png"
+                size="small"
+                float="right"
+              />
+            </Grid.Column>
+            <Grid.Column width={14}>
+              <Card fluid>
+                <Card.Content>
+                  <Card.Header>
+                    @{username}
+                    {user && user.username === profileUsername && (
+                      <Button onClick={(e) => setModalOpen(true)}>
+                        Edit profile
+                      </Button>
+                    )}
+                  </Card.Header>
+                  <Card.Meta>
+                    <FollowButton
+                      user={user}
+                      followeeUser={{ id, followers }}
+                    />
+                  </Card.Meta>
+                  <Card.Meta>
+                    <Icon fitted name="calendar alternate outline" /> Joined{" "}
+                    {moment(createdAt).format("MMMM Do, YYYY")}
+                  </Card.Meta>
+                  {location &&(<Card.Meta>
+                    <Icon fitted name="map pin" /> {location}
+                  </Card.Meta>)}
+                  {website &&(<Card.Meta>
+                    <Icon fitted name="linkify" /> {website}
+                  </Card.Meta>)}
+                  
+                  <Card.Meta>
+                    Following: {followingCount} Followers: {followersCount}
+                  </Card.Meta>
+                </Card.Content>
+              </Card>
+            </Grid.Column>
+          </Grid.Row>
+          <Grid.Row>
+            {posts &&
+              posts.map((post) => (
+                <Grid.Column
+                  key={post.id}
+                  style={{ marginBottom: 20 }}
+                  width={16}
+                >
+                  <Link
+                    to={`/posts/${post.id}`}
+                    style={{ textDecoration: "normal" }}
+                  >
+                    <span className="card" style={{ display: "block" }}>
+                      <PostCard post={post} />
+                    </span>
+                  </Link>
+                </Grid.Column>
+              ))}
+          </Grid.Row>
+        </Grid>{" "}
+      </>
     );
   }
 
@@ -100,6 +150,8 @@ const FETCH_PROFILE_QUERY = gql`
       id
       username
       createdAt
+      location
+      website
       followers {
         followerId
       }
