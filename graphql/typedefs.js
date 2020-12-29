@@ -7,7 +7,7 @@ module.exports = gql`
     body: String!
     betType: String!
     betAmount: String!
-    game: Pregame!
+    gameId: Pregame!
     user: User!
     createdAt: String!
     username: String!
@@ -33,17 +33,20 @@ module.exports = gql`
     token: String!
     username: String!
     createdAt: String!
+    bio: String!
+    website: String!
+    location: String!
     followers: [Follower]!
     following: [Following]!
     followersCount: Int!
     followingCount: Int!
   }
-  type Follower{
+  type Follower {
     id: ID!
     followerId: ID!
     createdAt: String!
   }
-  type Following{
+  type Following {
     id: ID!
     followeeId: ID!
     createdAt: String!

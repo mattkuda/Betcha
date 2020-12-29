@@ -6,6 +6,9 @@ const userSchema = new Schema({
   password: String,
   email: String,
   createdAt: String,
+  bio: String,
+  website: String,
+  location: String,
   followers: [
     {
       followerId: mongoose.Schema.Types.ObjectId,

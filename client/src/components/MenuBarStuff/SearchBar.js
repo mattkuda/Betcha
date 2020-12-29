@@ -50,6 +50,8 @@ export default function SearchBar() {
   return (
     <div>
         <Search
+        size="mini"
+        style={{margin: "0 0 0 0", padding: "0 0 0 0"}}
           // loading={loading}
           // onResultSelect={(e, data) =>
           //   dispatch({ type: 'UPDATE_SELECTION', selection: data.result.title })

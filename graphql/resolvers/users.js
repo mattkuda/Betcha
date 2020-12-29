@@ -29,6 +29,7 @@ module.exports = {
         const user = await User.findOne({ username });
 
         if (user) {
+          console.log("this is user: " + user)
           return user;
         } else {
           throw new Error("User not found");
