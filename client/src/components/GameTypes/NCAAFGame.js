@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Input, Menu, Stackable, Grid, Container, Image, Icon } from 'semantic-ui-react';
 import './game.css';
+import { betTimeFormat } from "../../util/Extensions/betTimeFormat";
 
 
 /*
@@ -19,8 +20,6 @@ TODO:
 class NCAAFGame extends Component {
 
   gameState = this.props.state;
-  localStartTime = new Date(Date.parse(this.props.startTime));
-
 
   render() {
 
@@ -39,7 +38,7 @@ class NCAAFGame extends Component {
                     {!this.props.specificData ? (<div></div>) : (
                       <p>{this.props.specificData.weatherDescription}</p>
                     )}
-                    <p>{this.localStartTime.toString()}</p>
+                    <p>{betTimeFormat(this.props.startTime)}</p>
                   </Grid.Column>
                   <Grid.Column>
                   <Image centered verticalAlign='middle' src={this.props.homeLogo} size='tiny'/>
