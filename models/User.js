@@ -9,6 +9,7 @@ const userSchema = new Schema({
   bio: String,
   website: String,
   location: String,
+  name: String,
   followers: [
     {
       followerId: mongoose.Schema.Types.ObjectId,

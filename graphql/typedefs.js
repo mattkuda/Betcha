@@ -36,6 +36,7 @@ module.exports = gql`
     bio: String!
     website: String!
     location: String!
+    name: String!
     followers: [Follower]!
     following: [Following]!
     followersCount: Int!
@@ -257,6 +258,12 @@ module.exports = gql`
       betAmount: String!
       gameId: String!
     ): Post!
+    updateInfo(
+      name: String!
+      bio: String!
+      location: String!
+      website: String!
+    ): User!
     deletePost(postId: ID!): String!
     createComment(postId: ID!, body: String!): Post!
     deleteComment(postId: ID!, commentId: ID!): Post!

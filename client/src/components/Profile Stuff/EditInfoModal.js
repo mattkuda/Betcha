@@ -9,31 +9,20 @@ import { FETCH_POSTS_QUERY } from "../../util/graphql";
 
 function EditInfoModal(props) {
   //Made this diff from og
-  const { values, onChange, onSubmit } = useForm(createPostCallback, {
-    name: "",
-    bio: props.testBio,
-    location: "",
-    website: "",
+  const { values, onChange, onSubmit } = useForm(updateInfoCallback, {
+    name: props.name,
+    bio: props.bio,
+    location: props.location,
+    website: props.website,
   });
 
-  const [createPost, { error }] = useMutation(CREATE_POST_MUTATION, {
+  const [updateInfo, { error }] = useMutation(UPDATE_INFO_MUTATION, {
     variables: values,
     update(proxy, result) {
       //If successful, close modal
       props.handleClose();
-      const data = proxy.readQuery({
-        query: FETCH_POSTS_QUERY,
-      });
-      proxy.writeQuery({
-        query: FETCH_POSTS_QUERY,
-        data: {
-          getPosts: [result.data.createPost, ...data.getPosts],
-        },
-      });
-      values.body = "";
-      values.betType = "";
-      values.betAmount = "";
-      values.gameId = "";
+      
+      
     },
     //Added this so the page doesnt break
     onError(err) {
@@ -41,8 +30,8 @@ function EditInfoModal(props) {
     },
   });
 
-  function createPostCallback() {
-    createPost();
+  function updateInfoCallback() {
+    updateInfo();
   }
 
   return (
@@ -89,50 +78,34 @@ function EditInfoModal(props) {
   );
 }
 
-const CREATE_POST_MUTATION = gql`
-  mutation createPost(
-    $body: String!
-    $betType: String!
-    $betAmount: String!
-    $gameId: String!
+const UPDATE_INFO_MUTATION = gql`
+  mutation updateInfo(
+    $name: String!
+    $bio: String!
+    $location: String!
+    $website: String!
   ) {
-    createPost(
-      body: $body
-      betType: $betType
-      betAmount: $betAmount
-      gameId: $gameId
+    updateInfo(
+      name: $name
+      bio: $bio
+      location: $location
+      website: $website
     ) {
       id
-      body
-      betType
-      betAmount
-      gameId {
-        homeFullName
-        awayFullName
-        homeRecord
-        awayRecord
-        awayLogo
-        homeLogo
-        awayAbbreviation
-        homeAbbreviation
-        startTime
-        broadcasts
-        spread
-        overUnder
-      }
-      createdAt
       username
-      likeCount
-      likes {
-        username
+      createdAt
+      name
+      location
+      bio
+      website
+      followers {
+        followerId
       }
-      commentCount
-      comments {
-        id
-        username
-        createdAt
-        body
+      following {
+        followeeId
       }
+      followingCount
+      followersCount
     }
   }
 `;

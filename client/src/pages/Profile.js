@@ -51,6 +51,8 @@ function Profile(props) {
       id,
       username,
       location,
+      name,
+      bio,
       website,
       createdAt,
       followingCount,
@@ -70,7 +72,7 @@ function Profile(props) {
         >
           <Modal.Header>Edit Profile</Modal.Header>
           <Modal.Content image scrolling>
-            <EditInfoModal handleClose={(e) => setModalOpen(false)} testBio={"test bio"}/>
+            <EditInfoModal handleClose={(e) => setModalOpen(false)} name={name} bio={bio} location={location} website={website}/>
           </Modal.Content>
         </Modal>
         <Grid>
@@ -150,7 +152,9 @@ const FETCH_PROFILE_QUERY = gql`
       id
       username
       createdAt
+      name
       location
+      bio
       website
       followers {
         followerId
