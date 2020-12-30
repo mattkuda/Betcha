@@ -36,9 +36,9 @@ function ScoreboardHome() {
               { user ? (
                 data.getUserPosts.map(post => (
                   <Grid.Column>
-                    <Link to={`/scoreboard/${post.game.gameId}`}>
+                    <Link to={`/scoreboard/${post.gameId.league}/${post.gameId.gameId}`}>
                       <span className="card" style={{"display": "block"}}>
-                        <Game key={post.game.gameId} {...post.game} />
+                        <Game key={post.gameId.gameId} {...post.gameId} />
                       </span>
                     </Link>
                   </Grid.Column>
@@ -66,11 +66,12 @@ const FETCH_USER_GAMES = gql`
   query($myUsername: String!) {
     getUserPosts(username: $myUsername) {
       id
-      game {
+      gameId {
         id
-        eventId
+        gameId
         state
         stateDetails
+        league
         homeFullName
         awayFullName
         homeRecord
