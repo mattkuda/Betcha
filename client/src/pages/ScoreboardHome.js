@@ -1,16 +1,31 @@
 import React, { useState, useContext, Fragment } from "react";
 import { useQuery } from "@apollo/react-hooks";
-import { Link } from 'react-router-dom';
-import { Input, Menu } from 'semantic-ui-react';
+import { Link } from "react-router-dom";
+import { Input, Menu } from "semantic-ui-react";
 import gql from "graphql-tag";
 //import { HashLink as Link } from 'react-router-hash-link';
 import Game from "../components/GameTypes/Game";
 import { Grid } from "semantic-ui-react";
 import { AuthContext } from "../context/auth";
 
+//If user has 2 or more bets on a game, won't display the game more than once.
+function removeDuplicates(originalArray, objKey) {
+  var trimmedArray = [];
+  var values = [];
+  var value;
+
+  for (var i = 0; i < originalArray.length; i++) {
+    value = originalArray[i][objKey];
+
+    if (values.indexOf(value) === -1) {
+      trimmedArray.push(originalArray[i]);
+      values.push(value);
+    }
+  }
+  return trimmedArray;
+}
 
 function ScoreboardHome() {
-
   const { user } = useContext(AuthContext);
   let myUsername = "";
   if (user) {
@@ -19,12 +34,11 @@ function ScoreboardHome() {
   const { loading, error, data } = useQuery(FETCH_USER_GAMES, {
     variables: { myUsername },
     pollInterval: 30000,
-    skip: !user
+    skip: !user,
   });
 
   if (user) {
-
-    if (loading) return 'Loading user games...';
+    if (loading) return "Loading user games...";
     if (error) return `Error! ${error.message}`;
 
     return (
@@ -33,33 +47,33 @@ function ScoreboardHome() {
         <Grid columns="two">
           <Grid.Row>
             <Fragment>
-              { user ? (
-                data.getUserPosts.map(post => (
+              {user ? (
+                removeDuplicates(data.getUserPosts).map((post) => (
                   <Grid.Column>
-                    <Link to={`/scoreboard/${post.gameId.league}/${post.gameId.gameId}`}>
-                      <span className="card" style={{"display": "block"}}>
+                    <Link
+                      to={`/scoreboard/${post.gameId.league}/${post.gameId.gameId}`}
+                    >
+                      <span className="card" style={{ display: "block" }}>
                         <Game key={post.gameId.gameId} {...post.gameId} />
                       </span>
                     </Link>
                   </Grid.Column>
                 ))
-              ) : (<div></div>)
-              }
+              ) : (
+                <div></div>
+              )}
             </Fragment>
           </Grid.Row>
         </Grid>
       </div>
-    )
-  }
-
-  else {
+    );
+  } else {
     return (
       <div>
         <h3>Log in to see your games</h3>
       </div>
-    )
+    );
   }
-
 }
 
 const FETCH_USER_GAMES = gql`

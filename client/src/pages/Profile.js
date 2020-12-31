@@ -9,7 +9,7 @@ import {
   Button,
   Icon,
   Label,
-  Modal
+  Modal,
 } from "semantic-ui-react";
 import moment from "moment";
 
@@ -43,8 +43,9 @@ function Profile(props) {
   //Depends on whether we have data from query yet
   let userMarkup;
 
-  // if (!getUser || !getUserPosts) {  
-  if (!getUser || !getUserPosts) { //todo fix
+  // if (!getUser || !getUserPosts) {
+  if (!getUser || !getUserPosts) {
+    //todo fix
     userMarkup = <p>Loading user...</p>;
   } else {
     const {
@@ -72,7 +73,13 @@ function Profile(props) {
         >
           <Modal.Header>Edit Profile</Modal.Header>
           <Modal.Content image scrolling>
-            <EditInfoModal handleClose={(e) => setModalOpen(false)} name={name} bio={bio} location={location} website={website}/>
+            <EditInfoModal
+              handleClose={(e) => setModalOpen(false)}
+              name={name}
+              bio={bio}
+              location={location}
+              website={website}
+            />
           </Modal.Content>
         </Modal>
         <Grid>
@@ -88,7 +95,7 @@ function Profile(props) {
               <Card fluid>
                 <Card.Content>
                   <Card.Header>
-                    @{username}
+                    {name} @{username}
                     {user && user.username === profileUsername && (
                       <Button onClick={(e) => setModalOpen(true)}>
                         Edit profile
@@ -101,17 +108,24 @@ function Profile(props) {
                       followeeUser={{ id, followers }}
                     />
                   </Card.Meta>
+                  {bio && <Card.Meta>{bio}</Card.Meta>}
                   <Card.Meta>
                     <Icon fitted name="calendar alternate outline" /> Joined{" "}
                     {moment(createdAt).format("MMMM Do, YYYY")}
                   </Card.Meta>
-                  {location &&(<Card.Meta>
-                    <Icon fitted name="map pin" /> {location}
-                  </Card.Meta>)}
-                  {website &&(<Card.Meta>
-                    <Icon fitted name="linkify" /> {website}
-                  </Card.Meta>)}
-                  
+                  {location && (
+                    <Card.Meta>
+                      <Icon fitted name="map pin" /> {location}
+                    </Card.Meta>
+                  )}
+                  {website && (
+                    <Card.Meta>
+                      <a href={`https://${website}`} target="_blank" rel="noopener noreferrer">
+                        <Icon fitted name="linkify" /> {website}
+                      </a>
+                    </Card.Meta>
+                  )}
+
                   <Card.Meta>
                     Following: {followingCount} Followers: {followersCount}
                   </Card.Meta>
