@@ -7,7 +7,8 @@ module.exports = gql`
     body: String!
     betType: String!
     betAmount: String!
-    gameId: Pregame!
+    gameId: Mastergame!
+   
     user: User!
     createdAt: String!
     username: String!
@@ -99,7 +100,7 @@ module.exports = gql`
     awayColor: String!
     homeRecord: String!
     awayRecord: String!
-    startTime: String!
+    startTime: String
     broadcasts: [String]
     spread: String!
     overUnder: Float!
@@ -161,6 +162,36 @@ module.exports = gql`
     spreadWinner: String!
     ouResult: String!
     specificData: MixedPostgameData
+  }
+
+  type Mastergame {
+    id: ID
+    gameId: String
+    state: String
+    stateDetails: String
+    sport: String
+    league: String
+    homeLogo: String
+    awayLogo: String
+    homeScore: Int
+    awayScore: Int
+    homeAbbreviation: String
+    awayAbbreviation: String
+    homeFullName: String
+    awayFullName: String
+    homeColor: String
+    awayColor: String
+    homeRecord: String
+    awayRecord: String
+    startTime: String
+    broadcasts: [String]
+    time: String
+    period: Int
+    spread: String
+    overUnder: Float
+    lastPlay: String
+    spreadWinner: String
+    ouResult: String
   }
 
   type StaticGameInfo {

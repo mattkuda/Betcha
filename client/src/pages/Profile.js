@@ -190,6 +190,7 @@ export const FETCH_USER_POSTS_QUERY = gql`
       betType
       betAmount
       gameId {
+        stateDetails
         homeFullName
         awayFullName
         homeRecord

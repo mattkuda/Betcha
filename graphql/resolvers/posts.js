@@ -3,6 +3,8 @@ const { AuthenticationError } = require("apollo-server");
 const Post = require("../../models/Post");
 const User = require("../../models/User");
 const Pregame = require("../../models/Pregame");
+const Livegame = require("../../models/Livegame");
+const Postgame = require("../../models/Postgame");
 
 const checkAuth = require("../../util/check-auth");
 
@@ -11,7 +13,7 @@ module.exports = {
     async getPosts(_, {}, context) {
       try {
         // GETTING POSTS FROM ONLY PPL YOU FOLLOW
-        
+
         const { id } = checkAuth(context);
         const userME = await User.findById(id);
         //Get array ids of all ppl you follow
@@ -23,10 +25,6 @@ module.exports = {
           createdAt: -1,
         });
 
-        //user
-        ///const posts = await Post.find().sort({ createdAt: -1 })
-
-        //FORMERLY const posts = await Post.find().sort({ createdAt: -1 }).populate('gameId').exec()
         return posts;
       } catch (err) {
         throw new Error(err);
@@ -59,12 +57,58 @@ module.exports = {
 
   Post: {
     async gameId(parent) {
-      let game = await Pregame.find({ gameId: parent.gameId }).then(
+      let game = await Postgame.find({ gameId: parent.gameId }).then(
         (games) => games[0]
       );
+      if (game != null) {
+        console.log("this is the post game: " + game);
+        return game;
+      } else {
+        game = await Livegame.find({ gameId: parent.gameId }).then(
+          (games) => games[0]
+        );
 
-      return game;
+        if (game != null) {
+          return game;
+        } else {
+          game = await Pregame.find({ gameId: parent.gameId }).then(
+            (games) => games[0]
+          );
+
+          return game;
+        }
+      }
     },
+
+    // async gamePre(parent) {
+    //   let game = await Pregame.find({ gameId: parent.gameId }).then(
+    //     (games) => games[0]
+    //   );
+    //   if (game != null) {
+    //     console.log("this is the pre game xxxx: " + game);
+    //     return game;
+    //   }
+    // },
+
+    // async gameLive(parent) {
+    //   let game = await Livegame.find({ gameId: parent.gameId }).then(
+    //     (games) => games[0]
+    //   );
+    //   if (game != null) {
+    //     console.log("this is the live game xxxx: " + game);
+    //     return game;
+    //   }
+    // },
+
+    // async gamePost(parent) {
+    //   let game = await Postgame.find({ gameId: parent.gameId }).then(
+    //     (games) => games[0]
+    //   );
+    //   if (game != null) {
+    //     console.log("this is the post game xxxx: " + game);
+    //     return game;
+    //   }
+    // },
   },
 
   Mutation: {

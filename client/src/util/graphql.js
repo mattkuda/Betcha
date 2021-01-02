@@ -10,8 +10,13 @@ export const FETCH_POSTS_QUERY = gql`
       gameId {
         homeFullName
         awayFullName
+        stateDetails
         homeRecord
         awayRecord
+        homeScore
+        awayScore
+        period
+        time
         awayLogo
         homeLogo
         awayAbbreviation

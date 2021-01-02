@@ -69,21 +69,41 @@ const CREATE_POST_MUTATION = gql`
     createPost(body: $body) {
       id
       body
+      betType
+      betAmount
+      gameId {
+        homeFullName
+        awayFullName
+        stateDetails
+        homeRecord
+        awayRecord
+        homeScore
+        awayScore
+        period
+        time
+        awayLogo
+        homeLogo
+        awayAbbreviation
+        homeAbbreviation
+        startTime
+        broadcasts
+        spread
+        overUnder
+      }
       createdAt
       username
-      likes {
-        id
-        username
-        createdAt
-      }
       likeCount
-      comments {
-        id
-        body
+      likes {
         username
-        createdAt
       }
       commentCount
+      comments {
+        id
+        username
+        createdAt
+        body
+      }
+    
     }
   }
 `;
