@@ -190,11 +190,15 @@ export const FETCH_USER_POSTS_QUERY = gql`
       betType
       betAmount
       gameId {
-        stateDetails
         homeFullName
         awayFullName
+        stateDetails
         homeRecord
         awayRecord
+        homeScore
+        awayScore
+        period
+        time
         awayLogo
         homeLogo
         awayAbbreviation
@@ -216,6 +220,9 @@ export const FETCH_USER_POSTS_QUERY = gql`
         username
         createdAt
         body
+      }
+      user{
+        name
       }
     }
   }

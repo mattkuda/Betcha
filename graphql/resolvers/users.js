@@ -15,7 +15,7 @@ function generateToken(user) {
     {
       id: user.id,
       email: user.email,
-      username: user.username
+      username: user.username,
     },
     SECRET_KEY,
     { expiresIn: "1h" }
@@ -29,7 +29,7 @@ module.exports = {
         const user = await User.findOne({ username });
 
         if (user) {
-          console.log("this is user: " + user)
+          console.log("this is user: " + user);
           return user;
         } else {
           throw new Error("User not found");
@@ -116,7 +116,7 @@ module.exports = {
     //UPDATE INFO (Name, Bio, Location, Website)
     async updateInfo(_, { name, bio, location, website }, context) {
       const user = checkAuth(context);
-      console.log("update 1")
+      console.log("update 1");
       //Can use these later if we want validation
       // if (body.trim() === "") {
       //   throw new Error("Post body must not be empty");
@@ -175,9 +175,7 @@ module.exports = {
 
     //FOLLOW and UNFOLLOW
     async followUser(_, { followeeId }, context) {
-      
       const { id } = checkAuth(context);
-
 
       const user = await User.findById(followeeId);
       const userME = await User.findById(id);
@@ -212,4 +210,6 @@ module.exports = {
       } else throw new UserInputError("User not found.");
     },
   },
+
+  
 };

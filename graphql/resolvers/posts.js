@@ -80,35 +80,23 @@ module.exports = {
       }
     },
 
-    // async gamePre(parent) {
-    //   let game = await Pregame.find({ gameId: parent.gameId }).then(
-    //     (games) => games[0]
-    //   );
-    //   if (game != null) {
-    //     console.log("this is the pre game xxxx: " + game);
-    //     return game;
-    //   }
-    // },
+    async user(parent) {
+      let user = await User.find({ username: parent.username }).then(
+        (users) => users[0]
+      );
 
-    // async gameLive(parent) {
-    //   let game = await Livegame.find({ gameId: parent.gameId }).then(
-    //     (games) => games[0]
-    //   );
-    //   if (game != null) {
-    //     console.log("this is the live game xxxx: " + game);
-    //     return game;
-    //   }
-    // },
+      return user;
+    },
+  },
 
-    // async gamePost(parent) {
-    //   let game = await Postgame.find({ gameId: parent.gameId }).then(
-    //     (games) => games[0]
-    //   );
-    //   if (game != null) {
-    //     console.log("this is the post game xxxx: " + game);
-    //     return game;
-    //   }
-    // },
+  User: {
+    async user(parent) {
+      let user = await User.find({ username: parent.username }).then(
+        (users) => users[0]
+      );
+
+      return user;
+    },
   },
 
   Mutation: {
