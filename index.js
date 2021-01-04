@@ -26,6 +26,7 @@ mongoose
     console.log(`server running at ${res.url}`);
   });
 
-//start game service here
-//NOTE: COMMENT OUT WHEN YOU DONT WANT IT UPDATED
-//new myGameService().run();
+//start game service based on command line arg
+if (process.argv.length > 2 && process.argv[2] === "g") {
+  new myGameService().run();
+}
