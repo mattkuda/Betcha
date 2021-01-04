@@ -37,7 +37,8 @@ function PostCard({
 
   let PreGameMarkup = (
     <>
-      <Card fluid floated="right" style={{ width: "100%" }}>
+      <Card fluid floated="right" rasied="false" style={{ width: "100%" }} as={Link}
+                        to={`/posts/${id}`}>
         <Card.Content>
           <div
             style={{ display: "inline-block", width: "auto", height: "100%" }}

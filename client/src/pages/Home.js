@@ -62,14 +62,9 @@ function Home() {
                 {posts &&
                   posts.map((post) => (
                     <Grid.Column key={post.id} style={{ marginBottom: 20 }}>
-                      <Link
-                        to={`/posts/${post.id}`}
-                        style={{ textDecoration: "normal" }}
-                      >
-                        <span className="card" style={{ display: "block" }}>
+                      
                           <PostCard post={post} />
-                        </span>
-                      </Link>
+                   
                     </Grid.Column>
                   ))}
               </Transition.Group>

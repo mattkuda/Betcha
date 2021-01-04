@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import { Menu } from "semantic-ui-react";
+import { Menu, Icon, Label } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 
 import { AuthContext } from "../../context/auth";
@@ -36,6 +36,14 @@ function MenuBar() {
       </Menu.Item>
 
       <Menu.Menu position="right">
+
+      <Menu.Item >
+        <Icon name="bell outline"/>
+        <Label color='red' floating style={{padding: "2px 3px", top: "10px", left: "47px"}}>
+        22
+      </Label>
+      </Menu.Item>
+
         <Menu.Item
           active={activeItem === user.username}
           name={user.username}
@@ -65,18 +73,18 @@ function MenuBar() {
 
       <Menu.Menu position="right">
         <Menu.Item
+          name="join"
+          active={activeItem === "join"}
+          onClick={handleItemClick}
+          as={Link}
+          to="/register"
+        />
+        <Menu.Item
           name="login"
           active={activeItem === "login"}
           onClick={handleItemClick}
           as={Link}
           to="/login"
-        />
-        <Menu.Item
-          name="register"
-          active={activeItem === "register"}
-          onClick={handleItemClick}
-          as={Link}
-          to="/register"
         />
       </Menu.Menu>
     </Menu>
