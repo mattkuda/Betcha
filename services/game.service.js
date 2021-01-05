@@ -106,7 +106,7 @@ class GameService {
     this.tick();
     this.timerID = setInterval(() => {
       this.tick();
-      if (this.ctr < 20) {
+      if (this.ctr < 60) {
         this.ctr = this.ctr + 1;
       } else {
         this.ctr = 1;
@@ -124,7 +124,7 @@ class GameService {
       console.log("Processing data for " + element[1]);
       //this.processData(data.events, element[0], element[1]);
     }
-    if (this.ctr === 2) {
+    if (this.ctr === 60) {
       const url = "http://site.api.espn.com/apis/v2/scoreboard/header?id=0";
       const response = await fetch(url);
       const data = await response.json();
@@ -184,7 +184,7 @@ class GameService {
   Logic for updating the pregames DB
   */
   async updatePregames(games, sport, league) {
-    let updatePregames = new Boolean(this.ctr === 20);
+    let updatePregames = new Boolean(this.ctr === 60);
     if (updatePregames == true) {
       console.log("Updating pregames odds for " + league + " games...");
     }
