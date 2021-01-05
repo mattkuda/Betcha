@@ -122,7 +122,7 @@ class GameService {
       const response = await fetch(url);
       const data = await response.json();
       console.log("Processing data for " + element[1]);
-      //this.processData(data.events, element[0], element[1]);
+      this.processData(data.events, element[0], element[1]);
     }
     if (this.ctr === 60) {
       const url = "http://site.api.espn.com/apis/v2/scoreboard/header?id=0";
