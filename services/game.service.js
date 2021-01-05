@@ -7,6 +7,7 @@ const Pregame = require("../models/Pregame");
 const Livegame = require("../models/Livegame");
 const Postgame = require("../models/Postgame");
 const Play = require("../models/Play");
+const TopEvent = require("../models/TopEvent");
 
 //import libraries
 const fetch = require("node-fetch");
@@ -117,29 +118,35 @@ class GameService {
   league list and processes the ESPN data for each one */
   async tick() {
     for (const element of this.sport_list) {
-      const url =
-        "http://site.api.espn.com/apis/site/v2/sports/" +
-        element[0] +
-        "/" +
-        element[1] +
-        "/scoreboard";
+      const url = "http://site.api.espn.com/apis/site/v2/sports/" + element[0] + "/" + element[1] + "/scoreboard";
       const response = await fetch(url);
       const data = await response.json();
       console.log("Processing data for " + element[1]);
-      this.processData(data.events, element[0], element[1]);
+      //this.processData(data.events, element[0], element[1]);
     }
-    const url = "http://site.api.espn.com/apis/v2/scoreboard/header?id=0";
-    const response = await fetch(url);
-    const data = await response.json();
-    console.log("Processing top events");
-    this.processTopEvents(data);
+    if (this.ctr === 2) {
+      const url = "http://site.api.espn.com/apis/v2/scoreboard/header?id=0";
+      const response = await fetch(url);
+      const data = await response.json();
+      console.log("Processing top events");
+      this.processTopEvents(data.sports);
+    }
   }
 
-  processTopEvents(sports) {
+  /* Used to process the top upcoming events (determined by ESPN) and update the DB accordingly. */
+  async processTopEvents(sports) {
     for (const sport of sports) {
-      for (const league of sport) {
-        for (const game of league) {
-          //do stuff
+      for (const league of sport.leagues) {
+        for (const game of league.events) {
+          const gameExists = await TopEvent.exists({ gameId: game.id });
+          if (gameExists === false) {
+            console.log("Adding new top event...");
+            let topEvent = new TopEvent({
+              gameId: game.id,
+              rank: game.priority
+            });
+            topEvent.save();
+          }
         }
       }
     }
