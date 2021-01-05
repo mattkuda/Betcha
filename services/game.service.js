@@ -128,7 +128,23 @@ class GameService {
       console.log("Processing data for " + element[1]);
       this.processData(data.events, element[0], element[1]);
     }
+    const url = "http://site.api.espn.com/apis/v2/scoreboard/header?id=0";
+    const response = await fetch(url);
+    const data = await response.json();
+    console.log("Processing top events");
+    this.processTopEvents(data);
   }
+
+  processTopEvents(sports) {
+    for (const sport of sports) {
+      for (const league of sport) {
+        for (const game of league) {
+          //do stuff
+        }
+      }
+    }
+  }
+
 
   /* Used to sort games by their status. In theory, we should be able to process games_pre, games_in,
   and games_post in parallel, as each game type has its own collection within the DB. */
