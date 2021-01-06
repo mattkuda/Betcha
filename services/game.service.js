@@ -133,29 +133,10 @@ class GameService {
     }
   }
 
-  /* Used to process the top upcoming events (determined by ESPN) and update the DB accordingly. */
-  async processTopEvents(sports) {
-    for (const sport of sports) {
-      for (const league of sport.leagues) {
-        for (const game of league.events) {
-          const gameExists = await TopEvent.exists({ gameId: game.id });
-          if (gameExists === false) {
-            console.log("Adding new top event...");
-            let topEvent = new TopEvent({
-              gameId: game.id,
-              rank: game.priority
-            });
-            topEvent.save();
-          }
-        }
-      }
-    }
-  }
-
-
   /* Used to sort games by their status. In theory, we should be able to process games_pre, games_in,
   and games_post in parallel, as each game type has its own collection within the DB. */
   processData(data, sport, league) {
+
     const games_pre = [];
     const games_in = [];
     const games_post = [];
@@ -180,6 +161,25 @@ class GameService {
     }
   }
 
+  /* Used to process the top upcoming events (determined by ESPN) and update the DB accordingly. */
+  async processTopEvents(sports) {
+    for (const sport of sports) {
+      for (const league of sport.leagues) {
+        for (const game of league.events) {
+          const gameExists = await TopEvent.exists({ gameId: game.id });
+          if (gameExists === false) {
+            console.log("Adding new top event...");
+            let topEvent = new TopEvent({
+              gameId: game.id,
+              rank: game.priority
+            });
+            topEvent.save();
+          }
+        }
+      }
+    }
+  }
+
   /*
   Logic for updating the pregames DB
   */
@@ -189,6 +189,7 @@ class GameService {
       console.log("Updating pregames odds for " + league + " games...");
     }
     for (const game of games) {
+
       const gameExists = await Pregame.exists({ gameId: game.id });
 
       //case 1 - game needs to be added to DB
