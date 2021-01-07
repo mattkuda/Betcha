@@ -5,7 +5,7 @@ import gql from "graphql-tag";
 import { Button, Label, Icon } from "semantic-ui-react";
 import MyPopup from "../../util/MyPopup";
 
-function LikeButton({ user, post: { id, likeCount, likes } }) {
+function LikeButton({ user, receiver, post: { id, likeCount, likes } }) {
   const [liked, setLiked] = useState(false);
 
   useEffect(() => {
@@ -17,6 +17,24 @@ function LikeButton({ user, post: { id, likeCount, likes } }) {
   const [likePost] = useMutation(LIKE_POST_MUTATION, {
     variables: { postId: id },
   });
+
+  const [createNotification] = useMutation(CREATE_NOTIFICATION_MUTATION, {
+    variables: { objectType: "post", objectId: id, receiver: receiver },
+  });
+
+  const handleButtonClick = async () => {
+    await likePost();
+    console.log("ABOUT TO");
+    console.log("receiver: " + receiver);
+    console.log("id: " + id);
+    try {
+      if (true) { //TODO: User cant create notif for themself
+        await createNotification();
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   //If already liked, then fill in the like button
   //If not logged in, onClick takes to login page
@@ -38,7 +56,7 @@ function LikeButton({ user, post: { id, likeCount, likes } }) {
   );
 
   return (
-    <Button as="div" labelPosition="right" onClick={likePost}>
+    <Button as="div" labelPosition="right" onClick={handleButtonClick}>
       <MyPopup content={liked ? "Unlike" : "Like"}>{likeButton}</MyPopup>
       <Label basic color="teal" pointing="left">
         {likeCount}
@@ -56,6 +74,22 @@ const LIKE_POST_MUTATION = gql`
         username
       }
       likeCount
+    }
+  }
+`;
+
+const CREATE_NOTIFICATION_MUTATION = gql`
+  mutation createNotification(
+    $objectType: String = "post"
+    $objectId: ID!
+    $receiver: ID!
+  ) {
+    createNotification(
+      objectType: $objectType
+      objectId: $objectId
+      receiver: $receiver
+    ) {
+      id
     }
   }
 `;

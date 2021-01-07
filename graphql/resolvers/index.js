@@ -5,13 +5,14 @@ const scoreboardResolvers = require("./scoreboard");
 const playsResolvers = require("./plays");
 const reactionResolvers = require("./reactions");
 const userResolvers = require("./users");
+const notificationResolvers = require("./notifications");
 
 module.exports = {
   //Any query or mutation that returns a post will go thru this.
   Post: {
     likeCount: (parent) => parent.likes.length,
     commentCount: (parent) => parent.comments.length,
-    ...postResolvers.Post
+    ...postResolvers.Post,
   },
   User: {
     followersCount: (parent) => parent.followers.length,
@@ -24,18 +25,23 @@ module.exports = {
     ...scoreboardResolvers.Query,
     ...playsResolvers.Query,
     ...leaguesResolvers.Query,
-    ...reactionResolvers.Query
+    ...reactionResolvers.Query,
+    ...notificationResolvers.Query,
   },
   Mutation: {
     ...userResolvers.Mutation,
     ...postResolvers.Mutation,
     ...commentsResolvers.Mutation,
-    ...reactionResolvers.Mutation
+    ...reactionResolvers.Mutation,
+    ...notificationResolvers.Mutation,
   },
   Subscription: {
     ...postResolvers.Subscription,
   },
   Reaction: {
-    ...reactionResolvers.React
+    ...reactionResolvers.React,
+  },
+  Notification: {
+    ...notificationResolvers.Notfication,
   },
 };

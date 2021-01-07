@@ -54,6 +54,16 @@ module.exports = gql`
     createdAt: String!
   }
 
+  type Notification {
+    id: ID!
+    objectType: String!
+    objectId: ID!
+    createdAt: String!
+    readAt: String
+    sender: User!
+    receiver: User!
+  }
+
   type Reaction {
     id: ID!
     user: User!
@@ -265,6 +275,7 @@ module.exports = gql`
     getPosts: [Post]
     getUser(username: String!): User
     getUserPosts(username: String!): [Post]
+    getUserNotifications(username: String!): [Notification]
     getLeagues: [League]
     getActiveLeagues: [League]
     getPost(postId: ID!): Post
@@ -289,6 +300,11 @@ module.exports = gql`
       betAmount: String!
       gameId: String!
     ): Post!
+    createNotification(
+      objectType: String!
+      objectId: ID!
+      receiver: ID!
+    ): Notification
     updateInfo(
       name: String!
       bio: String!

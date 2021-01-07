@@ -117,22 +117,6 @@ module.exports = {
     async updateInfo(_, { name, bio, location, website }, context) {
       const user = checkAuth(context);
       console.log("update 1");
-      //Can use these later if we want validation
-      // if (body.trim() === "") {
-      //   throw new Error("Post body must not be empty");
-      // }
-
-      // if (betType.trim() === "") {
-      //   throw new Error("Post betType must not be empty");
-      // }
-
-      // if (betAmount.trim() === "") {
-      //   throw new Error("Post betAmount must not be empty");
-      // }
-
-      // if (gameId.trim() === "") {
-      //   throw new Error("Post gameId must not be empty");
-      // }
 
       try {
         const userME = await User.findOne({ username: user.username });
@@ -152,25 +136,6 @@ module.exports = {
         console.log(err);
         throw new Error(err);
       }
-
-      //If we get here, that means no error was thrown during the checkAuth phase
-      const newPost = new Post({
-        body, //already destructured at the async line (above)
-        betType,
-        betAmount,
-        gameId, //already destructured at the async line (above)
-        user: user.id,
-        username: user.username,
-        createdAt: new Date().toISOString(),
-      });
-
-      const post = await newPost.save();
-
-      context.pubsub.publish("NEW_POST", {
-        newPost: post,
-      });
-
-      return post;
     },
 
     //FOLLOW and UNFOLLOW

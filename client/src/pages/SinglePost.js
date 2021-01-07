@@ -21,7 +21,7 @@ import { betTimeFormat } from "../util/Extensions/betTimeFormat";
 
 function SinglePost(props) {
   const postId = props.match.params.postId;
-  const { user } = useContext(AuthContext);
+  const { auth } = useContext(AuthContext);
 
   const commentInputRef = useRef(null);
 
@@ -97,7 +97,7 @@ function SinglePost(props) {
               </Card.Content>
               <hr />
               <Card.Content extra>
-                <LikeButton user={user} post={{ id, likeCount, likes }} />
+                <LikeButton user={auth} post={{ id, likeCount, likes }} />
                 <MyPopup content="Comment on post">
                   <Button
                     as="div"
@@ -113,12 +113,12 @@ function SinglePost(props) {
                     </Label>
                   </Button>
                 </MyPopup>
-                {user && user.username === username && (
+                {auth && auth.username === username && (
                   <DeleteButton postId={id} callback={deletePostCallback} />
                 )}
               </Card.Content>
             </Card>
-            {user && (
+            {auth && (
               <Card fluid>
                 <Card.Content>
                   <p>Post a comment</p>
@@ -148,7 +148,7 @@ function SinglePost(props) {
             {comments.map((comment) => (
               <Card fluid key={comment.id}>
                 <Card.Content>
-                  {user && user.username === comment.username && (
+                  {auth && auth.username === comment.username && (
                     <DeleteButton postId={id} commentId={comment.id} />
                   )}
                   <Card.Header>{comment.username}</Card.Header>
@@ -214,6 +214,10 @@ const FETCH_POST_QUERY = gql`
         username
         createdAt
         body
+      }
+      user{
+        id
+        name
       }
     }
   }

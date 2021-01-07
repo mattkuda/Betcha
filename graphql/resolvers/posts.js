@@ -8,6 +8,8 @@ const Postgame = require("../../models/Postgame");
 
 const checkAuth = require("../../util/check-auth");
 
+
+
 module.exports = {
   Query: {
     async getPosts(_, {}, context) {
@@ -91,7 +93,7 @@ module.exports = {
 
   User: {
     async user(parent) {
-      let user = await User.find({ username: parent.username }).then(
+      let user = await User.find({ id: parent.user }).then(
         (users) => users[0]
       );
 
@@ -156,6 +158,8 @@ module.exports = {
 
     //LIKE and UNLIKE
     async likePost(_, { postId }, context) {
+
+      console.log('LIKING A POST')
       const { username } = checkAuth(context);
 
       const post = await Post.findById(postId);
@@ -170,6 +174,7 @@ module.exports = {
             username,
             createdAt: new Date().toISOString(),
           });
+
         }
 
         await post.save();

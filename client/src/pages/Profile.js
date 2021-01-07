@@ -223,6 +223,7 @@ export const FETCH_USER_POSTS_QUERY = gql`
       }
       user{
         name
+        id
       }
     }
   }

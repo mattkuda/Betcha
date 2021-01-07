@@ -1,5 +1,14 @@
 import gql from "graphql-tag";
 
+//NOTIFS
+export const CREATE_NOTIFICATION_MUTATION = gql`
+  mutation createNotification($receiver: ID!, $type: String, $objectId: ID!) {
+    createNotification(receiver: $receiver, type: $type, objectId: $objectId) {
+      id
+    }
+  }
+`;
+
 export const FETCH_POSTS_QUERY = gql`
   {
     getPosts {
@@ -33,6 +42,7 @@ export const FETCH_POSTS_QUERY = gql`
         username
       }
       user{
+        id
         name
       }
       commentCount

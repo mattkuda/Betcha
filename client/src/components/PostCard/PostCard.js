@@ -30,15 +30,20 @@ function PostCard({
     commentCount,
     likes,
     user,
-    
   } = {},
 }) {
   const { userME } = useContext(AuthContext);
 
   let PreGameMarkup = (
     <>
-      <Card fluid floated="right" rasied="false" style={{ width: "100%" }} as={Link}
-                        to={`/posts/${id}`}>
+      <Card
+        fluid
+        floated="right"
+        rasied="false"
+        style={{ width: "100%" }}
+        as={Link}
+        to={`/posts/${id}`}
+      >
         <Card.Content>
           <div
             style={{ display: "inline-block", width: "auto", height: "100%" }}
@@ -52,7 +57,9 @@ function PostCard({
             </div>
           </div>
           <div className="pc-header">
-            <Link to={`/user/${username}`}>{user.name} @{username}</Link>
+            <Link to={`/user/${username}`}>
+              {user.name} @{username}
+            </Link>
             <div
               style={{ display: "inline-block", color: "gray", float: "right" }}
             >
@@ -79,7 +86,8 @@ function PostCard({
 
             <div className="pc-betBody">{body}</div>
             <div className="pc-buttons">
-              <LikeButton user={userME} post={{ id, likes, likeCount }} />
+              <Button onClick={(e) => console.log(userME)}>userME</Button>
+              <LikeButton user={userME} receiver= {user.id} post={{ id, likes, likeCount }} />
               <MyPopup content="Commment on post" inverted>
                 <Button labelPosition="right" as={Link} to={`/posts/${id}`}>
                   <Button color="blue" basic>
@@ -124,7 +132,9 @@ function PostCard({
             </div>
           </div>
           <div className="pc-header">
-            <Link to={`/user/${username}`}>{user.name} @{username}</Link>
+            <Link to={`/user/${username}`}>
+              {user.name} @{username}
+            </Link>
             <div
               style={{ display: "inline-block", color: "gray", float: "right" }}
             >
@@ -150,7 +160,7 @@ function PostCard({
 
             <div className="pc-betBody">{body}</div>
             <div className="pc-buttons">
-              <LikeButton user={userME} post={{ id, likes, likeCount }} />
+              <LikeButton user={userME} receiver= {user.id} post={{ id, likes, likeCount }} />
               <MyPopup content="Commment on post" inverted>
                 <Button labelPosition="right" as={Link} to={`/posts/${id}`}>
                   <Button color="blue" basic>
@@ -195,7 +205,9 @@ function PostCard({
             </div>
           </div>
           <div className="pc-header">
-            <Link to={`/user/${username}`}>{user.name} @{username}</Link>
+            <Link to={`/user/${username}`}>
+              {user.name} @{username}
+            </Link>
             <div
               style={{ display: "inline-block", color: "gray", float: "right" }}
             >
@@ -231,7 +243,7 @@ function PostCard({
 
             <div className="pc-betBody">{body}</div>
             <div className="pc-buttons">
-              <LikeButton user={userME} post={{ id, likes, likeCount }} />
+              <LikeButton user={userME} receiver= {user.id} post={{ id, likes, likeCount }} />
               <MyPopup content="Commment on post" inverted>
                 <Button labelPosition="right" as={Link} to={`/posts/${id}`}>
                   <Button color="blue" basic>
