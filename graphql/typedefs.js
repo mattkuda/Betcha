@@ -8,7 +8,7 @@ module.exports = gql`
     betType: String!
     betAmount: String!
     gameId: Mastergame!
-   
+
     user: User!
     createdAt: String!
     username: String!
@@ -91,6 +91,12 @@ module.exports = gql`
   type MixedPostgameData {
     homeRank: Int
     awayRank: Int
+  }
+
+  type TopEvent {
+    id: ID!
+    game: Pregame
+    rank: Int!
   }
 
   type Pregame {
@@ -283,6 +289,7 @@ module.exports = gql`
     getPregamesByLeague(league: String!): [Pregame]
     getLivegamesByLeague(league: String!): [Livegame]
     getPostgamesByLeague(league: String!): [Postgame]
+    getTopEvents: [TopEvent]
     getPlay(playId: String!): Play
     getPlaysInGame(gameId: String!): [Play]
     getPlaysInGameInPeriod(gameId: String!, period: Int!): [Play]

@@ -5,6 +5,7 @@ import { Input, Menu } from "semantic-ui-react";
 import gql from "graphql-tag";
 //import { HashLink as Link } from 'react-router-hash-link';
 import Game from "../components/GameTypes/Game";
+import TopEvents from "../components/TopEvents";
 import { Grid } from "semantic-ui-react";
 import { AuthContext } from "../context/auth";
 
@@ -65,6 +66,9 @@ function ScoreboardHome() {
             </Fragment>
           </Grid.Row>
         </Grid>
+
+        <TopEvents />
+
       </div>
     );
   } else {

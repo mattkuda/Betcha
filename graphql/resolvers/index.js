@@ -44,4 +44,7 @@ module.exports = {
   Notification: {
     ...notificationResolvers.Notfication,
   },
+  TopEvent: {
+    ...scoreboardResolvers.TopEvent
+  },
 };
