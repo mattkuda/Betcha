@@ -9,6 +9,18 @@ export const CREATE_NOTIFICATION_MUTATION = gql`
   }
 `;
 
+
+export const FETCH_USERS_FOR_USER_SEARCH_QUERY = gql`
+  {
+    getAllUsers {
+      id
+      username
+      name
+    }
+  }
+`;
+
+
 export const FETCH_POSTS_QUERY = gql`
   {
     getPosts {
