@@ -7,6 +7,7 @@ import { AuthContext } from "../context/auth";
 import PostCard from "../components/PostCard/PostCard";
 import PostForm from "../components/PostForm";
 import PostModal from "../components/PostModal/PostModal";
+import GameSidebar from "../components/GameSidebar";
 import { FETCH_POSTS_QUERY } from "../util/graphql";
 
 function Home() {
@@ -62,9 +63,9 @@ function Home() {
                 {posts &&
                   posts.map((post) => (
                     <Grid.Column key={post.id} style={{ marginBottom: 20 }}>
-                      
+
                           <PostCard post={post} />
-                   
+
                     </Grid.Column>
                   ))}
               </Transition.Group>
@@ -76,7 +77,7 @@ function Home() {
             <h1>Upcoming Games</h1>
           </Grid.Row>
           <Grid.Row>
-            <h4>Coming soon</h4>
+            <GameSidebar />
           </Grid.Row>
         </Grid.Column>
       </Grid>

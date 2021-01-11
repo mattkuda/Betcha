@@ -36,7 +36,9 @@ function SearchBar() {
   const { loadingSearch, results, value } = state;
   const timeoutRef = useRef();
 
-  const {loading, error, data } = useQuery(FETCH_USERS_FOR_USER_SEARCH_QUERY);
+  const {loading, error, data } = useQuery(FETCH_USERS_FOR_USER_SEARCH_QUERY, {
+    //fetchPolicy: "network-only",
+  });
 
   /*
   The title field is required for Semantic UI search results - this is how it knows what to
@@ -46,7 +48,7 @@ function SearchBar() {
   username in parentheses.
   */
 
-  if (!loading) {
+  if (loading === false) {
     for (const user of data.getAllUsers) {
       user.title = user.name + " (@" + user.username + ")";
     }
@@ -66,7 +68,7 @@ function SearchBar() {
         return
       }
 
-      if (!loading) {
+      if (loading === false) {
         filteredUsers = data.getAllUsers.filter(user => {
           return user.name.toLowerCase().includes(searchData.value.toLowerCase())
        })
@@ -88,6 +90,11 @@ function SearchBar() {
       clearTimeout(timeoutRef.current)
     }
   }, [])
+
+  const handleResultSelect = (e, searchData) => {
+    dispatch({ type: 'UPDATE_SELECTION', selection: searchData.result.name });
+
+  }
 
 
   return (

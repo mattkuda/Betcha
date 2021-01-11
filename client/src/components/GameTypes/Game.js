@@ -155,20 +155,28 @@ function Game(props) {
                 </Grid>
               </Grid.Row>
               <Grid.Row>
-                <Grid columns={gameLineLength}>
-                  <Grid.Column>{props.awayAbbreviation}</Grid.Column>
-                  {props.awayLines.map((q) => (
-                    <Grid.Column>{q}</Grid.Column>
-                  ))}
-                </Grid>
+                {gameLineLength === 0 ? (
+                  <div></div>
+                ) : (
+                  <Grid columns={gameLineLength}>
+                    <Grid.Column>{props.awayAbbreviation}</Grid.Column>
+                    {props.awayLines.map((q) => (
+                      <Grid.Column>{q}</Grid.Column>
+                    ))}
+                  </Grid>
+                )}
               </Grid.Row>
               <Grid.Row>
-                <Grid columns={gameLineLength}>
-                  <Grid.Column>{props.homeAbbreviation}</Grid.Column>
-                  {props.homeLines.map((q) => (
-                    <Grid.Column>{q}</Grid.Column>
-                  ))}
-                </Grid>
+                {gameLineLength === 0 ? (
+                  <div></div>
+                ) : (
+                  <Grid columns={gameLineLength}>
+                    <Grid.Column>{props.homeAbbreviation}</Grid.Column>
+                    {props.homeLines.map((q) => (
+                      <Grid.Column>{q}</Grid.Column>
+                    ))}
+                  </Grid>
+                )}
               </Grid.Row>
             </Grid>
           </Container>

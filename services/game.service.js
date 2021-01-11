@@ -171,7 +171,8 @@ class GameService {
             console.log("Adding new top event...");
             let topEvent = new TopEvent({
               gameId: game.id,
-              rank: game.priority
+              rank: game.priority,
+              gameState: "pre"
             });
             topEvent.save();
           }
@@ -424,6 +425,22 @@ class GameService {
         let g = new Livegame(contents);
         g.save();
 
+
+        //if this is a top event, we should update the game state
+        const isTopEvent = await TopEvent.exists({ gameId: game.id });
+        if (isTopEvent === true) {
+          console.log("Updating game state for top event...");
+          TopEvent.findOneAndUpdate(
+            { gameId: game.id },
+            {
+              gameState: "in",
+            },
+            (err, result) => {
+              if (err) console.log(err);
+            }
+          );
+        }
+
         //deleting entry from pregames DB
         Pregame.findOneAndDelete({ gameId: game.id }, (err, result) => {
           if (err) {
@@ -633,113 +650,134 @@ class GameService {
       const gameExists = await Postgame.exists({ gameId: game.id });
       const gameWasInLive = await Livegame.exists({ gameId: game.id });
 
-      if (
-        gameExists === false &&
-        game.status.type.name !== "STATUS_CANCELED" &&
-        game.status.type.name !== "STATUS_POSTPONED" &&
-        gameWasInLive === true
-      ) {
-        console.log("Adding completed game...");
+      if (gameExists === false && gameWasInLive === true) {
 
-        //add default data
-        const contents = {
-          gameId: game.id,
-          state: "post",
-          stateDetails: game.status.type.name,
-          sport: sport,
-          league: league,
-          homeLogo: game.competitions[0].competitors[0].team.logo,
-          awayLogo: game.competitions[0].competitors[1].team.logo,
-          homeScore: parseInt(game.competitions[0].competitors[0].score),
-          awayScore: parseInt(game.competitions[0].competitors[1].score),
-          homeAbbreviation:
-            game.competitions[0].competitors[0].team.abbreviation,
-          awayAbbreviation:
-            game.competitions[0].competitors[1].team.abbreviation,
-          homeFullName: game.competitions[0].competitors[0].team.displayName,
-          awayFullName: game.competitions[0].competitors[1].team.displayName,
-          homeColor: game.competitions[0].competitors[0].team.color,
-          awayColor: game.competitions[0].competitors[1].team.color,
-          homeRecord: "0-0",
-          awayRecord: "0-0",
-          spread: "",
-          overUnder: -1,
-          spreadWinner: "P",
-          ouResult: "P",
-          specificData: {},
-        };
-        if (
-          this.elementExists(game.competitions[0].competitors[0], "records")
-        ) {
-          contents.homeRecord =
-            game.competitions[0].competitors[0].records[0].summary;
+        if (game.status.type.name === "STATUS_CANCELED" ||
+            game.status.type.name === "STATUS_POSTPONED") {
+          console.log("Game was cancelled / postponed, removing from pregames...");
+          Pregame.findOneAndDelete({ gameId: game.id }, (err, result) => {
+            if (err) {
+              console.log(err);
+            }
+          });
         }
-        if (
-          this.elementExists(game.competitions[0].competitors[1], "records")
-        ) {
-          contents.awayRecord =
-            game.competitions[0].competitors[1].records[0].summary;
-        }
-        let result = await Livegame.findOne({ gameId: game.id });
-        if (result) {
-          contents.spread = result.spread;
-          contents.overUnder = result.overUnder;
-          if (result.spread.length > 0) {
-            contents.spreadWinner = this.calculateSpreadWinner(
-              parseInt(game.competitions[0].competitors[0].score),
-              parseInt(game.competitions[0].competitors[1].score),
+
+        else {
+
+          console.log("Adding completed game...");
+
+          //add default data
+          const contents = {
+            gameId: game.id,
+            state: "post",
+            stateDetails: game.status.type.name,
+            sport: sport,
+            league: league,
+            homeLogo: game.competitions[0].competitors[0].team.logo,
+            awayLogo: game.competitions[0].competitors[1].team.logo,
+            homeScore: parseInt(game.competitions[0].competitors[0].score),
+            awayScore: parseInt(game.competitions[0].competitors[1].score),
+            homeAbbreviation:
               game.competitions[0].competitors[0].team.abbreviation,
+            awayAbbreviation:
               game.competitions[0].competitors[1].team.abbreviation,
-              result.spread
-            );
+            homeFullName: game.competitions[0].competitors[0].team.displayName,
+            awayFullName: game.competitions[0].competitors[1].team.displayName,
+            homeColor: game.competitions[0].competitors[0].team.color,
+            awayColor: game.competitions[0].competitors[1].team.color,
+            homeRecord: "0-0",
+            awayRecord: "0-0",
+            spread: "",
+            overUnder: -1,
+            spreadWinner: "P",
+            ouResult: "P",
+            specificData: {},
+          };
+          if (
+            this.elementExists(game.competitions[0].competitors[0], "records")
+          ) {
+            contents.homeRecord =
+              game.competitions[0].competitors[0].records[0].summary;
           }
-          if (result.overUnder !== -1) {
-            contents.ouResult = this.calculateOuResult(
-              parseInt(game.competitions[0].competitors[0].score) +
+          if (
+            this.elementExists(game.competitions[0].competitors[1], "records")
+          ) {
+            contents.awayRecord =
+              game.competitions[0].competitors[1].records[0].summary;
+          }
+          let result = await Livegame.findOne({ gameId: game.id });
+          if (result) {
+            contents.spread = result.spread;
+            contents.overUnder = result.overUnder;
+            if (result.spread.length > 0) {
+              contents.spreadWinner = this.calculateSpreadWinner(
+                parseInt(game.competitions[0].competitors[0].score),
                 parseInt(game.competitions[0].competitors[1].score),
-              result.overUnder
-            );
+                game.competitions[0].competitors[0].team.abbreviation,
+                game.competitions[0].competitors[1].team.abbreviation,
+                result.spread
+              );
+            }
+            if (result.overUnder !== -1) {
+              contents.ouResult = this.calculateOuResult(
+                parseInt(game.competitions[0].competitors[0].score) +
+                  parseInt(game.competitions[0].competitors[1].score),
+                result.overUnder
+              );
+            }
           }
-        }
-        let localHomeLines = [];
-        let localAwayLines = [];
-        for (const element of game.competitions[0].competitors[0].linescores) {
-          localHomeLines.push(element.value);
-        }
-        for (const element of game.competitions[0].competitors[1].linescores) {
-          localAwayLines.push(element.value);
-        }
-        contents.homeLines = localHomeLines;
-        contents.awayLines = localAwayLines;
-
-        //add league-specific data
-        switch (league) {
-          case "college-football":
-            contents.specificData = {
-              homeRank: game.competitions[0].competitors[0].curatedRank.current,
-              awayRank: game.competitions[0].competitors[1].curatedRank.current,
-            };
-            break;
-          case "mens-college-basketball":
-            contents.specificData = {
-              homeRank: game.competitions[0].competitors[0].curatedRank.current,
-              awayRank: game.competitions[0].competitors[1].curatedRank.current,
-            };
-            break;
-          default:
-            contents.specificData = {};
-        }
-
-        //saving to DB
-        let g = new Postgame(contents);
-        g.save();
-
-        //deleting entry from livegames DB
-        Livegame.findOneAndDelete({ gameId: game.id }, (err, result) => {
-          if (err) {
-            console.log(err);
+          let localHomeLines = [];
+          let localAwayLines = [];
+          for (const element of game.competitions[0].competitors[0].linescores) {
+            localHomeLines.push(element.value);
           }
-        });
+          for (const element of game.competitions[0].competitors[1].linescores) {
+            localAwayLines.push(element.value);
+          }
+          contents.homeLines = localHomeLines;
+          contents.awayLines = localAwayLines;
+
+          //add league-specific data
+          switch (league) {
+            case "college-football":
+              contents.specificData = {
+                homeRank: game.competitions[0].competitors[0].curatedRank.current,
+                awayRank: game.competitions[0].competitors[1].curatedRank.current,
+              };
+              break;
+            case "mens-college-basketball":
+              contents.specificData = {
+                homeRank: game.competitions[0].competitors[0].curatedRank.current,
+                awayRank: game.competitions[0].competitors[1].curatedRank.current,
+              };
+              break;
+            default:
+              contents.specificData = {};
+          }
+
+          //saving to DB
+          let g = new Postgame(contents);
+          g.save();
+
+          //if this was a top event, we should remove it from the TopEvent collection
+          const isTopEvent = await TopEvent.exists({ gameId: game.id });
+          if (isTopEvent === true) {
+            console.log("Removing from top events...");
+            TopEvent.findOneAndDelete({ gameId: game.id }, (err, result) => {
+              if (err) {
+                console.log(err);
+              }
+            });
+          }
+
+          //deleting entry from livegames DB
+          Livegame.findOneAndDelete({ gameId: game.id }, (err, result) => {
+            if (err) {
+              console.log(err);
+            }
+          });
+
+        }
       }
     }
   }

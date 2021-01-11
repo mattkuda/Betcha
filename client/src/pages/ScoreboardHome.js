@@ -97,12 +97,21 @@ const FETCH_USER_GAMES = gql`
         awayRecord
         awayLogo
         homeLogo
+        homeScore
+        awayScore
         awayAbbreviation
         homeAbbreviation
+        homeLines
+        awayLines
+        time
+        period
         startTime
         broadcasts
+        lastPlay
         spread
         overUnder
+        spreadWinner
+        ouResult
       }
     }
   }

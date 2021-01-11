@@ -95,8 +95,9 @@ module.exports = gql`
 
   type TopEvent {
     id: ID!
-    game: Pregame
+    game: Mastergame
     rank: Int!
+    gameState: String!
   }
 
   type Pregame {
@@ -199,6 +200,8 @@ module.exports = gql`
     awayColor: String
     homeRecord: String
     awayRecord: String
+    homeLines: [Int]
+    awayLines: [Int]
     startTime: String
     broadcasts: [String]
     time: String

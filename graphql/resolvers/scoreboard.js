@@ -51,8 +51,14 @@ module.exports = {
   TopEvent: {
     async game(parent) {
       let game = await Pregame.find({ gameId: parent.gameId });
-      if (game.length > 0) {
+      if (game != null && game.length > 0) {
         return game[0];
+      }
+      else {
+        game = await Livegame.find({ gameId: parent.gameId });
+        if (game != null && game.length > 0) {
+          return game[0];
+        }
       }
     }
   }

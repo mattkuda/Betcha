@@ -20,6 +20,67 @@ export const FETCH_USERS_FOR_USER_SEARCH_QUERY = gql`
   }
 `;
 
+export const FETCH_TOP_PREGAME_EVENTS = gql`
+  {
+    getTopEvents {
+      id
+      game {
+        id
+        gameId
+        state
+        stateDetails
+        sport
+        league
+        homeFullName
+        awayFullName
+        homeRecord
+        awayRecord
+        awayLogo
+        homeLogo
+        awayAbbreviation
+        homeAbbreviation
+        startTime
+        broadcasts
+        spread
+        overUnder
+      }
+      rank
+    }
+  }
+`;
+
+export const FETCH_TOP_LIVEGAME_EVENTS = gql`
+  {
+    getTopEvents {
+      id
+      game {
+        id
+        gameId
+        state
+        stateDetails
+        sport
+        league
+        homeFullName
+        awayFullName
+        homeRecord
+        awayRecord
+        awayLogo
+        homeLogo
+        awayAbbreviation
+        homeAbbreviation
+        homeScore
+        awayScore
+        lastPlay
+        time
+        period
+        spread
+        overUnder
+      }
+      rank
+    }
+  }
+`;
+
 
 export const FETCH_POSTS_QUERY = gql`
   {

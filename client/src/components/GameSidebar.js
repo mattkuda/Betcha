@@ -1,28 +1,23 @@
-import React, { useState, useContext, Fragment } from "react";
+import React, { useContext, Fragment } from "react";
 import { useQuery } from "@apollo/react-hooks";
-import gql from "graphql-tag";
 import { Link } from "react-router-dom";
-import Game from "../components/GameTypes/Game";
-import { Grid } from "semantic-ui-react";
 import { FETCH_TOP_PREGAME_EVENTS } from "../util/graphql";
+import { Grid } from "semantic-ui-react";
+import { AuthContext } from "../context/auth";
+import Game from "./GameTypes/Game";
 
-function TopEvents() {
+function GameSidebar() {
+  const { user } = useContext(AuthContext);
 
-  const { loading, error, data } = useQuery(FETCH_TOP_PREGAME_EVENTS, {
-    pollInterval: 30000
-  });
+  const { loading, error, data } = useQuery(
+    FETCH_TOP_PREGAME_EVENTS
+  );
 
-  if (loading) return "Loading top events...";
+  if (loading) return "Loading...";
   if (error) return `Error! ${error.message}`;
-
-  if (data) {
-    console.log(data.getTopEvents);
-  }
 
   return (
     <div>
-
-      <h1>Top Upcoming Games</h1>
       <Grid columns="two">
         <Grid.Row>
           <Fragment>
@@ -43,7 +38,7 @@ function TopEvents() {
         </Grid.Row>
       </Grid>
     </div>
-  )
+  );
 }
 
-export default TopEvents;
+export default GameSidebar;
