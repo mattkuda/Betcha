@@ -285,7 +285,7 @@ module.exports = gql`
     getPosts: [Post]
     getUser(username: String!): User
     getUserPosts(username: String!): [Post]
-    getUserNotifications(username: String!): [Notification]
+    getUserNotifications: [Notification]
     getAllUsers: [User]
     getLeagues: [League]
     getActiveLeagues: [League]

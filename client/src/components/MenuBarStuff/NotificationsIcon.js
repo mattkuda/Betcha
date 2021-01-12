@@ -5,15 +5,13 @@ import gql from "graphql-tag";
 import { Button, Label, Icon } from "semantic-ui-react";
 
 function NotificationsIcon({ user }) {
-  const { data: { getUserNotifications } = {} } = useQuery(
-    FETCH_PROFILE_QUERY,
+  const { data: { getUserNotifications: notifications } = {} } = useQuery(
+    FETCH_NOTIFICATIONS_QUERY,
     {
       variables: { userId: user.id },
     }
   );
-  const profileUsername = user.username;
 
-  const { notificationCount } = getUserNotifications;
 
   // const NotificationsIcon = user ? (
   //   notificationCount > 0 ? (
@@ -45,7 +43,7 @@ function NotificationsIcon({ user }) {
         floating
         style={{ padding: "2px 3px", top: "10px", left: "47px" }}
       >
-        {notificationCount}
+        {notifications?notifications.length: <></>}
       </Label>
     </>
   ) : (
@@ -55,10 +53,10 @@ function NotificationsIcon({ user }) {
   return <>{NotificationsIcon}</>;
 }
 
-const FETCH_PROFILE_QUERY = gql`
-  query($profileUsername: String!) {
-    getUser(username: $profileUsername) {
-      notificationCount
+const FETCH_NOTIFICATIONS_QUERY = gql`
+  {
+    getUserNotifications{
+      id
     }
   }
 `;

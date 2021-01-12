@@ -8,14 +8,16 @@ const checkAuth = require("../../util/check-auth");
 
 module.exports = {
   Query: {
-    async getUserNotifications(_, { userId }) {
+    async getUserNotifications(_, {}, context) {
       try {
-        console.log("GETTING USER NOTIFICATIONS")
+        const user = checkAuth(context);
+        console.log("GETTING USER NOTIFICATIONS. the user is" + JSON.stringify(user))
         const notifications = await Notification.find({
-          receiver: userId,
+          receiver: user.id,
         }).sort({
           createdAt: -1,
         });
+        console.log("These are the notifications being returned: " + JSON.stringify(notifications))
         return notifications;
       } catch (err) {
         throw new Error(err);
