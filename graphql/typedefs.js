@@ -94,6 +94,13 @@ module.exports = gql`
     awayRank: Int
   }
 
+  type TopEvent {
+    id: ID!
+    game: Mastergame
+    rank: Int!
+    gameState: String!
+  }
+
   type Pregame {
     id: ID!
     gameId: String!
@@ -194,6 +201,8 @@ module.exports = gql`
     awayColor: String
     homeRecord: String
     awayRecord: String
+    homeLines: [Int]
+    awayLines: [Int]
     startTime: String
     broadcasts: [String]
     time: String
@@ -277,6 +286,7 @@ module.exports = gql`
     getUser(username: String!): User
     getUserPosts(username: String!): [Post]
     getUserNotifications(username: String!): [Notification]
+    getAllUsers: [User]
     getLeagues: [League]
     getActiveLeagues: [League]
     getPost(postId: ID!): Post
@@ -284,6 +294,7 @@ module.exports = gql`
     getPregamesByLeague(league: String!): [Pregame]
     getLivegamesByLeague(league: String!): [Livegame]
     getPostgamesByLeague(league: String!): [Postgame]
+    getTopEvents: [TopEvent]
     getPlay(playId: String!): Play
     getPlaysInGame(gameId: String!): [Play]
     getPlaysInGameInPeriod(gameId: String!, period: Int!): [Play]

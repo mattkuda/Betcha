@@ -5,25 +5,27 @@ import { Input, Menu } from "semantic-ui-react";
 import gql from "graphql-tag";
 //import { HashLink as Link } from 'react-router-hash-link';
 import Game from "../components/GameTypes/Game";
+import TopEvents from "../components/TopEvents";
 import { Grid } from "semantic-ui-react";
 import { AuthContext } from "../context/auth";
 
+
 //If user has 2 or more bets on a game, won't display the game more than once.
-function removeDuplicates(originalArray, objKey) {
-  var trimmedArray = [];
-  var values = [];
-  var value;
-
-  for (var i = 0; i < originalArray.length; i++) {
-    value = originalArray[i][objKey];
-
-    if (values.indexOf(value) === -1) {
-      trimmedArray.push(originalArray[i]);
-      values.push(value);
+function removeDuplicateGames(games) {
+  let uniqueGames = [];
+  let gameIDs = [];
+  let gameID;
+  for (const game of games) {
+    gameID = game.gameId.gameId;
+    //if ID is not yet in list of IDs, this is a unique game - push to array and add to list of gameIDs
+    if (gameIDs.indexOf(gameID) === -1) {
+      uniqueGames.push(game);
+      gameIDs.push(gameID)
     }
   }
-  return trimmedArray;
+  return uniqueGames;
 }
+
 
 function ScoreboardHome() {
   const { user } = useContext(AuthContext);
@@ -48,7 +50,7 @@ function ScoreboardHome() {
           <Grid.Row>
             <Fragment>
               {user ? (
-                removeDuplicates(data.getUserPosts).map((post) => (
+                removeDuplicateGames(data.getUserPosts).map((post) => (
                   <Grid.Column>
                     <Link
                       to={`/scoreboard/${post.gameId.league}/${post.gameId.gameId}`}
@@ -65,6 +67,9 @@ function ScoreboardHome() {
             </Fragment>
           </Grid.Row>
         </Grid>
+
+        <TopEvents />
+
       </div>
     );
   } else {
@@ -92,12 +97,21 @@ const FETCH_USER_GAMES = gql`
         awayRecord
         awayLogo
         homeLogo
+        homeScore
+        awayScore
         awayAbbreviation
         homeAbbreviation
+        homeLines
+        awayLines
+        time
+        period
         startTime
         broadcasts
+        lastPlay
         spread
         overUnder
+        spreadWinner
+        ouResult
       }
     }
   }

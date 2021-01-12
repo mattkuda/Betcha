@@ -3,6 +3,7 @@ const Pregame = require("../../models/Pregame");
 const Livegame = require("../../models/Livegame");
 const Postgame = require("../../models/Postgame");
 const Play = require("../../models/Play");
+const TopEvent = require("../../models/TopEvent");
 
 module.exports = {
   Query: {
@@ -38,5 +39,27 @@ module.exports = {
         throw new Error(err);
       }
     },
+    async getTopEvents() {
+      try {
+        const topEvents = await TopEvent.find({}).sort({rank: 1});
+        return topEvents;
+      } catch (err) {
+        throw new Error(err);
+      }
+    }
+  },
+  TopEvent: {
+    async game(parent) {
+      let game = await Pregame.find({ gameId: parent.gameId });
+      if (game != null && game.length > 0) {
+        return game[0];
+      }
+      else {
+        game = await Livegame.find({ gameId: parent.gameId });
+        if (game != null && game.length > 0) {
+          return game[0];
+        }
+      }
+    }
   }
 };

@@ -39,6 +39,14 @@ module.exports = {
         throw new Error(err);
       }
     },
+    async getAllUsers() {
+      try {
+        const user = await User.find({});
+        return user;
+      } catch (err) {
+        throw new Error(err);
+      }
+    },
   },
   Mutation: {
     async login(_, { username, password }) {
@@ -176,5 +184,5 @@ module.exports = {
     },
   },
 
-  
+
 };

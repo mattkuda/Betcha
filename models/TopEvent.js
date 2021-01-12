@@ -5,7 +5,8 @@ const Schema = mongoose.Schema;
 
 const topEventSchema = new Schema({
   gameId: String,
-  rank: Number
+  rank: Number,
+  gameState: String
 }, { strict: false });
 
 module.exports = mongoose.model('TopEvent', topEventSchema);
