@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 
 import { AuthContext } from "../../context/auth";
 import SearchBar from "./SearchBar";
+import NotificationsIcon from "./NotificationsIcon";
 
 function MenuBar() {
   const { user, logout } = useContext(AuthContext);
@@ -38,10 +39,7 @@ function MenuBar() {
       <Menu.Menu position="right">
 
       <Menu.Item >
-        <Icon name="bell outline"/>
-        <Label color='red' floating style={{padding: "2px 3px", top: "10px", left: "47px"}}>
-        22
-      </Label>
+        <NotificationsIcon user={user}/>
       </Menu.Item>
 
         <Menu.Item

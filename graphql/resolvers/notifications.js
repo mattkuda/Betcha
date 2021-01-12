@@ -8,14 +8,14 @@ const checkAuth = require("../../util/check-auth");
 
 module.exports = {
   Query: {
-    async getUserNotifications(_, { username }) {
+    async getUserNotifications(_, { userId }) {
       try {
+        console.log("GETTING USER NOTIFICATIONS")
         const notifications = await Notification.find({
-          receiver: username,
+          receiver: userId,
         }).sort({
           createdAt: -1,
         });
-        //FORMERLY const posts = await Post.find().sort({ createdAt: -1 }).populate('gameId').exec()
         return notifications;
       } catch (err) {
         throw new Error(err);

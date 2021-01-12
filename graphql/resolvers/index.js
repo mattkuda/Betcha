@@ -17,6 +17,8 @@ module.exports = {
   User: {
     followersCount: (parent) => parent.followers.length,
     followingCount: (parent) => parent.following.length,
+    notificationCount: (parent) => parent.following.length,
+
     ...userResolvers.User,
   },
   Query: {

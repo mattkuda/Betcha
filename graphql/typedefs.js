@@ -8,7 +8,7 @@ module.exports = gql`
     betType: String!
     betAmount: String!
     gameId: Mastergame!
-   
+
     user: User!
     createdAt: String!
     username: String!
@@ -42,6 +42,7 @@ module.exports = gql`
     following: [Following]!
     followersCount: Int!
     followingCount: Int!
+    notificationCount: Int
   }
   type Follower {
     id: ID!
