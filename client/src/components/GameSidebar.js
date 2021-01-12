@@ -18,7 +18,7 @@ function GameSidebar() {
 
   return (
     <div>
-      <Grid columns="two">
+      <Grid columns="one">
         <Grid.Row>
           <Fragment>
           {
