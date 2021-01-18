@@ -10,6 +10,7 @@ import AuthRoute from './util/AuthRoute';
 
 import MenuBar from "./components/MenuBarStuff/MenuBar";
 import Home from "./pages/Home";
+import Home2 from "./pages/Home2";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Profile from "./pages/Profile";
@@ -23,9 +24,11 @@ function App() {
   return (
     <AuthProvider>
       <Router>
-        <Container>
+      {/* add fluid = true to contatiner to make it full screen */}
+        <Container > 
           <MenuBar />
           <Route exact path="/" component={Home} />
+          <Route exact path="/home2" component={Home2} />
           <AuthRoute exact path="/login" component={Login} />
           <AuthRoute exact path="/register" component={Register} />
           <Route exact path="/posts/:postId" component={SinglePost} />

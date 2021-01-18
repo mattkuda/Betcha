@@ -5,7 +5,7 @@ import gql from "graphql-tag";
 import { Button, Label, Icon } from "semantic-ui-react";
 import MyPopup from "../../util/MyPopup";
 
-function FollowButton({ user, followeeUser: {id, followers} }) {
+function FollowButton({ user, followeeUser: { id, followers } }) {
   const [followed, setFollowed] = useState(false);
 
   useEffect(() => {
@@ -18,16 +18,30 @@ function FollowButton({ user, followeeUser: {id, followers} }) {
     variables: { followeeId: id },
   });
 
+  const [createNotification] = useMutation(CREATE_NOTIFICATION_MUTATION, {
+    variables: { objectType: "follow", objectId: id, receiver: id },
+  });
+
+  const handleButtonClick = async () => {
+    await followUser();
+
+    try {
+      await createNotification();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   //If already followed, then fill in the like button
   //If not logged in, onClick takes to login page
 
   const FollowButton = user ? (
     followed ? (
-      <Button as="div"  onClick={followUser} color="teal">
+      <Button as="div" onClick={handleButtonClick} color="teal">
         Following <Icon fitted name="checkmark" />
       </Button>
     ) : (
-      <Button as="div" onClick={followUser} color="teal" basic>
+      <Button as="div" onClick={handleButtonClick} color="teal" basic>
         Follow <Icon fitted name="plus" />
       </Button>
     )
@@ -37,10 +51,12 @@ function FollowButton({ user, followeeUser: {id, followers} }) {
     </Button>
   );
 
-  return (
-      user && user.id !== id ? <MyPopup content={followed ? "Following" : "Follow"}>{FollowButton}</MyPopup> : <></>
-      
-  
+  return user && user.id !== id ? (
+    <MyPopup content={followed ? "Following" : "Follow"}>
+      {FollowButton}
+    </MyPopup>
+  ) : (
+    <></>
   );
 }
 
@@ -53,6 +69,22 @@ const FOLLOW_USER_MUTATION = gql`
         followerId
       }
       followersCount
+    }
+  }
+`;
+
+const CREATE_NOTIFICATION_MUTATION = gql`
+  mutation createNotification(
+    $objectType: String = "follow"
+    $objectId: ID = ""
+    $receiver: ID!
+  ) {
+    createNotification(
+      objectType: $objectType
+      objectId: $objectId
+      receiver: $receiver
+    ) {
+      id
     }
   }
 `;

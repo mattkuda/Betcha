@@ -23,12 +23,18 @@ function LikeButton({ user, receiver, post: { id, likeCount, likes } }) {
   });
 
   const handleButtonClick = async () => {
-    await likePost();
+    const likesBefore = likes.length;
+   await likePost();
+    const likesAfter = likes.length;
+
+    console.log("the amount of likes AFTER" + liked.data.likePost.likes.length)
+
     console.log("ABOUT TO");
     console.log("receiver: " + receiver);
     console.log("id: " + id);
+
     try {
-      if (true) { //TODO: User cant create notif for themself
+      if (likesAfter > likesBefore) { //also TODO: User cant create notif for themself
         await createNotification();
       }
     } catch (error) {
