@@ -21,6 +21,7 @@ module.exports = {
 
     ...userResolvers.User,
   },
+  
   Query: {
     ...postResolvers.Query,
     ...userResolvers.Query,
@@ -44,7 +45,7 @@ module.exports = {
     ...reactionResolvers.React,
   },
   Notification: {
-    ...notificationResolvers.Notfication,
+    ...notificationResolvers.Notification,
   },
   TopEvent: {
     ...scoreboardResolvers.TopEvent

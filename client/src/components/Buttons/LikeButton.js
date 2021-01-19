@@ -23,20 +23,12 @@ function LikeButton({ user, receiver, post: { id, likeCount, likes } }) {
   });
 
   const handleButtonClick = async () => {
-    const likesBefore = likes.length;
-   await likePost();
-    const likesAfter = likes.length;
+    await likePost();
 
-    console.log("the amount of likes AFTER" + liked.data.likePost.likes.length)
-
-    console.log("ABOUT TO");
-    console.log("receiver: " + receiver);
-    console.log("id: " + id);
-
+    console.log("after")
     try {
-      if (likesAfter > likesBefore) { //also TODO: User cant create notif for themself
-        await createNotification();
-      }
+      //also TODO: User cant create notif for themself
+      await createNotification();
     } catch (error) {
       console.log(error);
     }
@@ -86,7 +78,7 @@ const LIKE_POST_MUTATION = gql`
 
 const CREATE_NOTIFICATION_MUTATION = gql`
   mutation createNotification(
-    $objectType: String = "post"
+    $objectType: String = "like"
     $objectId: ID!
     $receiver: ID!
   ) {

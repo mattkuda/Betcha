@@ -76,6 +76,9 @@ const FETCH_NOTIFICATIONS_QUERY = gql`
   {
     getUserNotifications{
       id
+      sender {
+        id
+      }
     }
   }
 `;

@@ -11,9 +11,7 @@ module.exports = {
     async getUserNotifications(_, {}, context) {
       try {
         const user = checkAuth(context);
-        console.log(
-          "GETTING USER NOTIFICATIONS. the user is" + JSON.stringify(user)
-        );
+
         const notifications = await Notification.find({
           receiver: user.id,
           readAt: "",
@@ -21,11 +19,12 @@ module.exports = {
           createdAt: -1,
         });
         console.log(
-          "These are the notifications being returned: " +
+          "\n\nThese are the notifications being returned: " +
             JSON.stringify(notifications)
         );
         return notifications;
       } catch (err) {
+        console.log(err);
         throw new Error(err);
       }
     },
@@ -46,7 +45,35 @@ module.exports = {
     //   }
     // },
   },
+  Notification: {
+    async sender(parent) {
+ 
+      let user2 = await User.findById(parent.sender);
 
+      return user2;
+
+    },
+    async receiver(parent) {
+      
+      let user2 = await User.findById(parent.receiver)
+
+      return user2;
+
+    },
+    
+    // async objectId(parent) {
+    //   if (parent.objectType == "comment" || parent.objectType == "like") {
+    //     let post = await Post.find({ id: parent.objectId }).then(
+    //       (posts) => posts[0]
+    //     );
+    //     console.log("XXXXWE found htis post: " + post);
+    //     return post;
+    //   } else {
+    //     let post2 = null;
+    //     return post2;
+    //   }
+    // },
+  },
   Mutation: {
     async createNotification(_, { objectType, objectId, receiver }, context) {
       const user = checkAuth(context);
@@ -118,15 +145,5 @@ module.exports = {
     //     }
     //   );
     // },
-  },
-
-  Notfication: {
-    async sender(parent) {
-      let user = await User.find({ sender: parent.sender }).then(
-        (users) => users[0]
-      );
-
-      return user;
-    },
   },
 };

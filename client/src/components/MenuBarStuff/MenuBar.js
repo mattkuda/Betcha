@@ -44,10 +44,9 @@ function MenuBar() {
       </Menu.Item>
 
       <Menu.Menu position="right">
-
-      <Menu.Item >
-        <NotificationsIcon user={user}/>
-      </Menu.Item>
+        <Menu.Item onClick={handleItemClick} as={Link} to={"/notifications"}>
+          <NotificationsIcon user={user} />
+        </Menu.Item>
 
         <Menu.Item
           active={activeItem === user.username}

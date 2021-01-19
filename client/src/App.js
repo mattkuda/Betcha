@@ -14,6 +14,7 @@ import Home2 from "./pages/Home2";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Profile from "./pages/Profile";
+import NotificationsPage from "./pages/NotificationsPage";
 import SinglePost from "./pages/SinglePost";
 import ScoreboardNav from "./components/ScoreboardNav";
 import ScoreboardHome from "./pages/ScoreboardHome";
@@ -33,6 +34,7 @@ function App() {
           <AuthRoute exact path="/register" component={Register} />
           <Route exact path="/posts/:postId" component={SinglePost} />
           <Route exact path="/user/:usernameId" component={Profile} />
+          <Route exact path="/notifications" component={NotificationsPage} />
           <Route path="/scoreboard">
             <ScoreboardNav />
           </Route>
