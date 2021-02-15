@@ -39,10 +39,40 @@ module.exports = {
         throw new Error(err);
       }
     },
-    async getTopEvents() {
+    async getTopPregameEvents() {
       try {
-        const topEvents = await TopEvent.find({}).sort({rank: 1});
+        const topEvents = await TopEvent.find({gameState: "pre"}).sort({rank: 1});
         return topEvents;
+      } catch (err) {
+        throw new Error(err);
+      }
+    },
+    async getTopLivegameEvents() {
+      try {
+        const topEvents = await TopEvent.find({gameState: "in"}).sort({rank: 1});
+        return topEvents;
+      } catch (err) {
+        throw new Error(err);
+      }
+    },
+    async getGameByID(_, { gameId }) {
+      try {
+        let game = await Pregame.find({ gameId: gameId });
+        if (game != null && game.length > 0) {
+          return game[0];
+        }
+        else {
+          game = await Livegame.find({ gameId: gameId });
+          if (game != null && game.length > 0) {
+            return game[0];
+          }
+          else {
+            game = await Postgame.find({ gameId: gameId });
+            if (game != null && game.length > 0) {
+              return game[0];
+            }
+          }
+        }
       } catch (err) {
         throw new Error(err);
       }

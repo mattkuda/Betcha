@@ -647,22 +647,23 @@ class GameService {
   */
   async updatePostgames(games, sport, league) {
     for (const game of games) {
-      const gameExists = await Postgame.exists({ gameId: game.id });
-      const gameWasInLive = await Livegame.exists({ gameId: game.id });
 
-      if (gameExists === false && gameWasInLive === true) {
+      if (game.status.type.name === "STATUS_CANCELED" ||
+          game.status.type.name === "STATUS_POSTPONED") {
+        console.log("Game was cancelled / postponed, removing from pregames...");
+        Pregame.findOneAndDelete({ gameId: game.id }, (err, result) => {
+          if (err) {
+            console.log(err);
+          }
+        });
+      }
 
-        if (game.status.type.name === "STATUS_CANCELED" ||
-            game.status.type.name === "STATUS_POSTPONED") {
-          console.log("Game was cancelled / postponed, removing from pregames...");
-          Pregame.findOneAndDelete({ gameId: game.id }, (err, result) => {
-            if (err) {
-              console.log(err);
-            }
-          });
-        }
+      else {
 
-        else {
+        const gameExists = await Postgame.exists({ gameId: game.id });
+        const gameWasInLive = await Livegame.exists({ gameId: game.id });
+
+        if (gameExists === false && gameWasInLive === true) {
 
           console.log("Adding completed game...");
 

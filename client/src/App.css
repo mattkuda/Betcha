@@ -19,3 +19,13 @@
 .ui.links .link:focus{
   text-decoration: none;
 }
+
+.games-sidebar-container {
+  margin-top: 20px;
+  height: 400px;
+}
+
+.games-sidebar-content {
+  height: 400px;
+  overflow: auto;
+}
