@@ -34,14 +34,15 @@ module.exports = gql`
     token: String!
     username: String!
     createdAt: String!
-    bio: String!
-    website: String!
-    location: String!
-    name: String!
+    bio: String
+    website: String
+    location: String
+    name: String
     followers: [Follower]!
     following: [Following]!
     followersCount: Int!
     followingCount: Int!
+    notificationCount: Int
   }
   type Follower {
     id: ID!
@@ -57,7 +58,7 @@ module.exports = gql`
   type Notification {
     id: ID!
     objectType: String!
-    objectId: ID!
+    objectId: String!
     createdAt: String!
     readAt: String
     sender: User!
@@ -326,7 +327,7 @@ module.exports = gql`
     getPosts: [Post]
     getUser(username: String!): User
     getUserPosts(username: String!): [Post]
-    getUserNotifications(username: String!): [Notification]
+    getUserNotifications: [Notification]
     getAllUsers: [User]
     getLeagues: [League]
     getActiveLeagues: [League]

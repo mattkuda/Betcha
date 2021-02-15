@@ -5,10 +5,10 @@ const mongoose = require('mongoose');
 const notificationSchema = new Schema({
   
   sender: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: Schema.Types.ObjectId,
   },
   receiver: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: Schema.Types.ObjectId,
   },
   objectType: String,
   objectId: String,

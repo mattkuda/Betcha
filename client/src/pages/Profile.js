@@ -59,6 +59,7 @@ function Profile(props) {
       followingCount,
       followersCount,
       followers,
+      
     } = getUser;
     const posts = getUserPosts;
 
@@ -178,6 +179,8 @@ const FETCH_PROFILE_QUERY = gql`
       }
       followingCount
       followersCount
+      notificationCount
+
     }
   }
 `;

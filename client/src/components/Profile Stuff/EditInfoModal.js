@@ -106,6 +106,7 @@ const UPDATE_INFO_MUTATION = gql`
       }
       followingCount
       followersCount
+      
     }
   }
 `;

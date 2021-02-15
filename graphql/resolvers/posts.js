@@ -63,7 +63,6 @@ module.exports = {
         (games) => games[0]
       );
       if (game != null) {
-        console.log("this is the post game: " + game);
         return game;
       } else {
         game = await Livegame.find({ gameId: parent.gameId }).then(

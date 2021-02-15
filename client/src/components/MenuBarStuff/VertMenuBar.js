@@ -16,7 +16,13 @@ function MenuBar() {
   const handleItemClick = (e, { name }) => setActiveItem(name);
 
   const menuBar = user ? (
-    <Menu pointing secondary size="massive" color="teal">
+    <Menu
+      fitted
+      pointing secondary size="massive"
+      vertical
+      color="teal"
+      style={{ width: "100%", height: "100%", padding: "0", margin: "0" }}
+    >
       <Menu.Item
         name="home"
         active={activeItem === "home"}
@@ -25,26 +31,41 @@ function MenuBar() {
         to="/"
       />
       <Menu.Item
-        name="my bets"
-        active={activeItem === "my bets"}
-        onClick={handleItemClick}
-        as={Link}
-        to="/mybetsTODO"
-      />
-      <Menu.Item
         name="scores"
         active={activeItem === "scores"}
         onClick={handleItemClick}
         as={Link}
         to="/scoreboard"
       />
+      <Menu.Item
+        name="my bets"
+        active={activeItem === "my bets"}
+        onClick={handleItemClick}
+        as={Link}
+        to="/bets"
+      />
+      <Menu.Item
+        name= "notifications"
+        active={activeItem === "notifications"}
+        onClick={handleItemClick}
+        as={Link}
+        to="/notifications"
+      />
+      <Menu.Item
+        name="profile"
+        active={activeItem === "profile"}
+        onClick={handleItemClick}
+        as={Link}
+        to={"/user/" + user.username}
+      />
+      
 
       <Menu.Item style={{ margin: "0 0 3px 0", padding: "0 0 0 0" }}>
         <SearchBar />
       </Menu.Item>
 
       <Menu.Menu position="right">
-        <Menu.Item onClick={handleItemClick} as={Link} to={"/notifications"}>
+        <Menu.Item>
           <NotificationsIcon user={user} />
         </Menu.Item>
 

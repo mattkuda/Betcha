@@ -1,5 +1,6 @@
 import React, { useContext, useState, useRef } from "react";
 import gql from "graphql-tag";
+import { useForm } from '../util/hooks';
 import { useQuery, useMutation } from "@apollo/react-hooks";
 import {
   Grid,
@@ -21,14 +22,25 @@ import { betTimeFormat } from "../util/Extensions/betTimeFormat";
 
 function SinglePost(props) {
   const postId = props.match.params.postId;
-  const { auth } = useContext(AuthContext);
+  const { user } = useContext(AuthContext);
 
   const commentInputRef = useRef(null);
+
+  const { values } = useForm(createNotifCallback, {
+    receiverId: ''
+  });
 
   const { data: { getPost } = {} } = useQuery(FETCH_POST_QUERY, {
     variables: {
       postId,
     },
+  });
+
+  ///YOU ARE BUILDING NOTIFS FOR COMMENTS
+  
+
+  const [createNotification] = useMutation(CREATE_NOTIFICATION_MUTATION, {
+    variables: { objectType: "comment", objectId: postId, receiver: values.receiverId },
   });
 
   const [comment, setComment] = useState("");
@@ -46,10 +58,30 @@ function SinglePost(props) {
     },
   });
 
+  function createNotifCallback() {
+    createNotification();
+  }
+
+  const handleButtonClick = async () => {
+
+    
+
+    await submitComment();
+
+    console.log("AS WE SEND postId is " +postId)
+    console.log("AS WE SEND receiverId is " )
+    try {
+      await createNotification();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   function deletePostCallback() {
     props.history.push("/");
   }
 
+ 
   //Depends on whether we have data from query yet
   let postMarkup;
 
@@ -70,6 +102,10 @@ function SinglePost(props) {
       commentCount,
     } = getPost;
 
+    values.receiverId = getPost.user.id;
+
+    console.log("the recID is: ");
+  
     postMarkup = (
       <Grid>
         <Grid.Row>
@@ -97,12 +133,12 @@ function SinglePost(props) {
               </Card.Content>
               <hr />
               <Card.Content extra>
-                <LikeButton user={auth} post={{ id, likeCount, likes }} />
+                <LikeButton user={user} post={{ id, likeCount, likes }} />
                 <MyPopup content="Comment on post">
                   <Button
                     as="div"
                     labelPosition="right"
-                    onClick={() => console.log("Comment on POst")}
+                    onClick={() => console.log("The user is: " + user)}
                   >
                     <Button basic color="blue">
                       <Icon name="comments" />
@@ -113,12 +149,12 @@ function SinglePost(props) {
                     </Label>
                   </Button>
                 </MyPopup>
-                {auth && auth.username === username && (
+                {user && user.username === username && (
                   <DeleteButton postId={id} callback={deletePostCallback} />
                 )}
               </Card.Content>
             </Card>
-            {auth && (
+            {user && (
               <Card fluid>
                 <Card.Content>
                   <p>Post a comment</p>
@@ -136,7 +172,7 @@ function SinglePost(props) {
                         type="submit"
                         className="ui button teal"
                         disable={comment.trim() === ""}
-                        onClick={submitComment}
+                        onClick={handleButtonClick}
                       >
                         Submit
                       </button>
@@ -148,7 +184,7 @@ function SinglePost(props) {
             {comments.map((comment) => (
               <Card fluid key={comment.id}>
                 <Card.Content>
-                  {auth && auth.username === comment.username && (
+                  {user && user.username === comment.username && (
                     <DeleteButton postId={id} commentId={comment.id} />
                   )}
                   <Card.Header>{comment.username}</Card.Header>
@@ -219,6 +255,22 @@ const FETCH_POST_QUERY = gql`
         id
         name
       }
+    }
+  }
+`;
+
+const CREATE_NOTIFICATION_MUTATION = gql`
+  mutation createNotification(
+    $objectType: String = "comment"
+    $objectId: ID!
+    $receiver: ID!
+  ) {
+    createNotification(
+      objectType: $objectType
+      objectId: $objectId
+      receiver: $receiver
+    ) {
+      id
     }
   }
 `;

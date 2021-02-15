@@ -1,0 +1,81 @@
+.pc-header{
+  color: #444444;
+  font-size: 18px;
+  font-weight: normal;
+  display: inline-block; 
+  padding: 10px; 
+  top: 0px; 
+  width: calc(100% - 150px);
+  position: relative ;
+}
+
+
+.pc-bet{
+  color: #444444;
+  font-size: 18px;
+  font-weight: bold;
+  padding-top: 10px; 
+  position: relative ;
+}
+
+.pc-game{
+  color: #444444;
+  font-size: 18px;
+  font-style: italic;
+  padding-top: 5px; 
+  position: relative ;
+}
+
+.pc-betBody{
+  color: #444444;
+  font-size: 18px;
+  padding-top: 10px; 
+  position: relative ;
+}
+
+.pc-buttons{
+  font-size: 18px;
+  padding-top: 30px; 
+  position: relative ;
+}
+
+
+.pc-img {
+  display: inline-block; 
+  padding: 10px 10px;
+  position: relative;
+  border-radius: 50%;
+  width: 80px;
+  text-align: center;
+  top: 0px;
+  height: 100%;
+}
+
+.pc-icon {
+  display: inline-block; 
+  padding: 10px 10px;
+  position: relative;
+  border-radius: 50%;
+
+  text-align: center;
+  top: 0px;
+  height: 100%;
+}
+
+.win{
+  display: inline-block;
+  color: #4BB543 !important
+}
+
+.push{
+  display: inline-block;
+  color: #ffae42 !important
+}
+
+.loss{
+  display: inline-block;
+  color: #ff3d3d !important
+}
+
+
+
