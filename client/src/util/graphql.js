@@ -22,7 +22,7 @@ export const FETCH_USERS_FOR_USER_SEARCH_QUERY = gql`
 
 export const FETCH_TOP_PREGAME_EVENTS = gql`
   {
-    getTopEvents {
+    getTopPregameEvents {
       id
       game {
         id
@@ -51,7 +51,7 @@ export const FETCH_TOP_PREGAME_EVENTS = gql`
 
 export const FETCH_TOP_LIVEGAME_EVENTS = gql`
   {
-    getTopEvents {
+    getTopLivegameEvents {
       id
       game {
         id
@@ -345,7 +345,13 @@ export const FETCH_NCAABMENS_PREGAMES = gql`
       startTime
       broadcasts
       spread
+      homeSpreadOdds
+      awaySpreadOdds
+      homeML
+      awayML
       overUnder
+      overOdds
+      underOdds
       specificData {
         homeRank
         awayRank
@@ -376,7 +382,13 @@ export const FETCH_NCAABMENS_LIVEGAMES = gql`
       time
       period
       spread
+      homeSpreadOdds
+      awaySpreadOdds
+      homeML
+      awayML
       overUnder
+      overOdds
+      underOdds
       lastPlay
       specificData {
         homeRank
@@ -405,8 +417,6 @@ export const FETCH_NCAABMENS_POSTGAMES = gql`
       awayAbbreviation
       homeScore
       awayScore
-      homeLines
-      awayLines
       spread
       overUnder
       spreadWinner
@@ -442,7 +452,13 @@ export const FETCH_NBA_PREGAMES = gql`
       startTime
       broadcasts
       spread
+      homeSpreadOdds
+      awaySpreadOdds
+      homeML
+      awayML
       overUnder
+      overOdds
+      underOdds
     }
   }
 `;
@@ -469,7 +485,13 @@ export const FETCH_NBA_LIVEGAMES = gql`
       time
       period
       spread
+      homeSpreadOdds
+      awaySpreadOdds
+      homeML
+      awayML
       overUnder
+      overOdds
+      underOdds
       lastPlay
       specificData {
         possession
@@ -496,8 +518,6 @@ export const FETCH_NBA_POSTGAMES = gql`
       awayAbbreviation
       homeScore
       awayScore
-      homeLines
-      awayLines
       spread
       overUnder
       spreadWinner
@@ -505,6 +525,29 @@ export const FETCH_NBA_POSTGAMES = gql`
     }
   }
 `;
+
+
+export const FETCH_NBA_GAME = gql`
+  query($gameId: String!) {
+    getGameByID(gameId: $gameId) {
+      homeFullName
+      awayFullName
+      homeRecord
+      awayRecord
+      homeLogo
+      awayLogo
+      homeAbbreviation
+      awayAbbreviation
+      homeScore
+      awayScore
+      spread
+      overUnder
+      spreadWinner
+      ouResult
+    }
+  }
+`;
+
 
 
 //PLAY QUERIES
@@ -573,6 +616,14 @@ export const FETCH_PLAYS_IN_NBA_GAME = gql`
       id
       playId
       description
+      game {
+        homeLogo
+        awayLogo
+        homeFullName
+        awayFullName
+        homeAbbreviation
+        awayAbbreviation
+      }
       specificData {
         homeScore
         awayScore

@@ -46,27 +46,41 @@ class NBAGame extends Component {
               <Grid.Row>
                 <Grid columns={3}>
                   <Grid.Column>
-                  <p>{this.props.awayAbbreviation}</p>
+                  <p>{this.props.awayAbbreviation} ({this.props.awayRecord})</p>
                   </Grid.Column>
                   <Grid.Column>
                     <p>{this.props.broadcasts}</p>
                   </Grid.Column>
                   <Grid.Column>
-                    <p>{this.props.homeAbbreviation}</p>
+                    <p>{this.props.homeAbbreviation} ({this.props.homeRecord})</p>
                   </Grid.Column>
                 </Grid>
               </Grid.Row>
               <Grid.Row>
                 <Grid columns={3}>
                   <Grid.Column>
-                    <p>{this.props.awayRecord}</p>
+                    <div>
+                      {this.props.awayML > 0 ? (
+                        <p>+{this.props.awayML}</p>
+                      ): (
+                        <p>{this.props.awayML}</p>
+                        )
+                      }
+                    </div>
                   </Grid.Column>
                   <Grid.Column>
                     <p>{this.props.spread}</p>
                     <p>O/U: {this.props.overUnder}</p>
                   </Grid.Column>
                   <Grid.Column>
-                    <p>{this.props.homeRecord}</p>
+                    <div>
+                      {this.props.homeML > 0 ? (
+                        <p>+{this.props.homeML}</p>
+                      ): (
+                        <p>{this.props.homeML}</p>
+                        )
+                      }
+                    </div>
                   </Grid.Column>
                 </Grid>
               </Grid.Row>
@@ -140,13 +154,11 @@ class NBAGame extends Component {
 
     if (this.gameState === 'post') {
 
-      const gameLineLength = this.props.awayLines.length + 1;
-
       return (
 
         <div>
           <Container textAlign='center' className='scoreboard'>
-            <Grid rows={5}>
+            <Grid rows={3}>
               <Grid.Row>
                 <Grid columns={3}>
                   <Grid.Column>
@@ -185,22 +197,6 @@ class NBAGame extends Component {
                   <Grid.Column>
                     <p>{this.props.homeRecord}</p>
                   </Grid.Column>
-                </Grid>
-              </Grid.Row>
-              <Grid.Row>
-                <Grid columns={gameLineLength}>
-                  <Grid.Column>{this.props.awayAbbreviation}</Grid.Column>
-                  {this.props.awayLines.map((q) => (
-                    <Grid.Column>{q}</Grid.Column>
-                  ))}
-                </Grid>
-              </Grid.Row>
-              <Grid.Row>
-                <Grid columns={gameLineLength}>
-                  <Grid.Column>{this.props.homeAbbreviation}</Grid.Column>
-                  {this.props.homeLines.map((q) => (
-                    <Grid.Column>{q}</Grid.Column>
-                  ))}
                 </Grid>
               </Grid.Row>
             </Grid>

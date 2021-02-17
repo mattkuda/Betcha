@@ -10,7 +10,7 @@ import { Grid } from "semantic-ui-react";
 import { FETCH_NFL_PREGAMES, FETCH_NFL_LIVEGAMES, FETCH_NFL_POSTGAMES,
          FETCH_NCAAF_PREGAMES, FETCH_NCAAF_LIVEGAMES, FETCH_NCAAF_POSTGAMES,
          FETCH_NCAABMENS_PREGAMES, FETCH_NCAABMENS_LIVEGAMES, FETCH_NCAABMENS_POSTGAMES,
-         FETCH_NBA_PREGAMES, FETCH_NBA_LIVEGAMES, FETCH_NBA_POSTGAMES } from "../util/graphql";
+         FETCH_NBA_PREGAMES, FETCH_NBA_LIVEGAMES, FETCH_NBA_POSTGAMES, FETCH_ACTIVE_LEAGUES_QUERY } from "../util/graphql";
 import './scoreboard.css';
 
 
@@ -92,7 +92,7 @@ function LeagueScoreboard(props) {
     skip: (myLeague !== "nba")
   });
 
-
+  const { loading: LeagueLoading, error: LeagueError, data: LeagueData } = useQuery(FETCH_ACTIVE_LEAGUES_QUERY);
 
 
   if (NFLpregameLoading) return 'Loading pregames...';
@@ -131,71 +131,73 @@ function LeagueScoreboard(props) {
   if (NBApostgameLoading) return 'Loading postgames...';
   if (NBApostgameError) return `Error! ${NBApostgameError.message}`;
 
+  if (LeagueLoading) return 'Loading leagues...';
+  if (LeagueError) return `Error! ${LeagueError.message}`;
+
 
   //NFL
   if (myLeague === "nfl") {
+
     return (
       <div>
+        <h1>Upcoming Games</h1>
+          <Grid columns="two">
+            <Grid.Row>
+              <Fragment>
+                {
+                  NFLpregameData.getPregamesByLeague.map(game => (
+                    <Grid.Column>
+                      <Link to={`/scoreboard/${myLeague}/${game.gameId}`}>
+                        <span className="card" style={{"display": "block"}}>
+                          <NFLGame key={game.gameId} {...game} />
+                        </span>
+                      </Link>
+                    </Grid.Column>
+                  ))
+                }
+              </Fragment>
+            </Grid.Row>
+          </Grid>
 
-      <h1>Upcoming Games</h1>
-      <Grid columns="two">
-        <Grid.Row>
-          <Fragment>
-            {
-              NFLpregameData.getPregamesByLeague.map(game => (
-                <Grid.Column>
-                  <Link to={`/scoreboard/${myLeague}/${game.gameId}`}>
-                    <span className="card" style={{"display": "block"}}>
-                      <NFLGame key={game.gameId} {...game} />
-                    </span>
-                  </Link>
-                </Grid.Column>
-              ))
-            }
-          </Fragment>
-        </Grid.Row>
-      </Grid>
 
+        <h1>Live Games</h1>
+          <Grid columns="two">
+            <Grid.Row>
+              <Fragment>
+                {
+                  NFLlivegameData.getLivegamesByLeague.map(game => (
+                    <Grid.Column>
+                      <Link to={`/scoreboard/${myLeague}/${game.gameId}`}>
+                        <span className="card" style={{"display": "block"}}>
+                          <NFLGame key={game.gameId} {...game} />
+                        </span>
+                      </Link>
+                    </Grid.Column>
+                  ))
+                }
+              </Fragment>
+            </Grid.Row>
+          </Grid>
 
-      <h1>Live Games</h1>
-      <Grid columns="two">
-        <Grid.Row>
-          <Fragment>
-            {
-              NFLlivegameData.getLivegamesByLeague.map(game => (
-                <Grid.Column>
-                  <Link to={`/scoreboard/${myLeague}/${game.gameId}`}>
-                    <span className="card" style={{"display": "block"}}>
-                      <NFLGame key={game.gameId} {...game} />
-                    </span>
-                  </Link>
-                </Grid.Column>
-              ))
-            }
-          </Fragment>
-        </Grid.Row>
-      </Grid>
-
-      <h1>Completed Games</h1>
-      <Grid columns="two">
-        <Grid.Row>
-          <Fragment>
-            {
-              NFLpostgameData.getPostgamesByLeague.map(game => (
-                <Grid.Column>
-                  <Link to={`/scoreboard/${myLeague}/${game.gameId}`}>
-                    <span className="card" style={{"display": "block"}}>
-                      <NFLGame key={game.gameId} {...game} />
-                    </span>
-                  </Link>
-                </Grid.Column>
-              ))
-            }
-          </Fragment>
-        </Grid.Row>
-      </Grid>
-
-      </div>
+        <h1>Completed Games</h1>
+          <Grid columns="two">
+            <Grid.Row>
+              <Fragment>
+                {
+                  NFLpostgameData.getPostgamesByLeague.map(game => (
+                    <Grid.Column>
+                      <Link to={`/scoreboard/${myLeague}/${game.gameId}`}>
+                        <span className="card" style={{"display": "block"}}>
+                          <NFLGame key={game.gameId} {...game} />
+                        </span>
+                      </Link>
+                    </Grid.Column>
+                  ))
+                }
+              </Fragment>
+            </Grid.Row>
+          </Grid>
+        </div>
     )
   }
 

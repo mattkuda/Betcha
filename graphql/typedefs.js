@@ -133,6 +133,8 @@ module.exports = gql`
     stateDetails: String!
     sport: String!
     league: String!
+    homeId: Int!
+    awayId: Int!
     homeLogo: String!
     awayLogo: String!
     homeAbbreviation: String!
@@ -145,8 +147,18 @@ module.exports = gql`
     awayRecord: String!
     startTime: String
     broadcasts: [String]
-    spread: String!
+    spread: Float!
+    homeSpreadOdds: Float!
+    awaySpreadOdds: Float!
+    favoredTeamId: Int!
+    favoredTeam: String!
     overUnder: Float!
+    overOdds: Float!
+    underOdds: Float!
+    homeML: Int!
+    awayML: Int!
+    playByPlayAvailable: Boolean!
+    location: String!
     specificData: MixedPregameData
   }
 
@@ -157,6 +169,8 @@ module.exports = gql`
     stateDetails: String!
     sport: String!
     league: String!
+    homeId: Int!
+    awayId: Int!
     homeLogo: String!
     awayLogo: String!
     homeScore: Int!
@@ -171,10 +185,20 @@ module.exports = gql`
     awayRecord: String!
     startTime: String!
     broadcasts: [String]
+    spread: Float!
+    homeSpreadOdds: Float!
+    awaySpreadOdds: Float!
+    favoredTeamId: Int!
+    favoredTeam: String!
+    overUnder: Float!
+    overOdds: Float!
+    underOdds: Float!
+    homeML: Int!
+    awayML: Int!
+    playByPlayAvailable: Boolean!
+    location: String!
     time: String!
     period: Int!
-    spread: String!
-    overUnder: Float!
     lastPlay: String!
     specificData: MixedLivegameData
   }
@@ -186,6 +210,8 @@ module.exports = gql`
     stateDetails: String!
     sport: String!
     league: String!
+    homeId: Int!
+    awayId: Int!
     homeLogo: String!
     awayLogo: String!
     homeScore: Int!
@@ -198,10 +224,16 @@ module.exports = gql`
     awayColor: String!
     homeRecord: String!
     awayRecord: String!
-    homeLines: [Int]!
-    awayLines: [Int]!
-    spread: String!
+    spread: Float!
+    homeSpreadOdds: Float!
+    awaySpreadOdds: Float!
+    favoredTeamId: Int!
+    favoredTeam: String!
     overUnder: Float!
+    overOdds: Float!
+    underOdds: Float!
+    homeML: Int!
+    awayML: Int!
     spreadWinner: String!
     ouResult: String!
     specificData: MixedPostgameData
@@ -214,6 +246,8 @@ module.exports = gql`
     stateDetails: String
     sport: String
     league: String
+    homeId: Int
+    awayId: Int
     homeLogo: String
     awayLogo: String
     homeScore: Int
@@ -226,15 +260,23 @@ module.exports = gql`
     awayColor: String
     homeRecord: String
     awayRecord: String
-    homeLines: [Int]
-    awayLines: [Int]
     startTime: String
     broadcasts: [String]
     time: String
     period: Int
-    spread: String
+    spread: Float
+    homeSpreadOdds: Int
+    awaySpreadOdds: Int
+    favoredTeamId: Int
+    favoredTeam: String
     overUnder: Float
+    overOdds: Int
+    underOdds: Int
+    homeML: Int
+    awayML: Int
     lastPlay: String
+    playByPlayAvailable: Boolean
+    location: String
     spreadWinner: String
     ouResult: String
   }
@@ -294,7 +336,7 @@ module.exports = gql`
   type Play {
     id: ID!
     playId: String!
-    game: StaticGameInfo
+    game: Mastergame
     reactions: [Reaction]
     description: String!
     createdAt: String!
@@ -351,7 +393,9 @@ module.exports = gql`
     getPregamesByLeague(league: String!): [Pregame]
     getLivegamesByLeague(league: String!): [Livegame]
     getPostgamesByLeague(league: String!): [Postgame]
-    getTopEvents: [TopEvent]
+    getTopPregameEvents: [TopEvent]
+    getTopLivegameEvents: [TopEvent]
+    getGameByID(gameId: String!): Mastergame
     getPlay(playId: String!): Play
     getPlaysInGame(gameId: String!): [Play]
     getPlaysInGameInPeriod(gameId: String!, period: Int!): [Play]

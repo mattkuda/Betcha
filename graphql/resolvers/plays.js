@@ -34,13 +34,15 @@ module.exports = {
   },
   Play: {
     async game(parent) {
-      let game = await Livegame.find({gameId: parent.gameId});
-      if (game) {
-        return game;
+      let games = await Livegame.find({gameId: parent.gameId});
+      if (games.length > 0) {
+        return games[0];
       }
       else {
-        let game = await Postgame.find({gameId: parent.gameId});
-        return game;
+        let games = await Postgame.find({gameId: parent.gameId});
+        if (games.length > 0) {
+          return games[0];
+        }
       }
     },
     async reactions(parent) {

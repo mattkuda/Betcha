@@ -10,6 +10,9 @@ const pubsub = new PubSub();
 let updateGames = require('./services/game.service');
 let myGameService = updateGames.GameService;
 
+let updateGamesNew = require('./services/newGameServiceTest');
+let myGameServiceNew = updateGamesNew.NewGameService;
+
 const PORT = process.env.PORT || 5000;
 
 const server = new ApolloServer({
@@ -30,5 +33,6 @@ mongoose
 
 //start game service based on command line arg
 if (process.argv.length > 2 && process.argv[2] === "g") {
-  new myGameService().run();
+  //new myGameService().run();
+  new myGameServiceNew().run();
 }

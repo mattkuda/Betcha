@@ -2,11 +2,13 @@ import React, { useState, useContext, Fragment } from "react";
 import { useQuery } from "@apollo/react-hooks";
 import { Link, useParams } from 'react-router-dom';
 import gql from "graphql-tag";
-import { Input, Menu, Grid, Modal, Button } from 'semantic-ui-react';
+import { Input, Menu, Grid, Modal, Button, Image } from 'semantic-ui-react';
 import { AuthContext } from "../context/auth";
 import ReactionModal from "../components/ReactionModal/ReactionModal";
+import GameDetailsHeader from "../components/GameDetailsHeader";
 import { FETCH_PLAYS_IN_NFL_GAME, FETCH_PLAYS_IN_NCAAF_GAME,
          FETCH_PLAYS_IN_NCAABMENS_GAME, FETCH_PLAYS_IN_NBA_GAME } from "../util/graphql";
+import "./GameDetails.css";
 
 
 function GameDetails(props) {
@@ -58,8 +60,10 @@ function GameDetails(props) {
   if (NBAloading) return 'Loading...';
   if (NBAerror) return `Error! ${NBAerror.message}`;
 
+
   if (myLeague === "nfl") {
     return (
+
       <div>
 
       <Modal open={modalOpen} onClose={() => setModalOpen(false)} closeIcon dimmer='blurring' style={{height: '90%'}}>
@@ -97,6 +101,7 @@ function GameDetails(props) {
   if (myLeague === "college-football") {
 
     return (
+
       <div>
 
       <Modal open={modalOpen} onClose={() => setModalOpen(false)} closeIcon dimmer='blurring' style={{height: '90%'}}>
@@ -135,6 +140,7 @@ function GameDetails(props) {
   if (myLeague === "mens-college-basketball") {
 
     return (
+
       <div>
 
       <Modal open={modalOpen} onClose={() => setModalOpen(false)} closeIcon dimmer='blurring' style={{height: '90%'}}>
@@ -173,6 +179,7 @@ function GameDetails(props) {
   if (myLeague === "nba") {
 
     return (
+
       <div>
 
       <Modal open={modalOpen} onClose={() => setModalOpen(false)} closeIcon dimmer='blurring' style={{height: '90%'}}>
@@ -187,10 +194,24 @@ function GameDetails(props) {
       <Fragment>
         {
           NBAdata.getPlaysInGame.map(play => (
-            <Grid celled>
+            <Grid>
               <Grid.Row>
-              <Grid.Column width={14}>
-                <p>{play.specificData.time}: {play.description} ({play.specificData.awayScore} - {play.specificData.homeScore})</p>
+              <Grid.Column width={2} className="timeColumn">
+                {play.specificData.time}
+              </Grid.Column>
+              <Grid.Column width={2}>
+                {play.specificData.possession !== "" ? (
+                  (play.specificData.possession === play.game.homeAbbreviation ?
+                    (<Image centered verticalAlign='middle' src={play.game.homeLogo} className="playImage"/>):
+                    (<Image centered verticalAlign='middle' src={play.game.awayLogo} className="playImage"/>)
+                  )
+                ):(<div></div>)}
+              </Grid.Column>
+              <Grid.Column width={6}>
+                <p>{play.description}</p>
+              </Grid.Column>
+              <Grid.Column width={2}>
+                <p>{play.specificData.awayScore} - {play.specificData.homeScore}</p>
               </Grid.Column>
               <Grid.Column width={2}>
                 {user ? <Button onClick={() => {

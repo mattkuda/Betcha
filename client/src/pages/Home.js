@@ -74,10 +74,14 @@ function Home() {
         </Grid.Column>
         <Grid.Column width={4}>
           <Grid.Row className="page-title">
-            <h1>Upcoming Games</h1>
+            <h1>Game Center</h1>
           </Grid.Row>
           <Grid.Row>
-            <GameSidebar />
+            <div className="games-sidebar-container">
+              <div className="games-sidebar-content">
+                <GameSidebar />
+              </div>
+            </div>
           </Grid.Row>
         </Grid.Column>
       </Grid>

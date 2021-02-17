@@ -11,6 +11,8 @@ const pregameSchema = new Schema({
   stateDetails: String,
   sport: String,
   league: String,
+  homeId: Number,
+  awayId: Number,
   homeLogo: String,
   awayLogo: String,
   homeAbbreviation: String,
@@ -23,8 +25,18 @@ const pregameSchema = new Schema({
   awayRecord: String,
   startTime: String,
   broadcasts: [String],
-  spread: String,
+  spread: Number,
+  homeSpreadOdds: Number,
+  awaySpreadOdds: Number,
+  favoredTeamId: Number,
+  favoredTeam: String,
   overUnder: Number,
+  overOdds: Number,
+  underOdds: Number,
+  homeML: Number,
+  awayML: Number,
+  playByPlayAvailable: Boolean,
+  location: String,
   specificData: mongoose.Mixed
 }, { strict: false });
 
