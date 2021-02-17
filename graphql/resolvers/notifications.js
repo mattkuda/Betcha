@@ -18,10 +18,6 @@ module.exports = {
         }).sort({
           createdAt: -1,
         });
-        console.log(
-          "\n\nThese are the notifications being returned: " +
-            JSON.stringify(notifications)
-        );
         return notifications;
       } catch (err) {
         console.log(err);

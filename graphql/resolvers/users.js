@@ -1,6 +1,10 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { UserInputError } = require("apollo-server");
+const { Storage } = require("@google-cloud/storage");
+const path = require("path");
+const { createWriteStream } = require("fs");
+const express = require("express");
 
 const {
   validateRegisterInput,
@@ -21,6 +25,24 @@ function generateToken(user) {
     { expiresIn: "23h" }
   );
 }
+
+const gc = new Storage({
+  keyFilename: path.join(
+    __dirname,
+    "../../loyal-oath-304300-96ccd330b866.json"
+  ),
+  projectId: "loyal-oath-304300",
+});
+
+const gc2 = new Storage({
+  keyFilename: "../../loyal-oath-304300-96ccd330b866.json"
+});
+
+gc.getBuckets().then((x) =>
+  console.log("These a buckets: " + JSON.stringify(x))
+);
+
+const imagesBucket = gc.bucket("betcha-sports-images");
 
 module.exports = {
   Query: {
@@ -49,6 +71,43 @@ module.exports = {
     },
   },
   Mutation: {
+    uploadFile: async (_, { file }) => {
+      const { createReadStream, filename } = await file;
+
+      await new Promise((res) =>
+        createReadStream()
+          .pipe(
+            imagesBucket.file(filename).createWriteStream({
+              resumable: false,
+              gzip: true,
+            })
+          )
+          .on("finish", res)
+      )
+      return true;
+     
+    },
+
+    uploadFile2: async (_, { filename }) => {      
+
+      const storage = new Storage({ keyFilename: "loyal-oath-304300-96ccd330b866.json" });
+      // Replace with your bucket name and filename.
+      const bucketname = 'betcha-sports-images';
+      filename = '/Users/MattKuda/Desktop/Screen Shot 2021-01-23 at 12.48.48 PM.png';
+
+      const res = await storage.bucket(bucketname).upload(filename);
+      // `mediaLink` is the URL for the raw contents of the file.
+      const url = res[0].metadata.mediaLink;
+
+      // Need to make the file public before you can access it.
+      await storage.bucket(bucketname).file(filename).makePublic();
+
+      // Make a request to the uploaded URL.
+      const axios = require('axios');
+      const pkg = await axios.get(url).then(res => res.data);
+      pkg.name; // 'masteringjs.io'
+    },
+
     async login(_, { username, password }) {
       const { errors, valid } = validateLoginInput(username, password);
 
@@ -183,6 +242,4 @@ module.exports = {
       } else throw new UserInputError("User not found.");
     },
   },
-
-
 };

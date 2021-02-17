@@ -20,9 +20,7 @@ import { determineBetResult } from "../../util/Extensions/betCalculations";
 function PostCard({
   post: {
     body,
-    betType,
-    betAmount,
-    gameId,
+    gameArray,
     createdAt,
     id,
     username,
@@ -66,11 +64,11 @@ function PostCard({
               {moment(createdAt).fromNow(true)} ago
             </div>
 
-            {gameId == null ? (
+            {gameArray[0].gameId == null ? (
               <div className="pc-bet">Failed to load game data :-(</div>
             ) : (
               <div className="pc-bet">
-                {betDescFormat(betType, betAmount, gameId)} ·{" "}
+                {betDescFormat(gameArray[0].betType, gameArray[0].betAmount, gameArray[0].gameId)} ·{" "}
                 <div
                   style={{
                     display: "inline-block",
@@ -78,8 +76,8 @@ function PostCard({
                     fontStyle: "italic",
                   }}
                 >
-                  {gameId.awayAbbreviation} @ {gameId.homeAbbreviation},{" "}
-                  {betTimeFormat(gameId.startTime)}
+                  {gameArray[0].gameId.awayAbbreviation} @ {gameArray[0].gameId.homeAbbreviation},{" "}
+                  {betTimeFormat(gameArray[0].gameId.startTime)}
                 </div>
               </div>
             )}
@@ -141,11 +139,11 @@ function PostCard({
               {moment(createdAt).fromNow(true)} ago
             </div>
 
-            {gameId == null ? (
+            {gameArray[0].gameId == null ? (
               <div className="pc-bet">Failed to load game data :-(</div>
             ) : (
               <div className="pc-bet">
-                {betDescFormat(betType, betAmount, gameId)} ·{" "}
+                {betDescFormat(gameArray[0].betType, gameArray[0].betAmount, gameArray[0].gameId)} ·{" "}
                 <div
                   style={{
                     display: "inline-block",
@@ -153,7 +151,7 @@ function PostCard({
                     fontStyle: "italic",
                   }}
                 >
-                  LIVE: {liveGameDescFormat(gameId)}
+                  LIVE: {liveGameDescFormat(gameArray[0].gameId)}
                 </div>
               </div>
             )}
@@ -214,19 +212,19 @@ function PostCard({
               {moment(createdAt).fromNow(true)} ago
             </div>
 
-            {gameId == null ? (
+            {gameArray[0].gameId == null ? (
               <div className="pc-bet">Failed to load game data :-(</div>
             ) : (
               <div className="pc-bet">
                 <div
                   className={determineBetResult(
-                    gameId.homeScore,
-                    gameId.awayScore,
-                    betType,
-                    betAmount
+                    gameArray[0].gameId.homeScore,
+                    gameArray[0].gameId.awayScore,
+                    gameArray[0].betType,
+                    gameArray[0].betAmount
                   )}
                 >
-                  {betDescFormat(betType, betAmount, gameId)}
+                  {betDescFormat(gameArray[0].betType, gameArray[0].betAmount, gameArray[0].gameId)}
                 </div>
 
                 <div
@@ -236,7 +234,7 @@ function PostCard({
                     fontStyle: "italic",
                   }}
                 >
-                  · {postGameDescFormat(gameId)}
+                  · {postGameDescFormat(gameArray[0].gameId)}
                 </div>
               </div>
             )}
@@ -272,11 +270,11 @@ function PostCard({
     </>
   );
 
-  if (gameId.stateDetails === "STATUS_SCHEDULED") {
+  if (gameArray[0].gameId.stateDetails === "STATUS_SCHEDULED") {
     return PreGameMarkup;
-  } else if (gameId.stateDetails === "STATUS_IN_PROGRESS") {
+  } else if (gameArray[0].gameId.stateDetails === "STATUS_IN_PROGRESS") {
     return LiveGameMarkup;
-  } else if (gameId.stateDetails === "STATUS_FINAL") {
+  } else if (gameArray[0].gameId.stateDetails === "STATUS_FINAL") {
     return PostGameMarkup;
   } else;
 }

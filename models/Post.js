@@ -6,9 +6,14 @@ const postSchema = new Schema({
   body: String,
   username: String,
   createdAt: String,
-  betType: String,
-  betAmount: String,
-  gameId: String,
+  tease: Boolean,
+  gameArray: [
+    {
+      betType: String,
+      betAmount: String,
+      gameId: String,
+    }
+  ],
   comments: [
     {
       body: String,

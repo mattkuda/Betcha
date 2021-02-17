@@ -18,6 +18,7 @@ function PostModal(props) {
     betType: "",
     betAmount: "",
     gameId: "",
+    gameArray: [],
     xdefBetAmount: "",
     xleagueId: "",
   });
@@ -40,15 +41,21 @@ function PostModal(props) {
       values.betType = "";
       values.betAmount = "";
       values.gameId = "";
+      values.gameArray = [];
     },
     //Added this so the page doesnt break
     onError(err) {
+      console.log(err);
       return err;
     },
   });
 
   function createPostCallback() {
-    createPost();
+    try{
+      createPost();
+    } catch (err){
+      console.log(err);
+    }
   }
 
   function selectLeague(pickedLeague) {
@@ -70,6 +77,26 @@ function PostModal(props) {
   function selectxdefBetAmount(pickedxdefBetAmount) {
     values.xdefBetAmount = pickedxdefBetAmount;
     values.betAmount = pickedxdefBetAmount.toString();
+  }
+
+  function addBetToArray(pickedBetType) {
+    var gameBetTemp = {
+      betType: values.betType,
+      betAmount: values.betAmount,
+      gameId: values.gameId,
+    };
+    
+    values.gameArray.push(gameBetTemp);
+
+    // values.betType = "";
+    // values.betAmount = "";
+    // values.gameId = "";
+  }
+
+  function handleSingleBetSubmitClick() {
+    addBetToArray();
+    console.log(JSON.stringify(values));
+    createPostCallback();
   }
 
   return (
@@ -115,7 +142,7 @@ function PostModal(props) {
               <Button
                 type="submit"
                 color="teal"
-                onClick={() => console.log(values)}
+                onClick={() => handleSingleBetSubmitClick()}
               >
                 Submit
               </Button>
@@ -132,38 +159,37 @@ function PostModal(props) {
 const CREATE_POST_MUTATION = gql`
   mutation createPost(
     $body: String!
-    $betType: String!
-    $betAmount: String!
-    $gameId: String!
+    $gameArray: [gameBetInput]
   ) {
     createPost(
       body: $body
-      betType: $betType
-      betAmount: $betAmount
-      gameId: $gameId
+      gameArray: $gameArray
+      
     ) {
       id
       body
-      betType
-      betAmount
-      gameId {
-        homeFullName
-        awayFullName
-        stateDetails
-        homeRecord
-        awayRecord
-        homeScore
-        awayScore
-        period
-        time
-        awayLogo
-        homeLogo
-        awayAbbreviation
-        homeAbbreviation
-        startTime
-        broadcasts
-        spread
-        overUnder
+      gameArray{
+        betType
+        betAmount
+        gameId {
+          homeFullName
+          awayFullName
+          stateDetails
+          homeRecord
+          awayRecord
+          homeScore
+          awayScore
+          period
+          time
+          awayLogo
+          homeLogo
+          awayAbbreviation
+          homeAbbreviation
+          startTime
+          broadcasts
+          spread
+          overUnder
+        }
       }
       createdAt
       username

@@ -8,8 +8,6 @@ const Postgame = require("../../models/Postgame");
 
 const checkAuth = require("../../util/check-auth");
 
-
-
 module.exports = {
   Query: {
     async getPosts(_, {}, context) {
@@ -58,27 +56,62 @@ module.exports = {
   },
 
   Post: {
-    async gameId(parent) {
-      let game = await Postgame.find({ gameId: parent.gameId }).then(
-        (games) => games[0]
-      );
-      if (game != null) {
-        return game;
-      } else {
-        game = await Livegame.find({ gameId: parent.gameId }).then(
+    async gameArray(parent) {
+      
+      var newGameArr = [];
+
+      parent.gameArray.forEach(async (gameBet) => {
+        let game = await Postgame.find({ gameId: gameBet.gameId }).then(
           (games) => games[0]
         );
-
         if (game != null) {
-          return game;
+            console.log("FOUND THIS GAME: " + game);
+            newGameArr.push({betType: gameBet.betType, betAmount: gameBet.betAmount, gameId: game});
         } else {
-          game = await Pregame.find({ gameId: parent.gameId }).then(
+          game = await Livegame.find({ gameId: gameBet.gameId }).then(
             (games) => games[0]
           );
-
-          return game;
+  
+          if (game != null) {
+            console.log("FOUND THIS GAME: " + game);
+            newGameArr.push({betType: gameBet.betType, betAmount: gameBet.betAmount, gameId: game});
+          } else {
+            game = await Pregame.find({ gameId: gameBet.gameId }).then(
+              (games) => games[0]
+            );
+  
+            console.log("FOUND THIS GAME: " + game);
+            newGameArr.push({betType: gameBet.betType, betAmount: gameBet.betAmount, gameId: game});
+          }
         }
-      }
+      });
+
+      await Promise.all(newGameArr);
+
+      console.log("newGameArr: " + newGameArr);
+
+      return newGameArr;
+
+      // let game = await Postgame.find({ gameId: parent.gameId }).then(
+      //   (games) => games[0]
+      // );
+      // if (game != null) {
+      //   return game;
+      // } else {
+      //   game = await Livegame.find({ gameId: parent.gameId }).then(
+      //     (games) => games[0]
+      //   );
+
+      //   if (game != null) {
+      //     return game;
+      //   } else {
+      //     game = await Pregame.find({ gameId: parent.gameId }).then(
+      //       (games) => games[0]
+      //     );
+
+      //     return game;
+      //   }
+      // }
     },
 
     async user(parent) {
@@ -92,50 +125,52 @@ module.exports = {
 
   User: {
     async user(parent) {
-      let user = await User.find({ id: parent.user }).then(
-        (users) => users[0]
-      );
+      let user = await User.find({ id: parent.user }).then((users) => users[0]);
 
       return user;
     },
   },
 
   Mutation: {
-    async createPost(_, { body, betType, betAmount, gameId }, context) {
+    async createPost(_, { body, gameArray }, context) {
+      console.log("1. Entered createPost");
       const user = checkAuth(context);
 
       if (body.trim() === "") {
         throw new Error("Post body must not be empty");
       }
 
-      if (betType.trim() === "") {
-        throw new Error("Post betType must not be empty");
-      }
+      //TODO - Add this logic to each game in game array
+      // if (betType.trim() === "") {
+      //   throw new Error("Post betType must not be empty");
+      // }
 
-      if (betAmount.trim() === "") {
-        throw new Error("Post betAmount must not be empty");
-      }
+      // if (betAmount.trim() === "") {
+      //   throw new Error("Post betAmount must not be empty");
+      // }
 
-      if (gameId.trim() === "") {
-        throw new Error("Post gameId must not be empty");
-      }
+      // if (gameId.trim() === "") {
+      //   throw new Error("Post gameId must not be empty");
+      // }
 
       //If we get here, that means no error was thrown during the checkAuth phase
       const newPost = new Post({
         body, //already destructured at the async line (above)
-        betType,
-        betAmount,
-        gameId, //already destructured at the async line (above)
+        gameArray, //already destructured at the async line (above)
         user: user.id,
         username: user.username,
         createdAt: new Date().toISOString(),
       });
 
+      console.log("2. About to save createPost");
+
       const post = await newPost.save();
 
+      console.log("3. About to publish createPost");
       context.pubsub.publish("NEW_POST", {
         newPost: post,
       });
+      console.log("4. About to return createPost");
 
       return post;
     },
@@ -157,8 +192,7 @@ module.exports = {
 
     //LIKE and UNLIKE
     async likePost(_, { postId }, context) {
-
-      console.log('LIKING A POST')
+      console.log("LIKING A POST");
       const { username } = checkAuth(context);
 
       const post = await Post.findById(postId);
@@ -173,7 +207,6 @@ module.exports = {
             username,
             createdAt: new Date().toISOString(),
           });
-
         }
 
         await post.save();

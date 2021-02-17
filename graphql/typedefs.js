@@ -2,13 +2,16 @@ const { gql } = require("apollo-server");
 const mongoose = require("mongoose");
 
 module.exports = gql`
+
+  # 
+  #Post related items
+  #
+
   type Post {
     id: ID!
     body: String!
-    betType: String!
-    betAmount: String!
-    gameId: Mastergame!
-
+    tease: Boolean
+    gameArray: [gameBet]!
     user: User!
     createdAt: String!
     username: String!
@@ -17,6 +20,19 @@ module.exports = gql`
     commentCount: Int!
     likeCount: Int!
   }
+
+  type gameBet{
+    gameId: Mastergame!
+    betType: String!
+    betAmount: String!
+  }
+
+  input gameBetInput{
+    gameId: String!
+    betType: String!
+    betAmount: String!
+  }
+
   type Comment {
     id: ID!
     createdAt: String!
@@ -28,6 +44,11 @@ module.exports = gql`
     createdAt: String!
     username: String!
   }
+
+  # 
+  #User related items
+  #
+
   type User {
     id: ID!
     email: String!
@@ -64,6 +85,10 @@ module.exports = gql`
     sender: User!
     receiver: User!
   }
+
+  # 
+  #Reaction related items
+  #
 
   type Reaction {
     id: ID!
@@ -214,6 +239,38 @@ module.exports = gql`
     ouResult: String
   }
 
+  input MastergameInput {
+    id: ID
+    gameId: String
+    state: String
+    stateDetails: String
+    sport: String
+    league: String
+    homeLogo: String
+    awayLogo: String
+    homeScore: Int
+    awayScore: Int
+    homeAbbreviation: String
+    awayAbbreviation: String
+    homeFullName: String
+    awayFullName: String
+    homeColor: String
+    awayColor: String
+    homeRecord: String
+    awayRecord: String
+    homeLines: [Int]
+    awayLines: [Int]
+    startTime: String
+    broadcasts: [String]
+    time: String
+    period: Int
+    spread: String
+    overUnder: Float
+    lastPlay: String
+    spreadWinner: String
+    ouResult: String
+  }
+
   type StaticGameInfo {
     id: ID!
     gameId: String!
@@ -304,13 +361,13 @@ module.exports = gql`
   }
 
   type Mutation {
+    uploadFile(file: Upload!): Boolean
+    uploadFile2(file: String!): Boolean
     register(registerInput: RegisterInput): User!
     login(username: String!, password: String!): User!
     createPost(
       body: String!
-      betType: String!
-      betAmount: String!
-      gameId: String!
+      gameArray: [gameBetInput]
     ): Post!
     createNotification(
       objectType: String!
