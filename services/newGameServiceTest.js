@@ -18,6 +18,7 @@ const LIVE_TICK_INTERVAL = 30000;   //30 seconds
 const TOTAL_PREGAME_DAYS = 16;
 const ONE_DAY_IN_MS = 86400000;   //24 hrs
 const TODAYS_GAMES_ODDS_UPDATE_INTERVAL = 1800000  //30 mins
+const TOP_EVENT_INTERVAL = 3600000  //60 mins
 
 class NewGameService {
   constructor() {
@@ -141,8 +142,34 @@ class NewGameService {
       if (this.ctr === TODAYS_GAMES_ODDS_UPDATE_INTERVAL / LIVE_TICK_INTERVAL) {
         this.updateOddsForTodaysGames(sport, league, allCollegeTeams);
       }
-
+      if (this.ctr === TOP_EVENT_INTERVAL / LIVE_TICK_INTERVAL) {
+        const url = "http://site.api.espn.com/apis/v2/scoreboard/header?id=0";
+        const response = await fetch(url);
+        const data = await response.json();
+        console.log("Processing top events");
+        this.processTopEvents(data.sports);
+      }
       this.processData(sport, league, allCollegeTeams);   //livegames and postgames
+    }
+  }
+
+  /* Used to process the top upcoming events (determined by ESPN) and update the DB accordingly. */
+  async processTopEvents(sports) {
+    for (const sport of sports) {
+      for (const league of sport.leagues) {
+        for (const game of league.events) {
+          const gameExists = await TopEvent.exists({ gameId: game.id });
+          if (gameExists === false) {
+            console.log("Adding new top event...");
+            let topEvent = new TopEvent({
+              gameId: game.id,
+              rank: game.priority,
+              gameState: "pre"
+            });
+            topEvent.save();
+          }
+        }
+      }
     }
   }
 
@@ -169,6 +196,7 @@ class NewGameService {
 
 
   async updateOddsForTodaysGames(sport, league, college) {
+    var day = new Date();
     console.log("Updating odds for today's games...");
     const url = "http://site.api.espn.com/apis/v2/scoreboard/header?sport="+
     sport+"&league="+league+college+"&dates="+this.convertDate(day);
@@ -386,7 +414,6 @@ class NewGameService {
   }
 
 
-
   async processData(sport, league, college) {
 
     var day = new Date();
@@ -397,7 +424,6 @@ class NewGameService {
 
     const games_in = [];
     const games_post = [];
-
     const myData = data.sports[0].leagues[0].events
 
     myData.forEach((game) => {
@@ -414,7 +440,6 @@ class NewGameService {
       this.updatePostgames(games_post, sport, league);
     }
   }
-
 
 
 
@@ -607,23 +632,24 @@ class NewGameService {
         g.save();
 
 
-        // //if this is a top event, we should update the game state
-        // const isTopEvent = await TopEvent.exists({ gameId: game.id });
-        // if (isTopEvent === true) {
-        //   console.log("Updating game state for top event...");
-        //   TopEvent.findOneAndUpdate(
-        //     { gameId: game.id },
-        //     {
-        //       gameState: "in",
-        //     },
-        //     (err, result) => {
-        //       if (err) console.log(err);
-        //     }
-        //   );
-        // }
+        //if this is a top event, we should update the game state
+        const isTopEvent = await TopEvent.exists({ gameId: game.id });
+        if (isTopEvent === true) {
+          console.log("Updating game state for top event...");
+          TopEvent.findOneAndUpdate(
+            { gameId: game.id },
+            {
+              gameState: "in",
+            },
+            (err, result) => {
+              if (err) console.log(err);
+            }
+          );
+        }
 
         //deleting entry from pregames DB
         Pregame.findOneAndDelete({ gameId: game.id }, (err, result) => {
+          console.log("Deleting from pregame...");
           if (err) {
             console.log(err);
           }
@@ -731,93 +757,90 @@ class NewGameService {
 
 
         //if a lastPlay exists, look to see if it's been logged in the DB
-        // if (this.elementExists(game.situation, "lastPlay")) {
-        //   const playExists = await Play.exists({
-        //     playId: game.competitions[0].situation.lastPlay.id,
-        //   });
-        //   if (playExists === false) {
-        //     console.log("Adding new play...");
-        //
-        //     //add default data
-        //     const playData = {
-        //       playId: game.competitions[0].situation.lastPlay.id,
-        //       description: game.competitions[0].situation.lastPlay.text,
-        //       gameId: game.id,
-        //       createdAt: new Date().toISOString(),
-        //       specificData: {},
-        //     };
-        //
-        //     //add league-specific data
-        //     switch (league) {
-        //       case "nfl":
-        //         playData.specificData = {
-        //           homeScore: parseInt(
-        //             game.competitions[0].competitors[0].score
-        //           ),
-        //           awayScore: parseInt(
-        //             game.competitions[0].competitors[1].score
-        //           ),
-        //           time: game.competitions[0].status.displayClock,
-        //           quarter: game.competitions[0].status.period,
-        //           down: game.competitions[0].situation.down,
-        //           distance: game.competitions[0].situation.distance,
-        //           yardLine: game.competitions[0].situation.yardLine,
-        //           possession: possessionTeam,
-        //         };
-        //         break;
-        //       case "college-football":
-        //         playData.specificData = {
-        //           homeScore: parseInt(
-        //             game.competitions[0].competitors[0].score
-        //           ),
-        //           awayScore: parseInt(
-        //             game.competitions[0].competitors[1].score
-        //           ),
-        //           time: game.competitions[0].status.displayClock,
-        //           quarter: game.competitions[0].status.period,
-        //           down: game.competitions[0].situation.down,
-        //           distance: game.competitions[0].situation.distance,
-        //           yardLine: game.competitions[0].situation.yardLine,
-        //           possession: possessionTeam,
-        //         };
-        //         break;
-        //
-        //       //live test to add more logic to this
-        //       case "mens-college-basketball":
-        //         playData.specificData = {
-        //           homeScore: parseInt(
-        //             game.competitions[0].competitors[0].score
-        //           ),
-        //           awayScore: parseInt(
-        //             game.competitions[0].competitors[1].score
-        //           ),
-        //           time: game.competitions[0].status.displayClock,
-        //           half: game.competitions[0].status.period,
-        //           possession: possessionTeam,
-        //         };
-        //         break;
-        //
-        //       case "nba":
-        //         playData.specificData = {
-        //           homeScore: parseInt(
-        //             game.competitions[0].competitors[0].score
-        //           ),
-        //           awayScore: parseInt(
-        //             game.competitions[0].competitors[1].score
-        //           ),
-        //           time: game.competitions[0].status.displayClock,
-        //           quarter: game.competitions[0].status.period,
-        //           possession: possessionTeam,
-        //         };
-        //         break;
-        //       default:
-        //     }
-        //
-        //     //saving to DB
-        //     let currentPlay = new Play(playData);
-        //     currentPlay.save();
-        //   }
-        // }
+        if (this.elementExists(game.situation, "lastPlay")) {
+          const playExists = await Play.exists({
+            playId: game.situation.lastPlay.id,
+          });
+          if (playExists === false) {
+            console.log("Adding new play...");
+
+            //add default data
+            const playData = {
+              playId: game.situation.lastPlay.id,
+              description: game.situation.lastPlay.text,
+              scoreValue: game.situation.lastPlay.scoreValue,
+              gameId: game.id,
+              createdAt: new Date().toISOString(),
+              specificData: {},
+            };
+
+            let possession = "";
+            if (this.elementExists(game.situation.lastPlay, "team")) {
+              possession = game.situation.lastPlay.team.id
+            }
+
+            //add league-specific data
+            switch (league) {
+              case "nfl":
+                // playData.specificData = {
+                //   homeScore: parseInt(
+                //     game.competitions[0].competitors[0].score
+                //   ),
+                //   awayScore: parseInt(
+                //     game.competitions[0].competitors[1].score
+                //   ),
+                //   time: game.competitions[0].status.displayClock,
+                //   quarter: game.competitions[0].status.period,
+                //   down: game.competitions[0].situation.down,
+                //   distance: game.competitions[0].situation.distance,
+                //   yardLine: game.competitions[0].situation.yardLine,
+                //   possession: possessionTeam,
+                // };
+                break;
+              case "college-football":
+                // playData.specificData = {
+                //   homeScore: parseInt(
+                //     game.competitions[0].competitors[0].score
+                //   ),
+                //   awayScore: parseInt(
+                //     game.competitions[0].competitors[1].score
+                //   ),
+                //   time: game.competitions[0].status.displayClock,
+                //   quarter: game.competitions[0].status.period,
+                //   down: game.competitions[0].situation.down,
+                //   distance: game.competitions[0].situation.distance,
+                //   yardLine: game.competitions[0].situation.yardLine,
+                //   possession: possessionTeam,
+                // };
+                break;
+
+              //live test to add more logic to this
+              case "mens-college-basketball":
+                playData.specificData = {
+                  homeScore: parseInt(game.competitors[0].score),
+                  awayScore: parseInt(game.competitors[1].score),
+                  time: game.clock,
+                  half: game.period,
+                  possession: possession,
+                };
+                break;
+              case "nba":
+                playData.specificData = {
+                  homeScore: parseInt(game.competitors[0].score),
+                  awayScore: parseInt(game.competitors[1].score),
+                  time: game.clock,
+                  quarter: game.period,
+                  possession: possession,
+                };
+                break;
+              default:
+            }
+
+            //saving to DB
+            let currentPlay = new Play(playData);
+            currentPlay.save();
+          }
+        }
       }
     }
   }
@@ -942,19 +965,20 @@ class NewGameService {
           let g = new Postgame(contents);
           g.save();
 
-          // //if this was a top event, we should remove it from the TopEvent collection
-          // const isTopEvent = await TopEvent.exists({ gameId: game.id });
-          // if (isTopEvent === true) {
-          //   console.log("Removing from top events...");
-          //   TopEvent.findOneAndDelete({ gameId: game.id }, (err, result) => {
-          //     if (err) {
-          //       console.log(err);
-          //     }
-          //   });
-          // }
+          //if this was a top event, we should remove it from the TopEvent collection
+          const isTopEvent = await TopEvent.exists({ gameId: game.id });
+          if (isTopEvent === true) {
+            console.log("Removing from top events...");
+            TopEvent.findOneAndDelete({ gameId: game.id }, (err, result) => {
+              if (err) {
+                console.log(err);
+              }
+            });
+          }
 
           //deleting entry from livegames DB
           Livegame.findOneAndDelete({ gameId: game.id }, (err, result) => {
+            console.log("Deleting from livegame...");
             if (err) {
               console.log(err);
             }
