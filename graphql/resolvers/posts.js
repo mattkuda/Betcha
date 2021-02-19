@@ -8,12 +8,14 @@ const Postgame = require("../../models/Postgame");
 
 const checkAuth = require("../../util/check-auth");
 
+
+
 module.exports = {
   Query: {
     async getPosts(_, {}, context) {
       try {
         // GETTING POSTS FROM ONLY PPL YOU FOLLOW
-
+        console.log("ENTER GET POSTS");
         const { id } = checkAuth(context);
         const userME = await User.findById(id);
         //Get array ids of all ppl you follow
@@ -24,7 +26,8 @@ module.exports = {
         const posts = await Post.find({ user: { $in: followingIds } }).sort({
           createdAt: -1,
         });
-
+        
+        console.log("END GET POSTS");
         return posts;
       } catch (err) {
         throw new Error(err);
@@ -56,8 +59,9 @@ module.exports = {
   },
 
   Post: {
+    //This is what i'm talking about
     async gameArray(parent) {
-      
+      console.log("got in here")
       var newGameArr = [];
 
       parent.gameArray.forEach(async (gameBet) => {
@@ -87,10 +91,11 @@ module.exports = {
       });
 
       await Promise.all(newGameArr);
-
-      console.log("newGameArr: " + newGameArr);
-
+      
       return newGameArr;
+      
+
+      // return newGameArr;
 
       // let game = await Postgame.find({ gameId: parent.gameId }).then(
       //   (games) => games[0]

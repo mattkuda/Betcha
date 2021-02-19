@@ -87,8 +87,12 @@ export const FETCH_POSTS_QUERY = gql`
     getPosts {
       id
       body
-      betType
-      betAmount
+      gameArray{
+        gameId
+        betType
+        betAmount
+      }
+      
       gameId {
         homeFullName
         awayFullName

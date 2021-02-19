@@ -6,12 +6,12 @@ import moment from "moment";
 import { betTimeFormat } from "../../../util/Extensions/betTimeFormat";
 
 function GameCard(props) {
-  var spreadNumber = props.gameData.spread.replace("-", "").split(" ")[1];
+  var spreadNumber = props.gameData.spread;
   var homeSpread = "";
   var awaySpread = "";
 
   //if the home team is the favorite ... (espn spread is always negative / the value of the favorite)
-  if (props.gameData.spread.split(" ")[0] === props.gameData.homeAbbreviation) {
+  if (props.gameData.favoredTeam === props.gameData.homeAbbreviation) {
     homeSpread = "-" + spreadNumber;
     awaySpread = "+" + spreadNumber;
   } else {

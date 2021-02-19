@@ -26,23 +26,23 @@ function generateToken(user) {
   );
 }
 
-const gc = new Storage({
-  keyFilename: path.join(
-    __dirname,
-    "../../loyal-oath-304300-96ccd330b866.json"
-  ),
-  projectId: "loyal-oath-304300",
-});
+// const gc = new Storage({
+//   keyFilename: path.join(
+//     __dirname,
+//     "../../loyal-oath-304300-96ccd330b866.json"
+//   ),
+//   projectId: "loyal-oath-304300",
+// });
 
-const gc2 = new Storage({
-  keyFilename: "../../loyal-oath-304300-96ccd330b866.json"
-});
+// const gc2 = new Storage({
+//   keyFilename: "../../loyal-oath-304300-96ccd330b866.json"
+// });
 
-gc.getBuckets().then((x) =>
-  console.log("These a buckets: " + JSON.stringify(x))
-);
+// // gc.getBuckets().then((x) =>
+// //   console.log("These a buckets: " + JSON.stringify(x))
+// // );
 
-const imagesBucket = gc.bucket("betcha-sports-images");
+// const imagesBucket = gc.bucket("betcha-sports-images");
 
 module.exports = {
   Query: {
@@ -51,7 +51,6 @@ module.exports = {
         const user = await User.findOne({ username });
 
         if (user) {
-          console.log("this is user: " + user);
           return user;
         } else {
           throw new Error("User not found");

@@ -48,7 +48,7 @@ function GameSelection(props) {
             //Transition group adds animation for when new post is added/deleted
             <Transition.Group>
               {games &&
-                games.filter(o => o.league === props.league).map((game) => (
+                games.filter(o => o.league === props.league && o.spread !== -1 && o.overUnder > 0).map((game) => (
                   <Grid.Column
                     key={game.id}
                     style={{ marginBottom: 20, marginTop: 20 }}

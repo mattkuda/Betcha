@@ -51,9 +51,9 @@ function PostModal(props) {
   });
 
   function createPostCallback() {
-    try{
+    try {
       createPost();
-    } catch (err){
+    } catch (err) {
       console.log(err);
     }
   }
@@ -79,18 +79,18 @@ function PostModal(props) {
     values.betAmount = pickedxdefBetAmount.toString();
   }
 
-  function addBetToArray(pickedBetType) {
+  function addBetToArray() {
     var gameBetTemp = {
       betType: values.betType,
       betAmount: values.betAmount,
       gameId: values.gameId,
     };
-    
+
     values.gameArray.push(gameBetTemp);
 
-    // values.betType = "";
-    // values.betAmount = "";
-    // values.gameId = "";
+    
+
+    console.log("3");
   }
 
   function handleSingleBetSubmitClick() {
@@ -99,9 +99,23 @@ function PostModal(props) {
     createPostCallback();
   }
 
+  function handleAddGameClick() {
+    console.log("1");
+    addBetToArray();
+    values.gameId = "";
+    values.xdefBetAmount = "";
+    values.betType = "";
+    values.betAmount = "";
+    selectLeague("");
+    console.log(JSON.stringify(values));
+
+    console.log("2");
+  }
+
   return (
     <>
       <Form onSubmit={onSubmit}>
+        <p>The gameArray is: {JSON.stringify(values.gameArray)}</p>
         <Form.Field>
           {values.xleagueId === "" ? (
             <LeagueSelection chooseLeague={selectLeague} />
@@ -146,6 +160,13 @@ function PostModal(props) {
               >
                 Submit
               </Button>
+              <Button
+                type="button"
+                color="purple"
+                onClick={() => handleAddGameClick()}
+              >
+                Add another game
+              </Button>
             </>
           ) : (
             <></>
@@ -157,18 +178,11 @@ function PostModal(props) {
 }
 
 const CREATE_POST_MUTATION = gql`
-  mutation createPost(
-    $body: String!
-    $gameArray: [gameBetInput]
-  ) {
-    createPost(
-      body: $body
-      gameArray: $gameArray
-      
-    ) {
+  mutation createPost($body: String!, $gameArray: [gameBetInput]) {
+    createPost(body: $body, gameArray: $gameArray) {
       id
       body
-      gameArray{
+      gameArray {
         betType
         betAmount
         gameId {

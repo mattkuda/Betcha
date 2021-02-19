@@ -10,7 +10,7 @@ module.exports = gql`
   type Post {
     id: ID!
     body: String!
-    tease: Boolean
+    # tease: Boolean
     gameArray: [gameBet]!
     user: User!
     createdAt: String!
