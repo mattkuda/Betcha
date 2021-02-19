@@ -17,7 +17,7 @@ module.exports = {
     },
     async getPregamesByLeague(_, { league }) {
       try {
-        let pregames = await Pregame.find({league: league});
+        let pregames = await Pregame.find({league: league}).sort({startTime: 1});
         return pregames;
       } catch (err) {
         throw new Error(err);
