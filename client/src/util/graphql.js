@@ -9,7 +9,6 @@ export const CREATE_NOTIFICATION_MUTATION = gql`
   }
 `;
 
-
 export const FETCH_USERS_FOR_USER_SEARCH_QUERY = gql`
   {
     getAllUsers {
@@ -81,44 +80,43 @@ export const FETCH_TOP_LIVEGAME_EVENTS = gql`
   }
 `;
 
-
 export const FETCH_POSTS_QUERY = gql`
   {
     getPosts {
       id
       body
-      gameArray{
-        gameId
+      betOdds
+      gameArray {
+        gameId {
+          homeFullName
+          awayFullName
+          stateDetails
+          homeRecord
+          awayRecord
+          homeScore
+          awayScore
+          period
+          time
+          awayLogo
+          homeLogo
+          awayAbbreviation
+          homeAbbreviation
+          startTime
+          broadcasts
+          spread
+          overUnder
+        }
         betType
         betAmount
       }
-      
-      gameId {
-        homeFullName
-        awayFullName
-        stateDetails
-        homeRecord
-        awayRecord
-        homeScore
-        awayScore
-        period
-        time
-        awayLogo
-        homeLogo
-        awayAbbreviation
-        homeAbbreviation
-        startTime
-        broadcasts
-        spread
-        overUnder
-      }
+
       createdAt
       username
       likeCount
       likes {
         username
       }
-      user{
+      user {
         id
         name
       }
@@ -132,8 +130,6 @@ export const FETCH_POSTS_QUERY = gql`
     }
   }
 `;
-
-
 
 //NFL GAME QUERIES
 
@@ -198,7 +194,6 @@ export const FETCH_NFL_LIVEGAMES = gql`
   }
 `;
 
-
 export const FETCH_NFL_POSTGAMES = gql`
   query($myLeague: String!) {
     getPostgamesByLeague(league: $myLeague) {
@@ -225,8 +220,6 @@ export const FETCH_NFL_POSTGAMES = gql`
     }
   }
 `;
-
-
 
 //NCAAF GAME QUERIES
 
@@ -295,7 +288,6 @@ export const FETCH_NCAAF_LIVEGAMES = gql`
   }
 `;
 
-
 export const FETCH_NCAAF_POSTGAMES = gql`
   query($myLeague: String!) {
     getPostgamesByLeague(league: $myLeague) {
@@ -326,8 +318,6 @@ export const FETCH_NCAAF_POSTGAMES = gql`
     }
   }
 `;
-
-
 
 //NCAAB MENS GAME QUERIES
 
@@ -403,7 +393,6 @@ export const FETCH_NCAABMENS_LIVEGAMES = gql`
   }
 `;
 
-
 export const FETCH_NCAABMENS_POSTGAMES = gql`
   query($myLeague: String!) {
     getPostgamesByLeague(league: $myLeague) {
@@ -432,9 +421,6 @@ export const FETCH_NCAABMENS_POSTGAMES = gql`
     }
   }
 `;
-
-
-
 
 //NBA GAME QUERIES
 
@@ -504,7 +490,6 @@ export const FETCH_NBA_LIVEGAMES = gql`
   }
 `;
 
-
 export const FETCH_NBA_POSTGAMES = gql`
   query($myLeague: String!) {
     getPostgamesByLeague(league: $myLeague) {
@@ -530,7 +515,6 @@ export const FETCH_NBA_POSTGAMES = gql`
   }
 `;
 
-
 export const FETCH_NBA_GAME = gql`
   query($gameId: String!) {
     getGameByID(gameId: $gameId) {
@@ -551,8 +535,6 @@ export const FETCH_NBA_GAME = gql`
     }
   }
 `;
-
-
 
 //PLAY QUERIES
 
@@ -613,7 +595,6 @@ export const FETCH_PLAYS_IN_NCAABMENS_GAME = gql`
   }
 `;
 
-
 export const FETCH_PLAYS_IN_NBA_GAME = gql`
   query($myGameId: String!) {
     getPlaysInGame(gameId: $myGameId) {
@@ -638,8 +619,6 @@ export const FETCH_PLAYS_IN_NBA_GAME = gql`
     }
   }
 `;
-
-
 
 export const FETCH_NCCABMENS_GAMEPRES_QUERY = gql`
   {
@@ -667,7 +646,6 @@ export const FETCH_NCCABMENS_GAMEPRES_QUERY = gql`
   }
 `;
 
-
 export const FETCH_ALL_PREGAMES = gql`
   {
     getAllPregames {
@@ -685,11 +663,16 @@ export const FETCH_ALL_PREGAMES = gql`
       startTime
       broadcasts
       spread
+      awaySpreadOdds
+      homeSpreadOdds
+      awayML
+      homeML
       overUnder
+      overOdds
+      underOdds
     }
   }
 `;
-
 
 export const FETCH_LEAGUES_QUERY = gql`
   {

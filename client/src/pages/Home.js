@@ -5,7 +5,6 @@ import { Link } from "react-router-dom";
 
 import { AuthContext } from "../context/auth";
 import PostCard from "../components/PostCard/PostCard";
-import PostForm from "../components/PostForm";
 import PostModal from "../components/PostModal/PostModal";
 import GameSidebar from "../components/GameSidebar";
 import { FETCH_POSTS_QUERY } from "../util/graphql";
@@ -64,7 +63,7 @@ function Home() {
                   posts.map((post) => (
                     <Grid.Column key={post.id} style={{ marginBottom: 20 }}>
 
-                          <PostCard post={post} />
+                          <PostCard post={post} key={post.id} />
 
                     </Grid.Column>
                   ))}

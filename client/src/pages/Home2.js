@@ -6,7 +6,6 @@ import { Link } from "react-router-dom";
 import { AuthContext } from "../context/auth";
 import PostCard from "../components/PostCard/PostCard";
 import VertMenuBar from "../components/MenuBarStuff/VertMenuBar";
-import PostForm from "../components/PostForm";
 import PostModal from "../components/PostModal/PostModal";
 import GameSidebar from "../components/GameSidebar";
 import { FETCH_POSTS_QUERY } from "../util/graphql";
