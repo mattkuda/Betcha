@@ -13,6 +13,7 @@ const League = require("../models/League");
 //import libraries
 const fetch = require("node-fetch");
 
+
 //define constants here
 const LIVE_TICK_INTERVAL = 30000;   //30 seconds
 const TOTAL_PREGAME_DAYS = 16;
@@ -20,11 +21,13 @@ const ONE_DAY_IN_MS = 86400000;   //24 hrs
 const TODAYS_GAMES_ODDS_UPDATE_INTERVAL = 1800000  //30 mins
 const TOP_EVENT_INTERVAL = 3600000  //60 mins
 
-class NewGameService {
+
+class GameService {
   constructor() {
     this.ctr = 1;
     this.sport_list = [];
   }
+
 
   /*
   Checks if an element exists within a JSON file before trying to access it. Used to handle
@@ -35,6 +38,9 @@ class NewGameService {
   }
 
 
+  /*
+  Converts a UTC date string into a YYYYMMDD format, used for the API URLs.
+  */
   convertDate(day) {
     var dd = String(day.getDate()).padStart(2, '0');
     var mm = String(day.getMonth() + 1).padStart(2, '0'); //January is 0!
@@ -106,12 +112,13 @@ class NewGameService {
 
 
 
-  /* This is our "main()" function - we call it within the index.js file to start the game service */
+  /*
+  This is our "main()" function - we call it within the index.js file to start the game service.
+  */
   run() {
     this.fillSportListAndTick();
     this.timerID = setInterval(() => {
       this.tick();
-
       if (this.ctr < (ONE_DAY_IN_MS / LIVE_TICK_INTERVAL)) {
         this.ctr = this.ctr + 1;
       } else {
@@ -120,11 +127,21 @@ class NewGameService {
     }, LIVE_TICK_INTERVAL);
   }
 
+
+  /*
+  First, grab all the active leagues from the DB and do an initial tick.
+  */
   async fillSportListAndTick() {
     this.sport_list = await League.find({ isActive: true });
     this.tick();
+    this.ctr = this.ctr + 1;
   }
 
+
+  /*
+  Runs at each tick interval. Loops through all sports and checks for upcoming, live,
+  or completed games.
+  */
   async tick() {
     for (const item of this.sport_list) {
       let sport = item.sportName;
@@ -153,7 +170,10 @@ class NewGameService {
     }
   }
 
-  /* Used to process the top upcoming events (determined by ESPN) and update the DB accordingly. */
+
+  /*
+  Used to process the top upcoming events (determined by ESPN) and update the DB accordingly.
+  */
   async processTopEvents(sports) {
     for (const sport of sports) {
       for (const league of sport.leagues) {
@@ -173,12 +193,15 @@ class NewGameService {
     }
   }
 
+
+  /*
+  Add upcoming games for the next 2 weeks.
+  */
   async addUpcomingGames(sport, league, college) {
     var day = new Date();
     var next;
     var day_ctr = 1;
     while (day_ctr < TOTAL_PREGAME_DAYS) {
-
       const url = "http://site.api.espn.com/apis/v2/scoreboard/header?sport="+
       sport+"&league="+league+college+"&dates="+this.convertDate(day);
       const response = await fetch(url);
@@ -195,6 +218,9 @@ class NewGameService {
   }
 
 
+  /*
+  Update odds for today's games.
+  */
   async updateOddsForTodaysGames(sport, league, college) {
     var day = new Date();
     console.log("Updating odds for today's games...");
@@ -265,6 +291,13 @@ class NewGameService {
               }
 
             }
+
+            if (result.sport === "soccer" && this.elementExists(game.odds, "drawOdds")) {
+              if (this.elementExists(game.odds.drawOdds, "moneyLine")) {
+                result.drawML = game.odds.drawOdds.moneyLine;
+              }
+            }
+
           }
           await result.save();
         }
@@ -272,6 +305,10 @@ class NewGameService {
     }
   }
 
+
+  /*
+  Helper function for addUpcomingGames(), gets called for each day.
+  */
   async addGamesForDay(data, sport, league) {
     for (const game of data) {
       const gameExists = await Pregame.exists({ gameId: game.id });
@@ -308,6 +345,7 @@ class NewGameService {
           underOdds: 0,
           homeML: 0,
           awayML: 0,
+          drawML: 0,
           playByPlayAvailable: game.playByPlayAvailable,
           location: game.location,
           specificData: {},
@@ -323,10 +361,16 @@ class NewGameService {
           }
         }
         if (this.elementExists(game.competitors[0], "record")) {
-          contents.homeRecord = game.competitors[0].record;
+          if (sport === "hockey") {
+            contents.homeRecord = game.competitors[0].shortenedRecord;
+          }
+          else { contents.homeRecord = game.competitors[0].record; }
         }
         if (this.elementExists(game.competitors[1], "record")) {
-          contents.awayRecord = game.competitors[1].record;
+          if (sport === "hockey") {
+            contents.homeRecord = game.competitors[0].shortenedRecord;
+          }
+          else { contents.homeRecord = game.competitors[0].record; }
         }
 
 
@@ -388,6 +432,14 @@ class NewGameService {
             }
 
           }
+
+          if (sport === "soccer" && this.elementExists(game.odds, "drawOdds")) {
+
+            if (this.elementExists(game.odds.drawOdds, "moneyLine")) {
+              contents.drawML = game.odds.drawOdds.moneyLine;
+            }
+          }
+
         }
 
         //adding league-specific data
@@ -403,6 +455,11 @@ class NewGameService {
               contents.specificData.awayRank = game.competitors[1].rank;
             }
             break;
+          case "nhl":
+            if (this.elementExists(game, "seriesSummary")) {
+              contents.specificData.seriesSummary = game.seriesSummary;
+            }
+            break;
           default:
         }
 
@@ -414,6 +471,9 @@ class NewGameService {
   }
 
 
+  /*
+  Process live game data and check if any games have ended.
+  */
   async processData(sport, league, college) {
 
     var day = new Date();
@@ -426,11 +486,13 @@ class NewGameService {
     const games_post = [];
     const myData = data.sports[0].leagues[0].events
 
-    myData.forEach((game) => {
-      const gameState = game.status;
-      if (gameState === "in") games_in.push(game);
-      if (gameState === "post") games_post.push(game);
-    });
+    if (myData) {
+      myData.forEach((game) => {
+        const gameState = game.status;
+        if (gameState === "in") games_in.push(game);
+        if (gameState === "post") games_post.push(game);
+      });
+    }
 
     if (games_in.length > 0) {
       this.updateLivegames(games_in, sport, league);
@@ -442,7 +504,9 @@ class NewGameService {
   }
 
 
-
+  /*
+  Update live games.
+  */
   async updateLivegames(games, sport, league) {
     for (const game of games) {
       const gameExists = await Livegame.exists({ gameId: game.id });
@@ -503,10 +567,16 @@ class NewGameService {
           }
         }
         if (this.elementExists(game.competitors[0], "record")) {
-          contents.homeRecord = game.competitors[0].record;
+          if (sport === "hockey") {
+            contents.homeRecord = game.competitors[0].shortenedRecord;
+          }
+          else { contents.homeRecord = game.competitors[0].record; }
         }
         if (this.elementExists(game.competitors[1], "record")) {
-          contents.awayRecord = game.competitors[1].record;
+          if (sport === "hockey") {
+            contents.homeRecord = game.competitors[0].shortenedRecord;
+          }
+          else { contents.homeRecord = game.competitors[0].record; }
         }
 
 
@@ -577,39 +647,34 @@ class NewGameService {
 
 
         //adding league-specific data
-        switch (league) {
-          case "nfl":
-            // contents.specificData.down = game.competitions[0].situation.down;
-            // contents.specificData.distance =
-            //   game.competitions[0].situation.distance;
-            // contents.specificData.yardLine =
-            //   game.competitions[0].situation.yardLine;
-            // contents.specificData.isRedZone =
-            //   game.competitions[0].situation.isRedZone;
-            // contents.specificData.possession = possessionTeam;
-            break;
-          case "college-football":
-            // contents.specificData.homeRank =
-            //   game.competitions[0].competitors[0].curatedRank.current;
-            // contents.specificData.awayRank =
-            //   game.competitions[0].competitors[1].curatedRank.current;
-            // contents.specificData.down = game.competitions[0].situation.down;
-            // contents.specificData.distance =
-            //   game.competitions[0].situation.distance;
-            // contents.specificData.yardLine =
-            //   game.competitions[0].situation.yardLine;
-            // contents.specificData.isRedZone =
-            //   game.competitions[0].situation.isRedZone;
-            // contents.specificData.possession = possessionTeam;
-            break;
-          case "mens-college-basketball":
-            contents.specificData.homeRank = -1;
-            contents.specificData.awayRank = -1;
-            if (this.elementExists(game.competitors[0], "rank")) {
-              contents.specificData.homeRank = game.competitors[0].rank;
+        switch (sport) {
+          case "football":
+
+            if (league === "college-football") {
+              // contents.specificData.homeRank =
+              //   game.competitions[0].competitors[0].curatedRank.current;
+              // contents.specificData.awayRank =
+              //   game.competitions[0].competitors[1].curatedRank.current;
             }
-            if (this.elementExists(game.competitors[1], "rank")) {
-              contents.specificData.awayRank = game.competitors[1].rank;
+            // contents.specificData.down = game.competitions[0].situation.down;
+            // contents.specificData.distance =
+            //   game.competitions[0].situation.distance;
+            // contents.specificData.yardLine =
+            //   game.competitions[0].situation.yardLine;
+            // contents.specificData.isRedZone =
+            //   game.competitions[0].situation.isRedZone;
+            // contents.specificData.possession = possessionTeam;
+            break;
+          case "basketball":
+            if (league === "mens-college-basketball") {
+              contents.specificData.homeRank = -1;
+              contents.specificData.awayRank = -1;
+              if (this.elementExists(game.competitors[0], "rank")) {
+                contents.specificData.homeRank = game.competitors[0].rank;
+              }
+              if (this.elementExists(game.competitors[1], "rank")) {
+                contents.specificData.awayRank = game.competitors[1].rank;
+              }
             }
             contents.specificData.possession = "";
             if (this.elementExists(game.situation, "lastPlay") &&
@@ -617,7 +682,15 @@ class NewGameService {
               contents.specificData.possession = game.situation.lastPlay.team.id;
             }
             break;
-          case "nba":
+          case "soccer":
+            contents.specificData.possession = "";
+            if (this.elementExists(game.situation, "lastPlay") &&
+            this.elementExists(game.situation.lastPlay, "team")) {
+              contents.specificData.possession = game.situation.lastPlay.team.id;
+            }
+            contents.specificData.addedClock = game.addedClock;
+            break;
+          case "hockey":
             contents.specificData.possession = "";
             if (this.elementExists(game.situation, "lastPlay") &&
             this.elementExists(game.situation.lastPlay, "team")) {
@@ -662,8 +735,8 @@ class NewGameService {
 
         //first, update the live game entry
         const existingGame = await Livegame.findOne({ gameId: game.id });
-        switch (league) {
-          case "nfl":
+        switch (sport) {
+          case "football":
             // existingGame.homeScore = parseInt(game.competitors[0].score);
             // existingGame.awayScore = parseInt(game.competitions[0].competitors[1].score);
             // existingGame.time = game.clock;
@@ -680,34 +753,7 @@ class NewGameService {
             // };
             await existingGame.save();
             break;
-          case "college-football":
-            // existingGame.homeScore = parseInt(
-            //   game.competitions[0].competitors[0].score
-            // );
-            // existingGame.awayScore = parseInt(
-            //   game.competitions[0].competitors[1].score
-            // );
-            // existingGame.time = game.competitions[0].status.displayClock;
-            // existingGame.period = game.competitions[0].status.period;
-            // if (
-            //   this.elementExists(game.competitions[0].situation, "lastPlay")
-            // ) {
-            //   existingGame.lastPlay =
-            //     game.competitions[0].situation.lastPlay.text;
-            // }
-            // existingGame.specificData = {
-            //   homeRank: game.competitions[0].competitors[0].curatedRank.current,
-            //   awayRank: game.competitions[0].competitors[1].curatedRank.current,
-            //   down: game.competitions[0].situation.down,
-            //   distance: game.competitions[0].situation.distance,
-            //   yardLine: game.competitions[0].situation.yardLine,
-            //   isRedZone: game.competitions[0].situation.isRedZone,
-            //   possession: possessionTeam,
-            // };
-            await existingGame.save();
-            break;
-          case "mens-college-basketball":
-
+          case "basketball":
             if (existingGame) {
               existingGame.homeScore = 0;
               if (this.elementExists(game.competitors[0], "score")) {
@@ -730,7 +776,31 @@ class NewGameService {
               await existingGame.save();
             }
             break;
-          case "nba":
+          case "soccer":
+            if (existingGame) {
+              existingGame.homeScore = 0;
+              if (this.elementExists(game.competitors[0], "score")) {
+                existingGame.homeScore = parseInt(game.competitors[0].score);
+              }
+              existingGame.awayScore = 0;
+              if (this.elementExists(game.competitors[1], "score")) {
+                existingGame.awayScore = parseInt(game.competitors[1].score);
+              }
+              existingGame.time = game.clock;
+              existingGame.period = game.period;
+              if (this.elementExists(game.situation, "lastPlay")) {
+                existingGame.lastPlay = game.situation.lastPlay.text;
+                if (this.elementExists(game.situation.lastPlay, "team")) {
+                  existingGame.specificData = {
+                    possession: game.situation.lastPlay.team.id,
+                    addedClock: game.addedClock
+                  };
+                }
+              }
+              await existingGame.save();
+            }
+            break;
+          case "hockey":
             if (existingGame) {
               existingGame.homeScore = 0;
               if (this.elementExists(game.competitors[0], "score")) {
@@ -833,6 +903,26 @@ class NewGameService {
                   possession: possession,
                 };
                 break;
+              case "eng.1":
+              case "usa.1":
+              case "uefa.champions":
+                playData.specificData = {
+                  homeScore: parseInt(game.competitors[0].score),
+                  awayScore: parseInt(game.competitors[1].score),
+                  time: game.clock,
+                  half: game.period,
+                  possession: possession,
+                };
+                break;
+              case "nhl":
+                playData.specificData = {
+                  homeScore: parseInt(game.competitors[0].score),
+                  awayScore: parseInt(game.competitors[1].score),
+                  time: game.clock,
+                  period: game.period,
+                  possession: possession,
+                };
+                break;
               default:
             }
 
@@ -847,7 +937,9 @@ class NewGameService {
 
 
 
-
+  /*
+  Check if any games were completed and add them to the postgame DB.
+  */
   async updatePostgames(games, sport, league) {
     for (const game of games) {
       if (game.fullStatus.type.name === "STATUS_CANCELED" ||
@@ -900,16 +992,23 @@ class NewGameService {
             underOdds: 0,
             homeML: 0,
             awayML: 0,
+            drawML: 0,
             spreadWinner: "P",
             ouResult: "P",
             specificData: {},
           };
 
           if (this.elementExists(game.competitors[0], "record")) {
-            contents.homeRecord = game.competitors[0].record;
+            if (sport === "hockey") {
+              contents.homeRecord = game.competitors[0].shortenedRecord;
+            }
+            else { contents.homeRecord = game.competitors[0].record; }
           }
           if (this.elementExists(game.competitors[1], "record")) {
-            contents.awayRecord = game.competitors[1].record;
+            if (sport === "hockey") {
+              contents.homeRecord = game.competitors[0].shortenedRecord;
+            }
+            else { contents.homeRecord = game.competitors[0].record; }
           }
 
           let result = await Livegame.findOne({ gameId: game.id });
@@ -991,5 +1090,5 @@ class NewGameService {
 }
 
 module.exports = {
-  NewGameService: NewGameService,
+  GameService: GameService,
 };

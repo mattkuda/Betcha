@@ -92,7 +92,7 @@ export const FETCH_POSTS_QUERY = gql`
         betType
         betAmount
       }
-      
+
       gameId {
         homeFullName
         awayFullName
@@ -620,6 +620,7 @@ export const FETCH_PLAYS_IN_NBA_GAME = gql`
       id
       playId
       description
+      scoreValue
       game {
         homeLogo
         awayLogo
@@ -627,6 +628,8 @@ export const FETCH_PLAYS_IN_NBA_GAME = gql`
         awayFullName
         homeAbbreviation
         awayAbbreviation
+        homeId
+        awayId
       }
       specificData {
         homeScore

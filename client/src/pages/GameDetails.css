@@ -3,3 +3,8 @@
   width: 30px;
   height: 30px;
 }
+
+.scoreVal {
+  color: green;
+  font-family: "Helvetica";
+}
