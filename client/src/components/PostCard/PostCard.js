@@ -20,6 +20,7 @@ import { determineBetResult } from "../../util/Extensions/betCalculations";
 function PostCard({
   post: {
     body,
+    betOdds,
     gameArray,
     createdAt,
     id,
@@ -68,10 +69,9 @@ function PostCard({
               <div className="pc-bet">Failed to load game data :-(</div>
             ) : (
               <div className="pc-bet">
-                {betDescFormat(gameArray[0].betType, gameArray[0].betAmount, gameArray[0].gameId)} ·{" "}
+                {betDescFormat(gameArray[0].betType, gameArray[0].betAmount, gameArray[0].gameId)} {" ("}{betOdds}{")"}
                 <div
                   style={{
-                    display: "inline-block",
                     fontWeight: "normal",
                     fontStyle: "italic",
                   }}

@@ -15,19 +15,18 @@ module.exports = {
     async getPosts(_, {}, context) {
       try {
         // GETTING POSTS FROM ONLY PPL YOU FOLLOW
-        console.log("ENTER GET POSTS");
         const { id } = checkAuth(context);
         const userME = await User.findById(id);
         //Get array ids of all ppl you follow
         const followingIds = userME.following.map((f) => f.followeeId);
         //ADD YOURSELF TO THE FEED
         followingIds.push(id);
+
         //Only get posts from ppl that are in that array
         const posts = await Post.find({ user: { $in: followingIds } }).sort({
           createdAt: -1,
         });
         
-        console.log("END GET POSTS");
         return posts;
       } catch (err) {
         throw new Error(err);
@@ -61,15 +60,13 @@ module.exports = {
   Post: {
     //This is what i'm talking about
     async gameArray(parent) {
-      console.log("got in here")
       var newGameArr = [];
-
-      parent.gameArray.forEach(async (gameBet) => {
+      
+      for(const gameBet of parent.gameArray){
         let game = await Postgame.find({ gameId: gameBet.gameId }).then(
           (games) => games[0]
         );
         if (game != null) {
-            console.log("FOUND THIS GAME: " + game);
             newGameArr.push({betType: gameBet.betType, betAmount: gameBet.betAmount, gameId: game});
         } else {
           game = await Livegame.find({ gameId: gameBet.gameId }).then(
@@ -77,21 +74,18 @@ module.exports = {
           );
   
           if (game != null) {
-            console.log("FOUND THIS GAME: " + game);
             newGameArr.push({betType: gameBet.betType, betAmount: gameBet.betAmount, gameId: game});
           } else {
             game = await Pregame.find({ gameId: gameBet.gameId }).then(
               (games) => games[0]
             );
   
-            console.log("FOUND THIS GAME: " + game);
             newGameArr.push({betType: gameBet.betType, betAmount: gameBet.betAmount, gameId: game});
           }
         }
-      });
+      };
 
-      await Promise.all(newGameArr);
-      
+      //await Promise.all(newGameArr);
       return newGameArr;
       
 
@@ -137,7 +131,7 @@ module.exports = {
   },
 
   Mutation: {
-    async createPost(_, { body, gameArray }, context) {
+    async createPost(_, { body, gameArray, betOdds }, context) {
       console.log("1. Entered createPost");
       const user = checkAuth(context);
 
@@ -146,9 +140,9 @@ module.exports = {
       }
 
       //TODO - Add this logic to each game in game array
-      // if (betType.trim() === "") {
-      //   throw new Error("Post betType must not be empty");
-      // }
+      if (betOdds.trim() === "") {
+        throw new Error("Post betOdds must not be empty");
+      }
 
       // if (betAmount.trim() === "") {
       //   throw new Error("Post betAmount must not be empty");
@@ -162,6 +156,7 @@ module.exports = {
       const newPost = new Post({
         body, //already destructured at the async line (above)
         gameArray, //already destructured at the async line (above)
+        betOdds,
         user: user.id,
         username: user.username,
         createdAt: new Date().toISOString(),

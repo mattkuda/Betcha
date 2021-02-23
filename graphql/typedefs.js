@@ -12,6 +12,7 @@ module.exports = gql`
     body: String!
     # tease: Boolean
     gameArray: [gameBet]!
+    betOdds: String!
     user: User!
     createdAt: String!
     username: String!
@@ -413,6 +414,7 @@ module.exports = gql`
     createPost(
       body: String!
       gameArray: [gameBetInput]
+      betOdds: String
     ): Post!
     createNotification(
       objectType: String!

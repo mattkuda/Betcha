@@ -7,6 +7,7 @@ const postSchema = new Schema({
   username: String,
   createdAt: String,
   // tease: Boolean,
+  betOdds: String,
   gameArray: [
     {
       betType: String,

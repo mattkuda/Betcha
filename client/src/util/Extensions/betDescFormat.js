@@ -4,13 +4,19 @@ export const betDescFormat = (betType, betAmount, gameData) => {
   if (betType === "HOME") {
     rValue =
       gameData.homeAbbreviation +
-      (betAmount >= 0 ? " +" : " ") +
-      betAmount;
+      (betAmount == 0
+        ? " Moneyline"
+        : betAmount > 0
+        ? " +" + betAmount
+        : " " + betAmount);
   } else if (betType === "AWAY") {
     rValue =
       gameData.awayAbbreviation +
-      (betAmount >= 0 ? " +" : " ") +
-      betAmount;
+      (betAmount == 0
+        ? " Moneyline"
+        : betAmount > 0
+        ? " +" + betAmount
+        : " " + betAmount);
   } else if (betType === "UNDER") {
     rValue = "Under " + betAmount;
   } else if (betType === "OVER") {
@@ -21,7 +27,6 @@ export const betDescFormat = (betType, betAmount, gameData) => {
 };
 
 export const betMatchFormat = (gameData) => {
- 
   let rValue = new String();
 
   rValue = gameData.awayAbbreviation + " @ " + gameData.homeAbbreviation;

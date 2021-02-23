@@ -57,6 +57,7 @@ function GameSelection(props) {
                       gameData={game}
                       pickGameId={props.chooseGameId}
                       pickBetType={props.chooseBetType}
+                      pickBetOdds={props.chooseBetOdds}
                       pickBetAmount={props.chooseBetAmount}
                     />
                   </Grid.Column>

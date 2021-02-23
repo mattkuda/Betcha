@@ -19,6 +19,8 @@ function PostModal(props) {
     betAmount: "",
     gameId: "",
     gameArray: [],
+    betOdds: "",
+    xdefBetOdds: "",
     xdefBetAmount: "",
     xleagueId: "",
   });
@@ -41,6 +43,7 @@ function PostModal(props) {
       values.betType = "";
       values.betAmount = "";
       values.gameId = "";
+      values.betOdds = "";
       values.gameArray = [];
     },
     //Added this so the page doesnt break
@@ -68,6 +71,15 @@ function PostModal(props) {
 
   function selectBetType(pickedBetType) {
     values.betType = pickedBetType;
+  }
+
+  function selectBetOdds(pickedBetOdds) {
+    values.betOdds = pickedBetOdds;
+  }
+
+  function selectxdefBetOdds(pickedxdefBetOdds) {
+    values.xdefBetOdds = pickedxdefBetOdds;
+    values.betOdds = pickedxdefBetOdds.toString();
   }
 
   function selectBetAmount(pickedBetAmount) {
@@ -104,6 +116,7 @@ function PostModal(props) {
     addBetToArray();
     values.gameId = "";
     values.xdefBetAmount = "";
+    values.xdefBetOdds = "";
     values.betType = "";
     values.betAmount = "";
     selectLeague("");
@@ -128,6 +141,7 @@ function PostModal(props) {
               league={values.xleagueId}
               chooseGameId={selectGameId}
               chooseBetType={selectBetType}
+              chooseBetOdds={selectxdefBetOdds}
               chooseBetAmount={selectxdefBetAmount}
             />
           ) : (
@@ -145,6 +159,13 @@ function PostModal(props) {
                 chooseBetAmount={selectBetAmount}
                 betValue={values.betAmount}
               />
+
+              <BetSelection
+                defValue={values.xdefBetOdds}
+                chooseBetAmount={selectBetOdds}
+                betValue={values.betOdds}
+              />
+
               <Form.Input
                 placeholder="Why are you taking this bet?"
                 noValidate
@@ -178,10 +199,11 @@ function PostModal(props) {
 }
 
 const CREATE_POST_MUTATION = gql`
-  mutation createPost($body: String!, $gameArray: [gameBetInput]) {
-    createPost(body: $body, gameArray: $gameArray) {
+  mutation createPost($body: String!,$betOdds: String!, $gameArray: [gameBetInput]) {
+    createPost(body: $body,betOdds: $betOdds, gameArray: $gameArray) {
       id
       body
+      betOdds
       gameArray {
         betType
         betAmount
