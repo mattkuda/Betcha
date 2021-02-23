@@ -482,6 +482,8 @@ class GameService {
     const response = await fetch(url);
     const data = await response.json();
 
+    console.log("Processing data for "+league);
+
     const games_in = [];
     const games_post = [];
     const myData = data.sports[0].leagues[0].events
