@@ -690,8 +690,11 @@ export const FETCH_LEAGUES_QUERY = gql`
 export const FETCH_ACTIVE_LEAGUES_QUERY = gql`
   {
     getActiveLeagues {
+      id
+      displayName
       sportName
       leagueName
+      image
     }
   }
 `;
