@@ -20,6 +20,7 @@ const TOTAL_PREGAME_DAYS = 16;
 const ONE_DAY_IN_MS = 86400000;   //24 hrs
 const TODAYS_GAMES_ODDS_UPDATE_INTERVAL = 1800000  //30 mins
 const TOP_EVENT_INTERVAL = 3600000  //60 mins
+const GENERAL_UPDATE_INTERVAL = 10800000  //3 hrs
 
 
 class GameService {
@@ -166,6 +167,9 @@ class GameService {
         console.log("Processing top events");
         this.processTopEvents(data.sports);
       }
+      if (this.ctr === GENERAL_UPDATE_INTERVAL / LIVE_TICK_INTERVAL) {
+        this.updateVariableGameInfo(sport, league, allCollegeTeams);
+      }
       this.processData(sport, league, allCollegeTeams);   //livegames and postgames
     }
   }
@@ -215,6 +219,163 @@ class GameService {
       next = new Date(day.valueOf() + ONE_DAY_IN_MS);
       day = next;
       day_ctr++;
+    }
+  }
+
+
+  /*
+  Update all game info for games in DB
+  */
+  async updateVariableGameInfo(sport, league, college) {
+    var day = new Date();
+    var next;
+    var day_ctr = 1;
+    while (day_ctr < TOTAL_PREGAME_DAYS) {
+      const url = "http://site.api.espn.com/apis/v2/scoreboard/header?sport="+
+      sport+"&league="+league+college+"&dates="+this.convertDate(day);
+      const response = await fetch(url);
+      const data = await response.json();
+      console.log("Processing data for " + league);
+      if (this.elementExists(data.sports[0].leagues[0], "events")) {
+        this.updateGameInfoForDay(data.sports[0].leagues[0].events, sport, league);
+      }
+      console.log("Date (today): "+this.convertDate(day));
+      next = new Date(day.valueOf() + ONE_DAY_IN_MS);
+      day = next;
+      day_ctr++;
+    }
+  }
+
+
+  /*
+  Helper function for updateVariableGameInfo(), gets called for each day.
+  */
+  async updateGameInfoForDay(data, sport, league) {
+    for (const game of data) {
+      let result = await Pregame.findOne({ gameId: game.id });
+      if (result) {
+        console.log("Updating variable data for upcoming game...");
+
+        if (this.elementExists(game, "broadcasts")) {
+          if (game.broadcasts.length > 0) {
+            let myBroadcasts = []
+            for (const broadcast of game.broadcasts) {
+              myBroadcasts.push(broadcast.name);
+            }
+            result.broadcasts = myBroadcasts;
+          }
+        }
+        if (this.elementExists(game.competitors[0], "record")) {
+          if (sport === "hockey") {
+            result.homeRecord = game.competitors[0].shortenedRecord;
+          }
+          else { result.homeRecord = game.competitors[0].record; }
+        }
+        if (this.elementExists(game.competitors[1], "record")) {
+          if (sport === "hockey") {
+            result.awayRecord= game.competitors[1].shortenedRecord;
+          }
+          else { result.awayRecord = game.competitors[1].record; }
+        }
+
+
+        if (this.elementExists(game, "odds")) {
+
+          if (this.elementExists(game.odds, "overUnder")) {
+            result.overUnder = game.odds.overUnder;
+          }
+
+          if (this.elementExists(game.odds, "spread")) {
+            result.spread = Math.abs(game.odds.spread);
+          }
+
+          if (this.elementExists(game.odds, "overOdds")) {
+            result.overOdds = game.odds.overOdds;
+          }
+
+          if (this.elementExists(game.odds, "underOdds")) {
+            result.underOdds = game.odds.underOdds;
+          }
+
+          if (this.elementExists(game.odds, "awayTeamOdds")) {
+
+            if (this.elementExists(game.odds.awayTeamOdds, "moneyLine")) {
+              result.awayML = game.odds.awayTeamOdds.moneyLine;
+            }
+
+            if (this.elementExists(game.odds.awayTeamOdds, "favorite") &&
+            game.odds.awayTeamOdds.favorite === true) {
+              result.favoredTeam = game.odds.awayTeamOdds.team.abbreviation;
+              result.favoredTeamId = game.odds.awayTeamOdds.team.id;
+            }
+
+            if (this.elementExists(game.odds.awayTeamOdds, "spreadOdds")) {
+              result.awaySpreadOdds = game.odds.awayTeamOdds.spreadOdds;
+            }
+
+          }
+
+
+          if (this.elementExists(game.odds, "homeTeamOdds")) {
+
+            if (this.elementExists(game.odds.homeTeamOdds, "moneyLine")) {
+              result.homeML = game.odds.homeTeamOdds.moneyLine;
+            }
+
+            if (this.elementExists(game.odds.homeTeamOdds, "favorite") &&
+            game.odds.homeTeamOdds.favorite === true) {
+              result.favoredTeam = game.odds.homeTeamOdds.team.abbreviation;
+              result.favoredTeamId = game.odds.homeTeamOdds.team.id;
+            }
+
+            if (this.elementExists(game.odds.homeTeamOdds, "spreadOdds")) {
+              result.homeSpreadOdds = game.odds.homeTeamOdds.spreadOdds;
+            }
+
+          }
+
+          if (result.sport === "soccer" && this.elementExists(game.odds, "drawOdds")) {
+            if (this.elementExists(game.odds.drawOdds, "moneyLine")) {
+              result.drawML = game.odds.drawOdds.moneyLine;
+            }
+          }
+        }
+
+        result.stateDetails = game.fullStatus.type.name;
+        result.homeId = parseInt(game.competitors[0].id);
+        result.awayId = parseInt(game.competitors[1].id);
+        result.homeLogo = game.competitors[0].logo;
+        result.awayLogo = game.competitors[1].logo;
+        result.homeAbbreviation = game.competitors[0].abbreviation;
+        result.awayAbbreviation = game.competitors[1].abbreviation;
+        result.homeFullName = game.competitors[0].displayName;
+        result.awayFullName = game.competitors[1].displayName;
+        result.homeColor = game.competitors[0].color;
+        result.awayColor = game.competitors[1].color;
+        result.startTime = game.date;
+        result.playByPlayAvailable = game.playByPlayAvailable;
+        result.location = game.location;
+
+        //adding league-specific data
+        switch (league) {
+          case "college-football":
+          case "mens-college-basketball":
+            if (this.elementExists(game.competitors[0], "rank")) {
+              result.specificData.homeRank = game.competitors[0].rank;
+            }
+            if (this.elementExists(game.competitors[1], "rank")) {
+              result.specificData.awayRank = game.competitors[1].rank;
+            }
+            break;
+          case "nhl":
+            if (this.elementExists(game, "seriesSummary")) {
+              result.specificData.seriesSummary = game.seriesSummary;
+            }
+            break;
+          default:
+        }
+        await result.save();
+      }
     }
   }
 
@@ -369,9 +530,9 @@ class GameService {
         }
         if (this.elementExists(game.competitors[1], "record")) {
           if (sport === "hockey") {
-            contents.homeRecord = game.competitors[0].shortenedRecord;
+            contents.awayRecord= game.competitors[1].shortenedRecord;
           }
-          else { contents.homeRecord = game.competitors[0].record; }
+          else { contents.awayRecord = game.competitors[1].record; }
         }
 
 
@@ -577,9 +738,9 @@ class GameService {
         }
         if (this.elementExists(game.competitors[1], "record")) {
           if (sport === "hockey") {
-            contents.homeRecord = game.competitors[0].shortenedRecord;
+            contents.awayRecord = game.competitors[1].shortenedRecord;
           }
-          else { contents.homeRecord = game.competitors[0].record; }
+          else { contents.awayRecord = game.competitors[1].record; }
         }
 
 
@@ -1009,9 +1170,9 @@ class GameService {
           }
           if (this.elementExists(game.competitors[1], "record")) {
             if (sport === "hockey") {
-              contents.homeRecord = game.competitors[0].shortenedRecord;
+              contents.awayRecord = game.competitors[1].shortenedRecord;
             }
-            else { contents.homeRecord = game.competitors[0].record; }
+            else { contents.awayRecord = game.competitors[1].record; }
           }
 
           let result = await Livegame.findOne({ gameId: game.id });
