@@ -583,6 +583,17 @@ export const FETCH_PLAYS_IN_NCAABMENS_GAME = gql`
       id
       playId
       description
+      scoreValue
+      game {
+        homeLogo
+        awayLogo
+        homeFullName
+        awayFullName
+        homeAbbreviation
+        awayAbbreviation
+        homeId
+        awayId
+      }
       specificData {
         homeScore
         awayScore

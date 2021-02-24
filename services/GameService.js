@@ -179,12 +179,13 @@ class GameService {
       for (const league of sport.leagues) {
         for (const game of league.events) {
           const gameExists = await TopEvent.exists({ gameId: game.id });
-          if (gameExists === false) {
+          const gameInPregame = await Pregame.exists({ gameId: game.id });
+          if (gameExists === false && gameInPregame === true && game.status === "pre") {
             console.log("Adding new top event...");
             let topEvent = new TopEvent({
               gameId: game.id,
               rank: game.priority,
-              gameState: "pre"
+              gameState: game.status
             });
             topEvent.save();
           }
@@ -478,7 +479,7 @@ class GameService {
 
     var day = new Date();
     const url = "http://site.api.espn.com/apis/v2/scoreboard/header?sport="+
-    sport+"&league="+league+college+"&dates="+this.convertDate(day);
+    sport+"&league="+league+college;
     const response = await fetch(url);
     const data = await response.json();
 
