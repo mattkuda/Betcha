@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, Form, Transition } from "semantic-ui-react";
+import { Button, Form, Transition, Modal } from "semantic-ui-react";
 import gql from "graphql-tag";
 import { useMutation } from "@apollo/react-hooks";
 
@@ -24,6 +24,8 @@ function PostModal(props) {
     xdefBetAmount: "",
     xleagueId: "",
   });
+
+  
 
   const [createPost, { error }] = useMutation(CREATE_POST_MUTATION, {
     variables: values,
@@ -61,34 +63,72 @@ function PostModal(props) {
     }
   }
 
-  function selectLeague(pickedLeague) {
-    values.xleagueId = pickedLeague;
+  //const [inputValue, setInputValue] = React.useState(""); //EX.
+  const [betType, setbetType] = React.useState("");
+  const [betAmount, setBetAmount] = React.useState("");
+  const [gameId, setGameId] = React.useState("");
+  const [gameArray, setGameArray] = React.useState([]);
+  const [betOdds, setBetOdds] = React.useState("");
+  const [xdefBetOdds, setxdefBetOdds] = React.useState("");
+  const [xdefBetAmount, setxdefBetAmount] = React.useState("");
+  const [xleagueId, setxleagueId] = React.useState("");
+  const [modalState, setModalState] = React.useState("Leagues");
+ 
+  function selectLeague(event) {
+    console.log("param pass in: " + event);
+    setxleagueId(event);
+    setModalState("Games");
+    console.log("the league id is: " + xleagueId)
+    console.log("modalState: " + modalState)
+
   }
 
   function selectGameId(pickedGameId) {
+    //values.gameId = pickedGameId;
     values.gameId = pickedGameId;
+    setGameId(pickedGameId);
+    setModalState("BetAdjust");
+    console.log("modalState: " + modalState)
   }
 
   function selectBetType(pickedBetType) {
+    // values.betType = pickedBetType;
     values.betType = pickedBetType;
+    setbetType(pickedBetType)
+    
   }
 
   function selectBetOdds(pickedBetOdds) {
-    values.betOdds = pickedBetOdds;
+    // values.betOdds = pickedBetOdds;
+    values.betOdds = pickedBetOdds.toString();
+    setBetOdds(pickedBetOdds.toString())
   }
 
   function selectxdefBetOdds(pickedxdefBetOdds) {
-    values.xdefBetOdds = pickedxdefBetOdds;
+    // values.xdefBetOdds = pickedxdefBetOdds;
+    // values.betOdds = pickedxdefBetOdds.toString();
+
     values.betOdds = pickedxdefBetOdds.toString();
+    values.xdefBetOdds = pickedxdefBetOdds;
+    setBetOdds(pickedxdefBetOdds.toString());
+    setxdefBetOdds(pickedxdefBetOdds);
   }
 
   function selectBetAmount(pickedBetAmount) {
+    // values.betAmount = pickedBetAmount.toString();
     values.betAmount = pickedBetAmount.toString();
+    
+    setBetAmount(pickedBetAmount);
   }
 
   function selectxdefBetAmount(pickedxdefBetAmount) {
-    values.xdefBetAmount = pickedxdefBetAmount;
+    // values.xdefBetAmount = pickedxdefBetAmount;
+    // values.betAmount = pickedxdefBetAmount.toString();
+
     values.betAmount = pickedxdefBetAmount.toString();
+    values.xdefBetAmount = pickedxdefBetAmount;
+    setxdefBetAmount(pickedxdefBetAmount);
+    setBetAmount(pickedxdefBetAmount.toString());
   }
 
   function addBetToArray() {
@@ -99,7 +139,7 @@ function PostModal(props) {
     };
 
     values.gameArray.push(gameBetTemp);
-
+    
     
 
     console.log("3");
@@ -107,19 +147,20 @@ function PostModal(props) {
 
   function handleSingleBetSubmitClick() {
     addBetToArray();
-    console.log(JSON.stringify(values));
+    console.log("SUBMITTING: "+JSON.stringify(values));
     createPostCallback();
   }
 
   function handleAddGameClick() {
     console.log("1");
     addBetToArray();
-    values.gameId = "";
+    selectGameId("");
     values.xdefBetAmount = "";
     values.xdefBetOdds = "";
-    values.betType = "";
-    values.betAmount = "";
-    selectLeague("");
+    selectBetType("");
+    selectBetAmount("");
+    setxleagueId("");
+    setModalState("Leagues");
     console.log(JSON.stringify(values));
 
     console.log("2");
@@ -127,43 +168,40 @@ function PostModal(props) {
 
   return (
     <>
+      <p>xlid: {xleagueId}</p>
       <Form onSubmit={onSubmit}>
         <p>The gameArray is: {JSON.stringify(values.gameArray)}</p>
+        {/* sdfsdf */}
         <Form.Field>
-          {values.xleagueId === "" ? (
+          {modalState === "Leagues" && (
             <LeagueSelection chooseLeague={selectLeague} />
-          ) : (
-            <p>The league state is {values.xleagueId}</p>
-          )}
+          ) }
 
-          {values.xleagueId !== "" && values.gameId === "" ? (
+          {modalState === "Games"  && (
+            <div><p>in game sleec</p>
             <GameSelection
-              league={values.xleagueId}
+              league={xleagueId}
               chooseGameId={selectGameId}
               chooseBetType={selectBetType}
               chooseBetOdds={selectxdefBetOdds}
               chooseBetAmount={selectxdefBetAmount}
             />
-          ) : (
-            <div>
-              <p>The gameId is {values.gameId}</p>
-              <p>The betType state is {values.betType}</p>
-              <p>The betAmount state is {values.betAmount}</p>
             </div>
-          )}
+          ) }
 
-          {values.xleagueId !== "" && values.gameId !== "" ? (
+          {modalState === "BetAdjust" && (
             <>
+              Change the spread o/u:
               <BetSelection
-                defValue={values.xdefBetAmount}
+                defValue={xdefBetAmount}
                 chooseBetAmount={selectBetAmount}
-                betValue={values.betAmount}
+                betValue={betAmount}
               />
-
+              Change the odds:
               <BetSelection
-                defValue={values.xdefBetOdds}
+                defValue={xdefBetOdds}
                 chooseBetAmount={selectBetOdds}
-                betValue={values.betOdds}
+                betValue={betOdds}
               />
 
               <Form.Input
@@ -185,12 +223,11 @@ function PostModal(props) {
                 type="button"
                 color="purple"
                 onClick={() => handleAddGameClick()}
+                disabled={values.gameArray.length > 9}
               >
                 Add another game
               </Button>
             </>
-          ) : (
-            <></>
           )}
         </Form.Field>
       </Form>

@@ -23,7 +23,7 @@ function Home() {
         open={modalOpen}
         onClose={() => setModalOpen(false)}
         closeIcon
-        dimmer="blurring"
+        // dimmer="blurring" TODO
         style={{ height: "90%" }}
       >
         <Modal.Header>Share Bet</Modal.Header>
