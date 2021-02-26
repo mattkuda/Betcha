@@ -109,7 +109,6 @@ export const FETCH_POSTS_QUERY = gql`
         betType
         betAmount
       }
-
       createdAt
       username
       likeCount
@@ -584,6 +583,17 @@ export const FETCH_PLAYS_IN_NCAABMENS_GAME = gql`
       id
       playId
       description
+      scoreValue
+      game {
+        homeLogo
+        awayLogo
+        homeFullName
+        awayFullName
+        homeAbbreviation
+        awayAbbreviation
+        homeId
+        awayId
+      }
       specificData {
         homeScore
         awayScore
@@ -601,6 +611,7 @@ export const FETCH_PLAYS_IN_NBA_GAME = gql`
       id
       playId
       description
+      scoreValue
       game {
         homeLogo
         awayLogo
@@ -608,6 +619,8 @@ export const FETCH_PLAYS_IN_NBA_GAME = gql`
         awayFullName
         homeAbbreviation
         awayAbbreviation
+        homeId
+        awayId
       }
       specificData {
         homeScore
@@ -688,8 +701,11 @@ export const FETCH_LEAGUES_QUERY = gql`
 export const FETCH_ACTIVE_LEAGUES_QUERY = gql`
   {
     getActiveLeagues {
+      id
+      displayName
       sportName
       leagueName
+      image
     }
   }
 `;

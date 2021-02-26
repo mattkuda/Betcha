@@ -155,10 +155,32 @@ function GameDetails(props) {
       <Fragment>
         {
           NCAABMENSdata.getPlaysInGame.map(play => (
-            <Grid celled>
+            <Grid>
               <Grid.Row>
-              <Grid.Column width={14}>
-                <p>{play.specificData.time}: {play.description} ({play.specificData.awayScore} - {play.specificData.homeScore})</p>
+              <Grid.Column width={1} className="timeColumn">
+                {play.specificData.time}
+              </Grid.Column>
+              <Grid.Column width={1} className="timeColumn">
+                {play.scoreValue > 0 ? (
+                  <p className="scoreVal">+{play.scoreValue}</p>
+                  ):(
+                  <p></p>
+                  )
+                }
+              </Grid.Column>
+              <Grid.Column width={2}>
+                {play.specificData.possession !== "" ? (
+                  (parseInt(play.specificData.possession) === play.game.homeId ?
+                    (<Image centered verticalAlign='middle' src={play.game.homeLogo} className="playImage"/>):
+                    (<Image centered verticalAlign='middle' src={play.game.awayLogo} className="playImage"/>)
+                  )
+                ):(<div></div>)}
+              </Grid.Column>
+              <Grid.Column width={6}>
+                <p>{play.description}</p>
+              </Grid.Column>
+              <Grid.Column width={2}>
+                <p>{play.specificData.awayScore} - {play.specificData.homeScore}</p>
               </Grid.Column>
               <Grid.Column width={2}>
                 {user ? <Button onClick={() => {
@@ -196,12 +218,20 @@ function GameDetails(props) {
           NBAdata.getPlaysInGame.map(play => (
             <Grid>
               <Grid.Row>
-              <Grid.Column width={2} className="timeColumn">
+              <Grid.Column width={1} className="timeColumn">
                 {play.specificData.time}
+              </Grid.Column>
+              <Grid.Column width={1} className="timeColumn">
+                {play.scoreValue > 0 ? (
+                  <p className="scoreVal">+{play.scoreValue}</p>
+                  ):(
+                  <p></p>
+                  )
+                }
               </Grid.Column>
               <Grid.Column width={2}>
                 {play.specificData.possession !== "" ? (
-                  (play.specificData.possession === play.game.homeAbbreviation ?
+                  (parseInt(play.specificData.possession) === play.game.homeId ?
                     (<Image centered verticalAlign='middle' src={play.game.homeLogo} className="playImage"/>):
                     (<Image centered verticalAlign='middle' src={play.game.awayLogo} className="playImage"/>)
                   )

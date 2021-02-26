@@ -6,7 +6,7 @@ import { AuthContext } from "../../../context/auth";
 import PostCard from "../../PostCard/PostCard";
 import PostModal from "../PostModal";
 import { FETCH_POSTS_QUERY } from "../../../util/graphql";
-import { FETCH_LEAGUES_QUERY } from "../../../util/graphql";
+import { FETCH_ACTIVE_LEAGUES_QUERY } from "../../../util/graphql";
 import LeagueCard from "./LeagueCard";
 
 function LeagueSelection(props) {
@@ -17,8 +17,8 @@ function LeagueSelection(props) {
 
   var loading2 = false;
 
-  const { loading, data: { getLeagues: leagues } = {} } = useQuery(
-    FETCH_LEAGUES_QUERY
+  const { loading, data: { getActiveLeagues: leagues } = {} } = useQuery(
+    FETCH_ACTIVE_LEAGUES_QUERY
   );
 
   // var leagues = [
@@ -48,7 +48,7 @@ function LeagueSelection(props) {
           ) : (
             //Transition group adds animation for when new post is added/deleted
             <Transition.Group>
-            
+
               {leagues &&
                 leagues.map((league) => (
                   <Grid.Column key={league.id} style={{ marginBottom: 20, marginTop: 20}}>
