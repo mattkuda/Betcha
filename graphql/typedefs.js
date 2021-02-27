@@ -57,6 +57,7 @@ module.exports = gql`
     username: String!
     createdAt: String!
     bio: String
+    profilePicture: String
     website: String
     location: String
     name: String

@@ -16,6 +16,7 @@
     "apollo-server": "^2.19.0",
     "bcryptjs": "^2.4.3",
     "dotenv": "^8.2.0",
+    "firebase": "^8.2.9",
     "fs": "0.0.1-security",
     "graphql": "^15.4.0",
     "jsonwebtoken": "^8.5.1",
