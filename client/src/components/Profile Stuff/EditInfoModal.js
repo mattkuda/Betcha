@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import { Button, Form, Transition } from "semantic-ui-react";
+import { Button, Input, Form, Transition } from "semantic-ui-react";
 import gql from "graphql-tag";
 import { useMutation } from "@apollo/react-hooks";
+import { storage } from "../../firebase";
 
 import { useForm } from "../../util/hooks";
 
@@ -14,6 +15,7 @@ function EditInfoModal(props) {
     bio: props.bio,
     location: props.location,
     website: props.website,
+    profilePicture: props.profilePicture,
   });
 
   const [updateInfo, { error }] = useMutation(UPDATE_INFO_MUTATION, {
@@ -21,8 +23,6 @@ function EditInfoModal(props) {
     update(proxy, result) {
       //If successful, close modal
       props.handleClose();
-      
-      
     },
     //Added this so the page doesnt break
     onError(err) {
@@ -30,12 +30,68 @@ function EditInfoModal(props) {
     },
   });
 
+  const [image, setImage] = useState(null);
+  const [url, setUrl] = useState("");
+  const [progress, setProgress] = useState(0);
+
+  const handleChange = (e) => {
+    if (e.target.files[0] && e.target.files[0].size < 5242880) {
+      setImage(e.target.files[0]);
+    } else {
+      e.target.value = null;
+      alert("File too big. Must be less than 5 MB.");
+    }
+  };
+
+  const handleUpload = async () => {
+    const uploadTask = storage.ref(`images/${image.name}`).put(image);
+    uploadTask.on(
+      "state_changed",
+      (snapshot) => {
+        const progress = Math.round(
+          (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+        );
+        setProgress(progress);
+      },
+      (error) => {
+        console.log(error);
+      },
+      () => {
+        storage
+          .ref("images")
+          .child(image.name)
+          .getDownloadURL()
+          .then((url) => {
+            console.log("the url is: " + url);
+            values.profilePicture = url;
+            return url;
+          });
+      }
+    );
+  };
+
   function updateInfoCallback() {
-    updateInfo();
+    //only upload if the image has changed
+    if (image != null) {
+      uploadFileCallback();
+      updateInfo();
+    } else {
+      updateInfo();
+    }
   }
 
+  const uploadFileCallback = async () => {
+    handleUpload();
+    return true;
+  };
+
   return (
-    <>
+    <div>
+      <input
+        type="file"
+        onChange={handleChange}
+        accept="image/png, image/jpeg"
+      />
       <Form onSubmit={onSubmit}>
         <Form.Input
           label="Name"
@@ -74,7 +130,7 @@ function EditInfoModal(props) {
           Save
         </Button>
       </Form>
-    </>
+    </div>
   );
 }
 
@@ -84,12 +140,14 @@ const UPDATE_INFO_MUTATION = gql`
     $bio: String!
     $location: String!
     $website: String!
+    $profilePicture: String!
   ) {
     updateInfo(
       name: $name
       bio: $bio
       location: $location
       website: $website
+      profilePicture: $profilePicture
     ) {
       id
       username
@@ -106,7 +164,6 @@ const UPDATE_INFO_MUTATION = gql`
       }
       followingCount
       followersCount
-      
     }
   }
 `;

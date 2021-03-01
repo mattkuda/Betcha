@@ -70,42 +70,7 @@ module.exports = {
     },
   },
   Mutation: {
-    uploadFile: async (_, { file }) => {
-      const { createReadStream, filename } = await file;
-
-      await new Promise((res) =>
-        createReadStream()
-          .pipe(
-            imagesBucket.file(filename).createWriteStream({
-              resumable: false,
-              gzip: true,
-            })
-          )
-          .on("finish", res)
-      )
-      return true;
-     
-    },
-
-    uploadFile2: async (_, { filename }) => {      
-
-      const storage = new Storage({ keyFilename: "loyal-oath-304300-96ccd330b866.json" });
-      // Replace with your bucket name and filename.
-      const bucketname = 'betcha-sports-images';
-      filename = '/Users/MattKuda/Desktop/Screen Shot 2021-01-23 at 12.48.48 PM.png';
-
-      const res = await storage.bucket(bucketname).upload(filename);
-      // `mediaLink` is the URL for the raw contents of the file.
-      const url = res[0].metadata.mediaLink;
-
-      // Need to make the file public before you can access it.
-      await storage.bucket(bucketname).file(filename).makePublic();
-
-      // Make a request to the uploaded URL.
-      const axios = require('axios');
-      const pkg = await axios.get(url).then(res => res.data);
-      pkg.name; // 'masteringjs.io'
-    },
+    
 
     async login(_, { username, password }) {
       const { errors, valid } = validateLoginInput(username, password);
@@ -180,9 +145,11 @@ module.exports = {
       };
     },
     //UPDATE INFO (Name, Bio, Location, Website)
-    async updateInfo(_, { name, bio, location, website }, context) {
+    async updateInfo(_, { name, bio, location, website, profilePicture }, context) {
       const user = checkAuth(context);
       console.log("update 1");
+      console.log("pro pic is: " + profilePicture);
+
 
       try {
         const userME = await User.findOne({ username: user.username });
@@ -192,6 +159,7 @@ module.exports = {
           userME.bio = bio;
           userME.location = location;
           userME.website = website;
+          userME.profilePicture = profilePicture;
 
           await userME.save();
           return userME;

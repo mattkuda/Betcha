@@ -91,9 +91,8 @@ function SinglePost(props) {
     const {
       id,
       body,
-      betType,
-      betAmount,
-      gameId,
+      gameArray,
+      betOdds,
       createdAt,
       username,
       comments,
@@ -121,14 +120,25 @@ function SinglePost(props) {
               <Card.Content>
                 <Card.Header>{username}</Card.Header>
                 <Card.Meta>{moment(createdAt).fromNow()}</Card.Meta>
-                <Card.Description style={{ fontStyle: "italic" }}>
-                  {betDescFormat(betType, betAmount, gameId)}
-                </Card.Description>
-
-                <Card.Description style={{ fontStyle: "italic" }}>
-                  {gameId.awayAbbreviation} @ {gameId.homeAbbreviation},{" "}
-                  {betTimeFormat(gameId.startTime)}
-                </Card.Description>
+                {gameArray[0].gameId == null ? (
+              <div className="pc-bet">Failed to load game data :-(</div>
+            ) : (
+              gameArray && gameArray.map((game) => (
+                   
+              <div>
+              <div className="pc-bet">
+                {betDescFormat(game.betType, game.betAmount, game.gameId)} {" ("}{betOdds}{")"}
+                <div
+                  style={{
+                    fontWeight: "normal",
+                    fontStyle: "italic",
+                  }}
+                >
+                  {game.gameId.awayAbbreviation} @ {game.gameId.homeAbbreviation},{" "}
+                  {betTimeFormat(game.gameId.startTime)}
+                </div>
+              </div></div>))
+            )}
                 <Card.Description>This is the body: {body}</Card.Description>
               </Card.Content>
               <hr />
@@ -222,27 +232,39 @@ const FETCH_POST_QUERY = gql`
     getPost(postId: $postId) {
       id
       body
-      betType
-      betAmount
-      gameId {
-        homeFullName
-        awayFullName
-        homeRecord
-        awayRecord
-        awayLogo
-        homeLogo
-        awayAbbreviation
-        homeAbbreviation
-        startTime
-        broadcasts
-        spread
-        overUnder
+      betOdds
+      gameArray {
+        gameId {
+          homeFullName
+          awayFullName
+          stateDetails
+          homeRecord
+          awayRecord
+          homeScore
+          awayScore
+          period
+          time
+          awayLogo
+          homeLogo
+          awayAbbreviation
+          homeAbbreviation
+          startTime
+          broadcasts
+          spread
+          overUnder
+        }
+        betType
+        betAmount
       }
       createdAt
       username
       likeCount
       likes {
         username
+      }
+      user {
+        id
+        name
       }
       commentCount
       comments {

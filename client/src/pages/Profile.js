@@ -69,7 +69,7 @@ function Profile(props) {
           open={modalOpen}
           onClose={() => setModalOpen(false)}
           closeIcon
-          dimmer="blurring"
+          // dimmer="blurring"
           style={{ height: "90%" }}
         >
           <Modal.Header>Edit Profile</Modal.Header>
@@ -181,7 +181,6 @@ const FETCH_PROFILE_QUERY = gql`
       followingCount
       followersCount
       notificationCount
-
     }
   }
 `;
