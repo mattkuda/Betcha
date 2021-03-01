@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 
 module.exports = gql`
 
-  # 
+  #
   #Post related items
   #
 
@@ -46,7 +46,7 @@ module.exports = gql`
     username: String!
   }
 
-  # 
+  #
   #User related items
   #
 
@@ -87,7 +87,7 @@ module.exports = gql`
     receiver: User!
   }
 
-  # 
+  #
   #Reaction related items
   #
 
@@ -349,6 +349,8 @@ module.exports = gql`
     homeScore: Int
     awayScore: Int
     time: String
+    quarter: Int
+    half: Int
     period: Int
     down: Int
     distance: Int
@@ -397,10 +399,11 @@ module.exports = gql`
     getPostgamesByLeague(league: String!): [Postgame]
     getTopPregameEvents: [TopEvent]
     getTopLivegameEvents: [TopEvent]
+    getTopPostgameEvents: [TopEvent]
     getGameByID(gameId: String!): Mastergame
     getPlay(playId: String!): Play
     getPlaysInGame(gameId: String!): [Play]
-    getPlaysInGameInPeriod(gameId: String!, period: Int!): [Play]
+    getPlaysInGameInPeriod(gameId: String!, currentPeriod: Int!): [Play]
     getAllReactions: [Reaction]
     getReactionsForPlay(playId: String!): [Reaction]
     getReactionsForUser(userId: String!): [Reaction]
