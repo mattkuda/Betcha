@@ -170,6 +170,7 @@ const FETCH_PROFILE_QUERY = gql`
       name
       location
       bio
+      profilePicture
       website
       followers {
         followerId
@@ -190,26 +191,29 @@ export const FETCH_USER_POSTS_QUERY = gql`
     getUserPosts(username: $profileUsername) {
       id
       body
-      betType
-      betAmount
-      gameId {
-        homeFullName
-        awayFullName
-        stateDetails
-        homeRecord
-        awayRecord
-        homeScore
-        awayScore
-        period
-        time
-        awayLogo
-        homeLogo
-        awayAbbreviation
-        homeAbbreviation
-        startTime
-        broadcasts
-        spread
-        overUnder
+      betOdds
+      gameArray {
+        gameId {
+          homeFullName
+          awayFullName
+          stateDetails
+          homeRecord
+          awayRecord
+          homeScore
+          awayScore
+          period
+          time
+          awayLogo
+          homeLogo
+          awayAbbreviation
+          homeAbbreviation
+          startTime
+          broadcasts
+          spread
+          overUnder
+        }
+        betType
+        betAmount
       }
       createdAt
       username
@@ -217,16 +221,16 @@ export const FETCH_USER_POSTS_QUERY = gql`
       likes {
         username
       }
+      user {
+        id
+        name
+      }
       commentCount
       comments {
         id
         username
         createdAt
         body
-      }
-      user{
-        name
-        id
       }
     }
   }

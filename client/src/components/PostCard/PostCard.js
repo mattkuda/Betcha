@@ -68,18 +68,21 @@ function PostCard({
             {gameArray[0].gameId == null ? (
               <div className="pc-bet">Failed to load game data :-(</div>
             ) : (
+              gameArray && gameArray.map((game) => (
+                   
+              <div>
               <div className="pc-bet">
-                {betDescFormat(gameArray[0].betType, gameArray[0].betAmount, gameArray[0].gameId)} {" ("}{betOdds}{")"}
+                {betDescFormat(game.betType, game.betAmount, game.gameId)} {" ("}{betOdds}{")"}
                 <div
                   style={{
                     fontWeight: "normal",
                     fontStyle: "italic",
                   }}
                 >
-                  {gameArray[0].gameId.awayAbbreviation} @ {gameArray[0].gameId.homeAbbreviation},{" "}
-                  {betTimeFormat(gameArray[0].gameId.startTime)}
+                  {game.gameId.awayAbbreviation} @ {game.gameId.homeAbbreviation},{" "}
+                  {betTimeFormat(game.gameId.startTime)}
                 </div>
-              </div>
+              </div></div>))
             )}
 
             <div className="pc-betBody">{body}</div>
