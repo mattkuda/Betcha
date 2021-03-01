@@ -191,7 +191,7 @@ class GameService {
               rank: game.priority,
               gameState: game.status
             });
-            topEvent.save();
+            await topEvent.save();
           }
         }
       }
@@ -894,205 +894,216 @@ class GameService {
       }
 
       //case 2 - update the livegame (only update games that are in progress)
-      else if (game.fullStatus.type.name === "STATUS_IN_PROGRESS") {
-        console.log("Updating existing game...");
+      else {
 
-        //first, update the live game entry
-        const existingGame = await Livegame.findOne({ gameId: game.id });
-        switch (sport) {
-          case "football":
-            // existingGame.homeScore = parseInt(game.competitors[0].score);
-            // existingGame.awayScore = parseInt(game.competitions[0].competitors[1].score);
-            // existingGame.time = game.clock;
-            // existingGame.period = game.period;
-            // if (this.elementExists(game.situation, "lastPlay")) {
-            //   existingGame.lastPlay = game.situation.lastPlay.text;
-            // }
-            // existingGame.specificData = {
-            //   down: game.competitions[0].situation.down,
-            //   distance: game.competitions[0].situation.distance,
-            //   yardLine: game.competitions[0].situation.yardLine,
-            //   isRedZone: game.competitions[0].situation.isRedZone,
-            //   possession: possessionTeam,
-            // };
-            await existingGame.save();
-            break;
-          case "basketball":
-            if (existingGame) {
-              existingGame.homeScore = 0;
-              if (this.elementExists(game.competitors[0], "score")) {
-                existingGame.homeScore = parseInt(game.competitors[0].score);
-              }
-              existingGame.awayScore = 0;
-              if (this.elementExists(game.competitors[1], "score")) {
-                existingGame.awayScore = parseInt(game.competitors[1].score);
-              }
-              existingGame.time = game.clock;
-              existingGame.period = game.period;
-              if (this.elementExists(game.situation, "lastPlay")) {
-                existingGame.lastPlay = game.situation.lastPlay.text;
-                if (this.elementExists(game.situation.lastPlay, "team")) {
-                  existingGame.specificData = {
-                    possession: game.situation.lastPlay.team.id,
-                  };
-                }
-              }
-              await existingGame.save();
-            }
-            break;
-          case "soccer":
-            if (existingGame) {
-              existingGame.homeScore = 0;
-              if (this.elementExists(game.competitors[0], "score")) {
-                existingGame.homeScore = parseInt(game.competitors[0].score);
-              }
-              existingGame.awayScore = 0;
-              if (this.elementExists(game.competitors[1], "score")) {
-                existingGame.awayScore = parseInt(game.competitors[1].score);
-              }
-              existingGame.time = game.clock;
-              existingGame.period = game.period;
-              if (this.elementExists(game.situation, "lastPlay")) {
-                existingGame.lastPlay = game.situation.lastPlay.text;
-                if (this.elementExists(game.situation.lastPlay, "team")) {
-                  existingGame.specificData = {
-                    possession: game.situation.lastPlay.team.id,
-                    addedClock: game.addedClock
-                  };
-                }
-              }
-              await existingGame.save();
-            }
-            break;
-          case "hockey":
-            if (existingGame) {
-              existingGame.homeScore = 0;
-              if (this.elementExists(game.competitors[0], "score")) {
-                existingGame.homeScore = parseInt(game.competitors[0].score);
-              }
-              existingGame.awayScore = 0;
-              if (this.elementExists(game.competitors[1], "score")) {
-                existingGame.awayScore = parseInt(game.competitors[1].score);
-              }
-              existingGame.time = game.clock;
-              existingGame.period = game.period;
-              if (this.elementExists(game.situation, "lastPlay")) {
-                existingGame.lastPlay = game.situation.lastPlay.text;
-                if (this.elementExists(game.situation.lastPlay, "team")) {
-                  existingGame.specificData = {
-                    possession: game.situation.lastPlay.team.id,
-                  };
-                }
-              }
-              await existingGame.save();
-            }
-            break;
+        if (game.fullStatus.type.name == "STATUS_END_PERIOD" ||
+        game.fullStatus.type.name == "STATUS_HALFTIME") {
+          console.log("Updating state details...");
+          const existingGame = await Livegame.findOne({ gameId: game.id });
+          existingGame.stateDetails = game.fullStatus.type.name;
+          await existingGame.save();
         }
 
+        if (game.fullStatus.type.name === "STATUS_IN_PROGRESS") {
+          console.log("Updating existing game...");
 
-        //if a lastPlay exists, look to see if it's been logged in the DB
-        if (this.elementExists(game.situation, "lastPlay")) {
-          const playExists = await Play.exists({
-            playId: game.situation.lastPlay.id,
-          });
-          if (playExists === false) {
-            console.log("Adding new play...");
+          //first, update the live game entry
+          const existingGame = await Livegame.findOne({ gameId: game.id });
+          switch (sport) {
+            case "football":
+              // existingGame.homeScore = parseInt(game.competitors[0].score);
+              // existingGame.awayScore = parseInt(game.competitions[0].competitors[1].score);
+              // existingGame.time = game.clock;
+              // existingGame.period = game.period;
+              // if (this.elementExists(game.situation, "lastPlay")) {
+              //   existingGame.lastPlay = game.situation.lastPlay.text;
+              // }
+              // existingGame.specificData = {
+              //   down: game.competitions[0].situation.down,
+              //   distance: game.competitions[0].situation.distance,
+              //   yardLine: game.competitions[0].situation.yardLine,
+              //   isRedZone: game.competitions[0].situation.isRedZone,
+              //   possession: possessionTeam,
+              // };
+              await existingGame.save();
+              break;
+            case "basketball":
+              if (existingGame) {
+                existingGame.homeScore = 0;
+                if (this.elementExists(game.competitors[0], "score")) {
+                  existingGame.homeScore = parseInt(game.competitors[0].score);
+                }
+                existingGame.awayScore = 0;
+                if (this.elementExists(game.competitors[1], "score")) {
+                  existingGame.awayScore = parseInt(game.competitors[1].score);
+                }
+                existingGame.time = game.clock;
+                existingGame.period = game.period;
+                if (this.elementExists(game.situation, "lastPlay")) {
+                  existingGame.lastPlay = game.situation.lastPlay.text;
+                  if (this.elementExists(game.situation.lastPlay, "team")) {
+                    existingGame.specificData = {
+                      possession: game.situation.lastPlay.team.id,
+                    };
+                  }
+                }
+                await existingGame.save();
+              }
+              break;
+            case "soccer":
+              if (existingGame) {
+                existingGame.homeScore = 0;
+                if (this.elementExists(game.competitors[0], "score")) {
+                  existingGame.homeScore = parseInt(game.competitors[0].score);
+                }
+                existingGame.awayScore = 0;
+                if (this.elementExists(game.competitors[1], "score")) {
+                  existingGame.awayScore = parseInt(game.competitors[1].score);
+                }
+                existingGame.time = game.clock;
+                existingGame.period = game.period;
+                if (this.elementExists(game.situation, "lastPlay")) {
+                  existingGame.lastPlay = game.situation.lastPlay.text;
+                  if (this.elementExists(game.situation.lastPlay, "team")) {
+                    existingGame.specificData = {
+                      possession: game.situation.lastPlay.team.id,
+                      addedClock: game.addedClock
+                    };
+                  }
+                }
+                await existingGame.save();
+              }
+              break;
+            case "hockey":
+              if (existingGame) {
+                existingGame.homeScore = 0;
+                if (this.elementExists(game.competitors[0], "score")) {
+                  existingGame.homeScore = parseInt(game.competitors[0].score);
+                }
+                existingGame.awayScore = 0;
+                if (this.elementExists(game.competitors[1], "score")) {
+                  existingGame.awayScore = parseInt(game.competitors[1].score);
+                }
+                existingGame.time = game.clock;
+                existingGame.period = game.period;
+                if (this.elementExists(game.situation, "lastPlay")) {
+                  existingGame.lastPlay = game.situation.lastPlay.text;
+                  if (this.elementExists(game.situation.lastPlay, "team")) {
+                    existingGame.specificData = {
+                      possession: game.situation.lastPlay.team.id,
+                    };
+                  }
+                }
+                await existingGame.save();
+              }
+              break;
+          }
 
-            //add default data
-            const playData = {
+
+          //if a lastPlay exists, look to see if it's been logged in the DB
+          if (this.elementExists(game.situation, "lastPlay")) {
+            const playExists = await Play.exists({
               playId: game.situation.lastPlay.id,
-              description: game.situation.lastPlay.text,
-              scoreValue: game.situation.lastPlay.scoreValue,
-              gameId: game.id,
-              createdAt: new Date().toISOString(),
-              specificData: {},
-            };
+            });
+            if (playExists === false) {
+              console.log("Adding new play...");
 
-            let possession = "";
-            if (this.elementExists(game.situation.lastPlay, "team")) {
-              possession = game.situation.lastPlay.team.id
+              //add default data
+              const playData = {
+                playId: game.situation.lastPlay.id,
+                description: game.situation.lastPlay.text,
+                scoreValue: game.situation.lastPlay.scoreValue,
+                gameId: game.id,
+                createdAt: new Date().toISOString(),
+                specificData: {},
+              };
+
+              let possession = "";
+              if (this.elementExists(game.situation.lastPlay, "team")) {
+                possession = game.situation.lastPlay.team.id
+              }
+
+              //add league-specific data
+              switch (league) {
+                case "nfl":
+                  // playData.specificData = {
+                  //   homeScore: parseInt(
+                  //     game.competitions[0].competitors[0].score
+                  //   ),
+                  //   awayScore: parseInt(
+                  //     game.competitions[0].competitors[1].score
+                  //   ),
+                  //   time: game.competitions[0].status.displayClock,
+                  //   quarter: game.competitions[0].status.period,
+                  //   down: game.competitions[0].situation.down,
+                  //   distance: game.competitions[0].situation.distance,
+                  //   yardLine: game.competitions[0].situation.yardLine,
+                  //   possession: possessionTeam,
+                  // };
+                  break;
+                case "college-football":
+                  // playData.specificData = {
+                  //   homeScore: parseInt(
+                  //     game.competitions[0].competitors[0].score
+                  //   ),
+                  //   awayScore: parseInt(
+                  //     game.competitions[0].competitors[1].score
+                  //   ),
+                  //   time: game.competitions[0].status.displayClock,
+                  //   quarter: game.competitions[0].status.period,
+                  //   down: game.competitions[0].situation.down,
+                  //   distance: game.competitions[0].situation.distance,
+                  //   yardLine: game.competitions[0].situation.yardLine,
+                  //   possession: possessionTeam,
+                  // };
+                  break;
+
+                //live test to add more logic to this
+                case "mens-college-basketball":
+                  playData.specificData = {
+                    homeScore: parseInt(game.competitors[0].score),
+                    awayScore: parseInt(game.competitors[1].score),
+                    time: game.clock,
+                    half: game.period,
+                    possession: possession,
+                  };
+                  break;
+                case "nba":
+                  playData.specificData = {
+                    homeScore: parseInt(game.competitors[0].score),
+                    awayScore: parseInt(game.competitors[1].score),
+                    time: game.clock,
+                    quarter: game.period,
+                    possession: possession,
+                  };
+                  break;
+                case "eng.1":
+                case "usa.1":
+                case "uefa.champions":
+                  playData.specificData = {
+                    homeScore: parseInt(game.competitors[0].score),
+                    awayScore: parseInt(game.competitors[1].score),
+                    time: game.clock,
+                    half: game.period,
+                    possession: possession,
+                  };
+                  break;
+                case "nhl":
+                  playData.specificData = {
+                    homeScore: parseInt(game.competitors[0].score),
+                    awayScore: parseInt(game.competitors[1].score),
+                    time: game.clock,
+                    period: game.period,
+                    possession: possession,
+                  };
+                  break;
+                default:
+              }
+
+              //saving to DB
+              let currentPlay = new Play(playData);
+              currentPlay.save();
             }
-
-            //add league-specific data
-            switch (league) {
-              case "nfl":
-                // playData.specificData = {
-                //   homeScore: parseInt(
-                //     game.competitions[0].competitors[0].score
-                //   ),
-                //   awayScore: parseInt(
-                //     game.competitions[0].competitors[1].score
-                //   ),
-                //   time: game.competitions[0].status.displayClock,
-                //   quarter: game.competitions[0].status.period,
-                //   down: game.competitions[0].situation.down,
-                //   distance: game.competitions[0].situation.distance,
-                //   yardLine: game.competitions[0].situation.yardLine,
-                //   possession: possessionTeam,
-                // };
-                break;
-              case "college-football":
-                // playData.specificData = {
-                //   homeScore: parseInt(
-                //     game.competitions[0].competitors[0].score
-                //   ),
-                //   awayScore: parseInt(
-                //     game.competitions[0].competitors[1].score
-                //   ),
-                //   time: game.competitions[0].status.displayClock,
-                //   quarter: game.competitions[0].status.period,
-                //   down: game.competitions[0].situation.down,
-                //   distance: game.competitions[0].situation.distance,
-                //   yardLine: game.competitions[0].situation.yardLine,
-                //   possession: possessionTeam,
-                // };
-                break;
-
-              //live test to add more logic to this
-              case "mens-college-basketball":
-                playData.specificData = {
-                  homeScore: parseInt(game.competitors[0].score),
-                  awayScore: parseInt(game.competitors[1].score),
-                  time: game.clock,
-                  half: game.period,
-                  possession: possession,
-                };
-                break;
-              case "nba":
-                playData.specificData = {
-                  homeScore: parseInt(game.competitors[0].score),
-                  awayScore: parseInt(game.competitors[1].score),
-                  time: game.clock,
-                  quarter: game.period,
-                  possession: possession,
-                };
-                break;
-              case "eng.1":
-              case "usa.1":
-              case "uefa.champions":
-                playData.specificData = {
-                  homeScore: parseInt(game.competitors[0].score),
-                  awayScore: parseInt(game.competitors[1].score),
-                  time: game.clock,
-                  half: game.period,
-                  possession: possession,
-                };
-                break;
-              case "nhl":
-                playData.specificData = {
-                  homeScore: parseInt(game.competitors[0].score),
-                  awayScore: parseInt(game.competitors[1].score),
-                  time: game.clock,
-                  period: game.period,
-                  possession: possession,
-                };
-                break;
-              default:
-            }
-
-            //saving to DB
-            let currentPlay = new Play(playData);
-            currentPlay.save();
           }
         }
       }
