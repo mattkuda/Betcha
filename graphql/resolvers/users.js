@@ -133,6 +133,7 @@ module.exports = {
         username,
         password,
         createdAt: new Date().toISOString(),
+        profilePicture: "https://react.semantic-ui.com/images/avatar/large/matthew.png"
       });
       const res = await newUser.save();
 
@@ -159,7 +160,9 @@ module.exports = {
           userME.bio = bio;
           userME.location = location;
           userME.website = website;
-          userME.profilePicture = profilePicture;
+
+          //Only update propic if user uploaded one
+          if(profilePicture != null) userME.profilePicture = profilePicture;
 
           await userME.save();
           return userME;

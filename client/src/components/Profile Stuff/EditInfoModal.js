@@ -15,7 +15,7 @@ function EditInfoModal(props) {
     bio: props.bio,
     location: props.location,
     website: props.website,
-    profilePicture: props.profilePicture,
+    profilePicture: null,
   });
 
   const [updateInfo, { error }] = useMutation(UPDATE_INFO_MUTATION, {
@@ -43,7 +43,38 @@ function EditInfoModal(props) {
     }
   };
 
+  const uploadImages = async() =>{
+    return new Promise((resolve, reject) => {
+      console.log("Start of: uploadImages");
+
+      const uploadTask = storage.ref(`images/${image.name}`).put(image);
+      
+        uploadTask.on("state_changed", {
+          error: error => {
+            console.error(error);
+            reject(error);
+          },
+          complete: () => {
+            storage
+              .ref("images")
+              .child(image.name)
+              .getDownloadURL()
+              .then((url) => {
+                console.log("the url is: " + url);
+                values.profilePicture = url;
+                console.log("End of: uploadImages");
+                resolve();
+                //return url;
+              });
+          }
+        });
+      });
+    }
+  
+
   const handleUpload = async () => {
+    console.log("Start of: handleUpload");
+
     const uploadTask = storage.ref(`images/${image.name}`).put(image);
     uploadTask.on(
       "state_changed",
@@ -64,26 +95,30 @@ function EditInfoModal(props) {
           .then((url) => {
             console.log("the url is: " + url);
             values.profilePicture = url;
+            console.log("Start of: handleUpload");
+
             return url;
           });
       }
     );
   };
 
-  function updateInfoCallback() {
+  async function updateInfoCallback() {
     //only upload if the image has changed
     if (image != null) {
-      uploadFileCallback();
+      console.log("Start of: updateInfoCallback");
+      await uploadImages();
+      
+      console.log('le values are: ' +JSON.stringify(values));
       updateInfo();
+      console.log("End of: updateInfoCallback");
+
     } else {
       updateInfo();
     }
   }
 
-  const uploadFileCallback = async () => {
-    handleUpload();
-    return true;
-  };
+  
 
   return (
     <div>
@@ -140,7 +175,7 @@ const UPDATE_INFO_MUTATION = gql`
     $bio: String!
     $location: String!
     $website: String!
-    $profilePicture: String!
+    $profilePicture: String
   ) {
     updateInfo(
       name: $name

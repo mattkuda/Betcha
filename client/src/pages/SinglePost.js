@@ -99,6 +99,7 @@ function SinglePost(props) {
       likes,
       likeCount,
       commentCount,
+      user
     } = getPost;
 
     values.receiverId = getPost.user.id;
@@ -110,7 +111,7 @@ function SinglePost(props) {
         <Grid.Row>
           <Grid.Column width={2}>
             <Image
-              src="https://react.semantic-ui.com/images/avatar/large/matthew.png"
+              src={`${user.profilePicture}`}
               size="small"
               float="right"
             />
@@ -265,6 +266,7 @@ const FETCH_POST_QUERY = gql`
       user {
         id
         name
+        profilePicture
       }
       commentCount
       comments {
@@ -273,10 +275,7 @@ const FETCH_POST_QUERY = gql`
         createdAt
         body
       }
-      user{
-        id
-        name
-      }
+      
     }
   }
 `;

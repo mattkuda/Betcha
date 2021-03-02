@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { Card, Icon, Label, Image, Button } from "semantic-ui-react";
+import { Card, Icon, Label, Button } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 import moment from "moment";
 import MyPopup from "../../util/MyPopup";
@@ -10,7 +10,6 @@ import { AuthContext } from "../../context/auth";
 import LikeButton from "../Buttons/LikeButton";
 import DeleteButton from "../Buttons/DeleteButton";
 
-import { FETCH_POSTS_QUERY } from "../../util/graphql";
 import { betDescFormat } from "../../util/Extensions/betDescFormat";
 import { betTimeFormat } from "../../util/Extensions/betTimeFormat";
 import { liveGameDescFormat } from "../../util/Extensions/liveGameDescFormat";
@@ -47,11 +46,17 @@ function PostCard({
           <div
             style={{ display: "inline-block", width: "auto", height: "100%" }}
           >
+            <Button
+              type="button"
+              onClick={() => console.log("user info:" + JSON.stringify(user))}
+            >
+              YO
+            </Button>
             <div>
               <img
                 className="pc-img"
                 alt="profile-pic"
-                src="https://react.semantic-ui.com/images/avatar/large/matthew.png"
+                src={`${user.profilePicture}`}
               ></img>
             </div>
           </div>
@@ -66,29 +71,39 @@ function PostCard({
             </div>
 
             {gameArray[0].gameId == null ? (
-              <div className="pc-bet">Failed to load game data :-(</div>
+              <div className="pc-bet">Failed to load game data</div>
             ) : (
-              gameArray && gameArray.map((game) => (
-                   
-              <div>
-              <div className="pc-bet">
-                {betDescFormat(game.betType, game.betAmount, game.gameId)} {" ("}{betOdds}{")"}
-                <div
-                  style={{
-                    fontWeight: "normal",
-                    fontStyle: "italic",
-                  }}
-                >
-                  {game.gameId.awayAbbreviation} @ {game.gameId.homeAbbreviation},{" "}
-                  {betTimeFormat(game.gameId.startTime)}
+              gameArray &&
+              gameArray.map((game) => (
+                <div>
+                  <div className="pc-bet">
+                    {betDescFormat(game.betType, game.betAmount, game.gameId)}{" "}
+                    {" ("}
+                    {betOdds}
+                    {")"}
+                    <div
+                      style={{
+                        fontWeight: "normal",
+                        fontStyle: "italic",
+                      }}
+                    >
+                      {game.gameId.awayAbbreviation} @{" "}
+                      {game.gameId.homeAbbreviation},{" "}
+                      {betTimeFormat(game.gameId.startTime)}
+                    </div>
+                  </div>
                 </div>
-              </div></div>))
+              ))
             )}
 
             <div className="pc-betBody">{body}</div>
             <div className="pc-buttons">
               <Button onClick={(e) => console.log(userME)}>userME</Button>
-              <LikeButton user={userME} receiver= {user.id} post={{ id, likes, likeCount }} />
+              <LikeButton
+                user={userME}
+                receiver={user.id}
+                post={{ id, likes, likeCount }}
+              />
               <MyPopup content="Commment on post" inverted>
                 <Button labelPosition="right" as={Link} to={`/posts/${id}`}>
                   <Button color="blue" basic>
@@ -128,7 +143,7 @@ function PostCard({
               <img
                 className="pc-img"
                 alt="profile-pic"
-                src="https://react.semantic-ui.com/images/avatar/large/matthew.png"
+                src={`${user.profilePicture}`}
               ></img>
             </div>
           </div>
@@ -143,10 +158,15 @@ function PostCard({
             </div>
 
             {gameArray[0].gameId == null ? (
-              <div className="pc-bet">Failed to load game data :-(</div>
+              <div className="pc-bet">Failed to load game data</div>
             ) : (
               <div className="pc-bet">
-                {betDescFormat(gameArray[0].betType, gameArray[0].betAmount, gameArray[0].gameId)} ·{" "}
+                {betDescFormat(
+                  gameArray[0].betType,
+                  gameArray[0].betAmount,
+                  gameArray[0].gameId
+                )}{" "}
+                ·{" "}
                 <div
                   style={{
                     display: "inline-block",
@@ -161,7 +181,11 @@ function PostCard({
 
             <div className="pc-betBody">{body}</div>
             <div className="pc-buttons">
-              <LikeButton user={userME} receiver= {user.id} post={{ id, likes, likeCount }} />
+              <LikeButton
+                user={userME}
+                receiver={user.id}
+                post={{ id, likes, likeCount }}
+              />
               <MyPopup content="Commment on post" inverted>
                 <Button labelPosition="right" as={Link} to={`/posts/${id}`}>
                   <Button color="blue" basic>
@@ -201,7 +225,7 @@ function PostCard({
               <img
                 className="pc-img"
                 alt="profile-pic"
-                src="https://react.semantic-ui.com/images/avatar/large/matthew.png"
+                src={`${user.profilePicture}`}
               ></img>
             </div>
           </div>
@@ -216,7 +240,7 @@ function PostCard({
             </div>
 
             {gameArray[0].gameId == null ? (
-              <div className="pc-bet">Failed to load game data :-(</div>
+              <div className="pc-bet">Failed to load game data</div>
             ) : (
               <div className="pc-bet">
                 <div
@@ -227,7 +251,11 @@ function PostCard({
                     gameArray[0].betAmount
                   )}
                 >
-                  {betDescFormat(gameArray[0].betType, gameArray[0].betAmount, gameArray[0].gameId)}
+                  {betDescFormat(
+                    gameArray[0].betType,
+                    gameArray[0].betAmount,
+                    gameArray[0].gameId
+                  )}
                 </div>
 
                 <div
@@ -244,7 +272,11 @@ function PostCard({
 
             <div className="pc-betBody">{body}</div>
             <div className="pc-buttons">
-              <LikeButton user={userME} receiver= {user.id} post={{ id, likes, likeCount }} />
+              <LikeButton
+                user={userME}
+                receiver={user.id}
+                post={{ id, likes, likeCount }}
+              />
               <MyPopup content="Commment on post" inverted>
                 <Button labelPosition="right" as={Link} to={`/posts/${id}`}>
                   <Button color="blue" basic>
