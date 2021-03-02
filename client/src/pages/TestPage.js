@@ -49,6 +49,7 @@ function TestPage(props) {
           (snapshot.bytesTransferred / snapshot.totalBytes) * 100
         );
         setProgress(progress);
+        console.log(progress);
       },
       error => {
         console.log(error);

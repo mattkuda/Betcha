@@ -55,6 +55,7 @@ function Profile(props) {
       name,
       bio,
       website,
+      profilePicture,
       createdAt,
       followingCount,
       followersCount,
@@ -69,7 +70,7 @@ function Profile(props) {
           open={modalOpen}
           onClose={() => setModalOpen(false)}
           closeIcon
-          dimmer="blurring"
+          // dimmer="blurring"
           style={{ height: "90%" }}
         >
           <Modal.Header>Edit Profile</Modal.Header>
@@ -80,6 +81,7 @@ function Profile(props) {
               bio={bio}
               location={location}
               website={website}
+            
             />
           </Modal.Content>
         </Modal>
@@ -87,7 +89,7 @@ function Profile(props) {
           <Grid.Row>
             <Grid.Column width={2}>
               <Image
-                src="https://react.semantic-ui.com/images/avatar/large/matthew.png"
+                src={profilePicture}
                 size="small"
                 float="right"
               />
@@ -181,7 +183,6 @@ const FETCH_PROFILE_QUERY = gql`
       followingCount
       followersCount
       notificationCount
-
     }
   }
 `;
@@ -224,6 +225,7 @@ export const FETCH_USER_POSTS_QUERY = gql`
       user {
         id
         name
+        profilePicture
       }
       commentCount
       comments {

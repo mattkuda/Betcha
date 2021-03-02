@@ -430,6 +430,7 @@ module.exports = gql`
       bio: String!
       location: String!
       website: String!
+      profilePicture: String
     ): User!
     deletePost(postId: ID!): String!
     createComment(postId: ID!, body: String!): Post!

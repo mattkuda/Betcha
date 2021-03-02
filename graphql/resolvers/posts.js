@@ -117,7 +117,7 @@ module.exports = {
       let user = await User.find({ username: parent.username }).then(
         (users) => users[0]
       );
-
+        console.log("this user is being returned: " + JSON.stringify(user));
       return user;
     },
   },
