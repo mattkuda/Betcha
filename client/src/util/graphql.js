@@ -633,6 +633,36 @@ export const FETCH_PLAYS_IN_NBA_GAME = gql`
   }
 `;
 
+
+export const FETCH_PLAYS_IN_NBA_GAME_IN_PERIOD = gql`
+  query($myGameId: String!, $myPeriod: Int!) {
+    getPlaysInNBAGameInPeriod(gameId: $myGameId, currentPeriod: $myPeriod) {
+      id
+      playId
+      description
+      scoreValue
+      game {
+        homeLogo
+        awayLogo
+        homeFullName
+        awayFullName
+        homeAbbreviation
+        awayAbbreviation
+        homeId
+        awayId
+      }
+      specificData {
+        homeScore
+        awayScore
+        time
+        quarter
+        possession
+      }
+    }
+  }
+`;
+
+
 export const FETCH_NCCABMENS_GAMEPRES_QUERY = gql`
   {
     getNCAABMensPregames {
