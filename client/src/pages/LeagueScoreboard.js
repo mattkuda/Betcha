@@ -6,6 +6,7 @@ import NFLGame from "../components/GameTypes/NFLGame";
 import NCAAFGame from "../components/GameTypes/NCAAFGame";
 import NCAABMensGame from "../components/GameTypes/NCAABMensGame";
 import NBAGame from "../components/GameTypes/NBAGame";
+import Game from "../components/GameTypes/Game";
 import { Grid } from "semantic-ui-react";
 import { FETCH_NFL_PREGAMES, FETCH_NFL_LIVEGAMES, FETCH_NFL_POSTGAMES,
          FETCH_NCAAF_PREGAMES, FETCH_NCAAF_LIVEGAMES, FETCH_NCAAF_POSTGAMES,
@@ -474,7 +475,7 @@ function LeagueScoreboard(props) {
                   <Grid.Column>
                     <Link to={`/scoreboard/${myLeague}/${game.gameId}`}>
                       <span className="card" style={{"display": "block"}}>
-                        <NBAGame key={game.gameId} {...game} />
+                        <Game key={game.gameId} {...game} />
                       </span>
                     </Link>
                   </Grid.Column>
@@ -493,7 +494,7 @@ function LeagueScoreboard(props) {
                 <Grid.Column>
                   <Link to={`/scoreboard/${myLeague}/${game.gameId}`}>
                     <span className="card" style={{"display": "block"}}>
-                      <NBAGame key={game.gameId} {...game} />
+                      <Game key={game.gameId} {...game} />
                     </span>
                   </Link>
                 </Grid.Column>
@@ -512,7 +513,7 @@ function LeagueScoreboard(props) {
                 <Grid.Column>
                   <Link to={`/scoreboard/${myLeague}/${game.gameId}`}>
                     <span className="card" style={{"display": "block"}}>
-                      <NBAGame key={game.gameId} {...game} />
+                      <Game key={game.gameId} {...game} />
                     </span>
                   </Link>
                 </Grid.Column>
@@ -541,7 +542,7 @@ function LeagueScoreboard(props) {
                   <Grid.Column>
                     <Link to={`/scoreboard/${myLeague}/${game.gameId}`}>
                       <span className="card" style={{"display": "block"}}>
-                        <NBAGame key={game.gameId} {...game} />
+                        <Game key={game.gameId} {...game} />
                       </span>
                     </Link>
                   </Grid.Column>
@@ -560,7 +561,7 @@ function LeagueScoreboard(props) {
                 <Grid.Column>
                   <Link to={`/scoreboard/${myLeague}/${game.gameId}`}>
                     <span className="card" style={{"display": "block"}}>
-                      <NBAGame key={game.gameId} {...game} />
+                      <Game key={game.gameId} {...game} />
                     </span>
                   </Link>
                 </Grid.Column>
@@ -579,7 +580,7 @@ function LeagueScoreboard(props) {
                 <Grid.Column>
                   <Link to={`/scoreboard/${myLeague}/${game.gameId}`}>
                     <span className="card" style={{"display": "block"}}>
-                      <NBAGame key={game.gameId} {...game} />
+                      <Game key={game.gameId} {...game} />
                     </span>
                   </Link>
                 </Grid.Column>

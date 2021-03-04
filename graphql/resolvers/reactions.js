@@ -53,7 +53,7 @@ module.exports = {
     async play(parent) {
       let play = await Play.find({playId: parent.playId})
       .then(plays => plays[0]);
-      //console.log(play);
+      console.log(play);
       return play;
     }
   }

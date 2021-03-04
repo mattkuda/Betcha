@@ -21,7 +21,7 @@ module.exports = {
 
     ...userResolvers.User,
   },
-  
+
   Query: {
     ...postResolvers.Query,
     ...userResolvers.Query,
@@ -42,7 +42,7 @@ module.exports = {
     ...postResolvers.Subscription,
   },
   Reaction: {
-    ...reactionResolvers.React,
+    ...reactionResolvers.Reaction,
   },
   Notification: {
     ...notificationResolvers.Notification,

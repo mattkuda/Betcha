@@ -892,11 +892,19 @@ class GameService {
           console.log("Updating game state for top event...");
           const filter = { gameId: game.id };
           const update = { gameState: "in" };
-          TopEvent.findOneAndUpdate(filter, update);
+          TopEvent.findOneAndUpdate(filter, update, (err, result) => {
+            if (err) {
+              console.log(err);
+            }
+          });
         }
 
         //deleting entry from pregames DB
-        Pregame.findOneAndDelete({ gameId: game.id });
+        Pregame.findOneAndDelete({ gameId: game.id }, (err, result) => {
+          if (err) {
+            console.log(err);
+          }
+        });
       }
 
       //case 2 - update the livegame (only update games that are in progress)
@@ -1239,11 +1247,19 @@ class GameService {
           const isTopEvent = await TopEvent.exists({ gameId: game.id });
           if (isTopEvent === true) {
             console.log("Removing from top events...");
-            TopEvent.findOneAndDelete({ gameId: game.id });
+            TopEvent.findOneAndDelete({ gameId: game.id }, (err, result) => {
+              if (err) {
+                console.log(err);
+              }
+            });
           }
 
           //deleting entry from livegames DB
-          Livegame.findOneAndDelete({ gameId: game.id });
+          Livegame.findOneAndDelete({ gameId: game.id }, (err, result) => {
+            if (err) {
+              console.log(err);
+            }
+          });
         }
       }
     }
