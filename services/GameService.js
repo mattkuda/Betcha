@@ -901,11 +901,10 @@ class GameService {
 
       //case 2 - update the livegame (only update games that are in progress)
       else {
-
-        if (game.fullStatus.type.name == "STATUS_END_PERIOD" ||
-        game.fullStatus.type.name == "STATUS_HALFTIME") {
-          console.log("Updating state details...");
-          const existingGame = await Livegame.findOne({ gameId: game.id });
+        const existingGame = await Livegame.findOne({ gameId: game.id });
+        if (existingGame.stateDetails === "STATUS_IN_PROGRESS" &&
+        game.fullStatus.type.name !== "STATUS_IN_PROGRESS") {
+          console.log("End of period - updating state details...");
           existingGame.stateDetails = game.fullStatus.type.name;
           await existingGame.save();
         }
@@ -913,8 +912,12 @@ class GameService {
         if (game.fullStatus.type.name === "STATUS_IN_PROGRESS") {
           console.log("Updating existing game...");
 
+          if (existingGame.stateDetails !== "STATUS_IN_PROGRESS") {
+            console.log("Play resumed - updating state details...");
+            existingGame.stateDetails = game.fullStatus.type.name;
+          }
+
           //first, update the live game entry
-          const existingGame = await Livegame.findOne({ gameId: game.id });
           switch (sport) {
             case "football":
               // existingGame.homeScore = parseInt(game.competitors[0].score);
