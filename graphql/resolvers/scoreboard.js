@@ -55,6 +55,14 @@ module.exports = {
         throw new Error(err);
       }
     },
+    async getTopPostgameEvents() {
+      try {
+        const topEvents = await TopEvent.find({gameState: "post"}).sort({rank: 1});
+        return topEvents;
+      } catch (err) {
+        throw new Error(err);
+      }
+    },
     async getGameByID(_, { gameId }) {
       try {
         let game = await Pregame.find({ gameId: gameId });
@@ -80,16 +88,28 @@ module.exports = {
   },
   TopEvent: {
     async game(parent) {
-      let game = await Pregame.find({ gameId: parent.gameId });
-      if (game != null && game.length > 0) {
-        return game[0];
+
+      if (parent.gameState === "pre") {
+        let game = await Pregame.find({ gameId: parent.gameId });
+        if (game !== null && game.length > 0) {
+          return game[0];
+        }
       }
-      else {
-        game = await Livegame.find({ gameId: parent.gameId });
+
+      if (parent.gameState === "in") {
+        let game = await Livegame.find({ gameId: parent.gameId });
         if (game != null && game.length > 0) {
           return game[0];
         }
       }
+
+      if (parent.gameState === "post") {
+        let game = await Postgame.find({ gameId: parent.gameId });
+        if (game != null && game.length > 0) {
+          return game[0];
+        }
+      }
+
     }
   }
 };

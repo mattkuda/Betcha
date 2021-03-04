@@ -50,9 +50,19 @@ class GameService {
     return yyyy+mm+dd
   }
 
+  /*
+  Checks if a date is equal to the current day.
+  */
+  isToday(day) {
+    const today = new Date();
+    return day.getDate() === today.getDate() &&
+      day.getMonth() === today.getMonth() &&
+      day.getFullYear() === today.getFullYear();
+  }
+
 
   /*
-  Function to determine which team covered the spread.
+  Determine which team covered the spread.
   */
   calculateSpreadWinner(homeScore, awayScore, homeAbbreviation, awayAbbreviation, favoredTeam, spread) {
 
@@ -103,7 +113,7 @@ class GameService {
 
 
   /*
-  Function to determine if the game went over or under.
+  Determine if the game went over or under.
   */
   calculateOuResult(totalScore, ou) {
     if (totalScore < ou) return "U";
@@ -120,6 +130,7 @@ class GameService {
     this.fillSportListAndTick();
     this.timerID = setInterval(() => {
       this.tick();
+      console.log("ctr = "+this.ctr);
       if (this.ctr < (ONE_DAY_IN_MS / LIVE_TICK_INTERVAL)) {
         this.ctr = this.ctr + 1;
       } else {
@@ -207,8 +218,12 @@ class GameService {
     var next;
     var day_ctr = 1;
     while (day_ctr < TOTAL_PREGAME_DAYS) {
-      const url = "http://site.api.espn.com/apis/v2/scoreboard/header?sport="+
-      sport+"&league="+league+college+"&dates="+this.convertDate(day);
+      let url = "http://site.api.espn.com/apis/v2/scoreboard/header?sport="+
+      sport+"&league="+league+college+"&dates="+this.convertDate(day)+"&enable=odds";
+      if (isToday(day)) {
+        url = "http://site.api.espn.com/apis/v2/scoreboard/header?sport="+
+        sport+"&league="+league+college+"&enable=odds";
+      }
       const response = await fetch(url);
       const data = await response.json();
       console.log("Processing data for " + league);
@@ -231,8 +246,12 @@ class GameService {
     var next;
     var day_ctr = 1;
     while (day_ctr < TOTAL_PREGAME_DAYS) {
-      const url = "http://site.api.espn.com/apis/v2/scoreboard/header?sport="+
-      sport+"&league="+league+college+"&dates="+this.convertDate(day);
+      let url = "http://site.api.espn.com/apis/v2/scoreboard/header?sport="+
+      sport+"&league="+league+college+"&dates="+this.convertDate(day)+"&enable=odds";
+      if (isToday(day)) {
+        url = "http://site.api.espn.com/apis/v2/scoreboard/header?sport="+
+        sport+"&league="+league+college+"&enable=odds";
+      }
       const response = await fetch(url);
       const data = await response.json();
       console.log("Processing data for " + league);
@@ -387,7 +406,7 @@ class GameService {
     var day = new Date();
     console.log("Updating odds for today's games...");
     const url = "http://site.api.espn.com/apis/v2/scoreboard/header?sport="+
-    sport+"&league="+league+college+"&dates="+this.convertDate(day);
+    sport+"&league="+league+college+"&dates="+this.convertDate(day)+"&enable=odds";
     const response = await fetch(url);
     const data = await response.json();
     console.log("Processing data for " + league);
@@ -627,7 +646,7 @@ class GameService {
 
         //saving to DB
         let g = new Pregame(contents);
-        g.save();
+        await g.save();
       }
     }
   }
@@ -637,8 +656,6 @@ class GameService {
   Process live game data and check if any games have ended.
   */
   async processData(sport, league, college) {
-
-    var day = new Date();
     const url = "http://site.api.espn.com/apis/v2/scoreboard/header?sport="+
     sport+"&league="+league+college;
     const response = await fetch(url);
@@ -651,11 +668,11 @@ class GameService {
     const myData = data.sports[0].leagues[0].events
 
     if (myData) {
-      myData.forEach((game) => {
+      for (const game of myData) {
         const gameState = game.status;
         if (gameState === "in") games_in.push(game);
         if (gameState === "post") games_post.push(game);
-      });
+      }
     }
 
     if (games_in.length > 0) {
@@ -866,31 +883,20 @@ class GameService {
 
         //saving to DB
         let g = new Livegame(contents);
-        g.save();
+        await g.save();
 
 
         //if this is a top event, we should update the game state
         const isTopEvent = await TopEvent.exists({ gameId: game.id });
         if (isTopEvent === true) {
           console.log("Updating game state for top event...");
-          TopEvent.findOneAndUpdate(
-            { gameId: game.id },
-            {
-              gameState: "in",
-            },
-            (err, result) => {
-              if (err) console.log(err);
-            }
-          );
+          const filter = { gameId: game.id };
+          const update = { gameState: "in" };
+          TopEvent.findOneAndUpdate(filter, update);
         }
 
         //deleting entry from pregames DB
-        Pregame.findOneAndDelete({ gameId: game.id }, (err, result) => {
-          console.log("Deleting from pregame...");
-          if (err) {
-            console.log(err);
-          }
-        });
+        Pregame.findOneAndDelete({ gameId: game.id });
       }
 
       //case 2 - update the livegame (only update games that are in progress)
@@ -1102,7 +1108,7 @@ class GameService {
 
               //saving to DB
               let currentPlay = new Play(playData);
-              currentPlay.save();
+              await currentPlay.save();
             }
           }
         }
@@ -1237,27 +1243,17 @@ class GameService {
 
           //saving to DB
           let g = new Postgame(contents);
-          g.save();
+          await g.save();
 
           //if this was a top event, we should remove it from the TopEvent collection
           const isTopEvent = await TopEvent.exists({ gameId: game.id });
           if (isTopEvent === true) {
             console.log("Removing from top events...");
-            TopEvent.findOneAndDelete({ gameId: game.id }, (err, result) => {
-              if (err) {
-                console.log(err);
-              }
-            });
+            TopEvent.findOneAndDelete({ gameId: game.id });
           }
 
           //deleting entry from livegames DB
-          Livegame.findOneAndDelete({ gameId: game.id }, (err, result) => {
-            console.log("Deleting from livegame...");
-            if (err) {
-              console.log(err);
-            }
-          });
-
+          Livegame.findOneAndDelete({ gameId: game.id });
         }
       }
     }

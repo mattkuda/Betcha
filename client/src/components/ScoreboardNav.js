@@ -55,6 +55,22 @@ function ScoreboardNav() {
           as={Link}
           to="/scoreboard/nba"
         />
+        <Menu.Item
+          name="nhl"
+          content="NHL"
+          active={activeItem === "nhl"}
+          onClick={handleItemClick}
+          as={Link}
+          to="/scoreboard/nhl"
+        />
+        <Menu.Item
+          name="eng.1"
+          content="Premier League"
+          active={activeItem === "eng.1"}
+          onClick={handleItemClick}
+          as={Link}
+          to="/scoreboard/eng.1"
+        />
       </Menu>
   )
 }
