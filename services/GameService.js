@@ -168,17 +168,17 @@ class GameService {
       if (this.ctr === 1) {
         this.addUpcomingGames(sport, league, allCollegeTeams);
       }
-      if (this.ctr === TODAYS_GAMES_ODDS_UPDATE_INTERVAL / LIVE_TICK_INTERVAL) {
+      if (this.ctr % (TODAYS_GAMES_ODDS_UPDATE_INTERVAL / LIVE_TICK_INTERVAL) === 0) {
         this.updateOddsForTodaysGames(sport, league, allCollegeTeams);
       }
-      if (this.ctr === TOP_EVENT_INTERVAL / LIVE_TICK_INTERVAL) {
+      if (this.ctr % (TOP_EVENT_INTERVAL / LIVE_TICK_INTERVAL) === 0) {
         const url = "http://site.api.espn.com/apis/v2/scoreboard/header?id=0";
         const response = await fetch(url);
         const data = await response.json();
         console.log("Processing top events");
         this.processTopEvents(data.sports);
       }
-      if (this.ctr === GENERAL_UPDATE_INTERVAL / LIVE_TICK_INTERVAL) {
+      if (this.ctr % (GENERAL_UPDATE_INTERVAL / LIVE_TICK_INTERVAL) === 0) {
         this.updateVariableGameInfo(sport, league, allCollegeTeams);
       }
       this.processData(sport, league, allCollegeTeams);   //livegames and postgames
