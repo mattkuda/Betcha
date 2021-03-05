@@ -22,10 +22,10 @@ module.exports = {
         throw new Error(err);
       }
     },
-    async getPlaysInGameInPeriod(_, { gameId, period }) {
+    async getPlaysInNBAGameInPeriod(_, { gameId, currentPeriod }) {
       try {
         //may want to add a check for invalid period entry
-        let plays = await Play.find({gameId: gameId, 'specificData.period': period}).sort({ createdAt: -1 });
+        let plays = await Play.find({gameId: gameId, 'specificData.quarter': currentPeriod}).sort({ createdAt: -1 });
         return plays;
       } catch (err) {
         throw new Error(err);

@@ -21,7 +21,7 @@ module.exports = {
 
     ...userResolvers.User,
   },
-  
+
   Query: {
     ...postResolvers.Query,
     ...userResolvers.Query,

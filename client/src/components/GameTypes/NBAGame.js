@@ -129,7 +129,12 @@ class NBAGame extends Component {
                   <p>{this.props.awayScore}</p>
                   </Grid.Column>
                   <Grid.Column>
-                    <p>{this.props.time}</p>
+                    {this.props.stateDetails === "STATUS_IN_PROGRESS" ? (
+                      <p>{this.props.time}</p>
+                      ):(
+                        <p>End of period</p>
+                      )
+                    }
                   </Grid.Column>
                   <Grid.Column>
                     <p>{this.props.homeAbbreviation}</p>

@@ -107,13 +107,10 @@ function Game(props) {
   }
 
   if (gameState === 'post') {
-
-      const gameLineLength = props.awayLines.length + 1;
-
       return (
         <div>
           <Container textAlign='center' className='scoreboard'>
-            <Grid rows={5}>
+            <Grid rows={3}>
               <Grid.Row>
                 <Grid columns={3}>
                   <Grid.Column>
@@ -153,30 +150,6 @@ function Game(props) {
                     <p>{props.homeRecord}</p>
                   </Grid.Column>
                 </Grid>
-              </Grid.Row>
-              <Grid.Row>
-                {gameLineLength === 0 ? (
-                  <div></div>
-                ) : (
-                  <Grid columns={gameLineLength}>
-                    <Grid.Column>{props.awayAbbreviation}</Grid.Column>
-                    {props.awayLines.map((q) => (
-                      <Grid.Column>{q}</Grid.Column>
-                    ))}
-                  </Grid>
-                )}
-              </Grid.Row>
-              <Grid.Row>
-                {gameLineLength === 0 ? (
-                  <div></div>
-                ) : (
-                  <Grid columns={gameLineLength}>
-                    <Grid.Column>{props.homeAbbreviation}</Grid.Column>
-                    {props.homeLines.map((q) => (
-                      <Grid.Column>{q}</Grid.Column>
-                    ))}
-                  </Grid>
-                )}
               </Grid.Row>
             </Grid>
           </Container>

@@ -21,13 +21,14 @@ import ScoreboardNav from "./components/ScoreboardNav";
 import ScoreboardHome from "./pages/ScoreboardHome";
 import LeagueScoreboard from "./pages/LeagueScoreboard";
 import GameDetails from "./pages/GameDetails";
+import NBADetails from "./pages/GamePages/NBADetails";
 
 function App() {
   return (
     <AuthProvider>
       <Router>
       {/* add fluid = true to contatiner to make it full screen */}
-        <Container > 
+        <Container >
           <MenuBar />
           <Route exact path="/" component={Home} />
           <Route exact path="/home2" component={Home2} />
@@ -52,6 +53,12 @@ function App() {
           </Route>
           <Route exact path="/scoreboard/nba">
             <LeagueScoreboard league="nba" />
+          </Route>
+          <Route exact path="/scoreboard/nhl">
+            <LeagueScoreboard league="nhl" />
+          </Route>
+          <Route exact path="/scoreboard/eng.1">
+            <LeagueScoreboard league="eng.1" />
           </Route>
           <Route exact path="/scoreboard/:league/:gameId" component={GameDetails} />
         </Container>

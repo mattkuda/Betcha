@@ -102,5 +102,5 @@ module.exports = {
       return newReaction.save();
     }
   },
-  
+
 };

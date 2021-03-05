@@ -588,6 +588,196 @@ export const FETCH_NBA_GAME = gql`
   }
 `;
 
+
+//NHL GAME QUERIES
+
+export const FETCH_NHL_PREGAMES = gql`
+  query($myLeague: String!) {
+    getPregamesByLeague(league: $myLeague) {
+      id
+      gameId
+      state
+      stateDetails
+      homeFullName
+      awayFullName
+      homeRecord
+      awayRecord
+      awayLogo
+      homeLogo
+      awayAbbreviation
+      homeAbbreviation
+      startTime
+      broadcasts
+      spread
+      homeSpreadOdds
+      awaySpreadOdds
+      homeML
+      awayML
+      overUnder
+      overOdds
+      underOdds
+    }
+  }
+`;
+
+export const FETCH_NHL_LIVEGAMES = gql`
+  query($myLeague: String!) {
+    getLivegamesByLeague(league: $myLeague) {
+      id
+      gameId
+      state
+      stateDetails
+      homeFullName
+      awayFullName
+      homeRecord
+      awayRecord
+      awayLogo
+      homeLogo
+      awayAbbreviation
+      homeAbbreviation
+      homeScore
+      awayScore
+      startTime
+      broadcasts
+      time
+      period
+      spread
+      homeSpreadOdds
+      awaySpreadOdds
+      homeML
+      awayML
+      overUnder
+      overOdds
+      underOdds
+      lastPlay
+      specificData {
+        possession
+      }
+    }
+  }
+`;
+
+export const FETCH_NHL_POSTGAMES = gql`
+  query($myLeague: String!) {
+    getPostgamesByLeague(league: $myLeague) {
+      id
+      gameId
+      state
+      stateDetails
+      homeFullName
+      awayFullName
+      homeRecord
+      awayRecord
+      homeLogo
+      awayLogo
+      homeAbbreviation
+      awayAbbreviation
+      homeScore
+      awayScore
+      spread
+      overUnder
+      spreadWinner
+      ouResult
+    }
+  }
+`;
+
+
+//PREMIER LEAGUE GAME QUERIES
+
+export const FETCH_PREMIER_LEAGUE_PREGAMES = gql`
+  query($myLeague: String!) {
+    getPregamesByLeague(league: $myLeague) {
+      id
+      gameId
+      state
+      stateDetails
+      homeFullName
+      awayFullName
+      homeRecord
+      awayRecord
+      awayLogo
+      homeLogo
+      awayAbbreviation
+      homeAbbreviation
+      startTime
+      broadcasts
+      spread
+      homeSpreadOdds
+      awaySpreadOdds
+      homeML
+      awayML
+      overUnder
+      overOdds
+      underOdds
+    }
+  }
+`;
+
+export const FETCH_PREMIER_LEAGUE_LIVEGAMES = gql`
+  query($myLeague: String!) {
+    getLivegamesByLeague(league: $myLeague) {
+      id
+      gameId
+      state
+      stateDetails
+      homeFullName
+      awayFullName
+      homeRecord
+      awayRecord
+      awayLogo
+      homeLogo
+      awayAbbreviation
+      homeAbbreviation
+      homeScore
+      awayScore
+      startTime
+      broadcasts
+      time
+      period
+      spread
+      homeSpreadOdds
+      awaySpreadOdds
+      homeML
+      awayML
+      overUnder
+      overOdds
+      underOdds
+      lastPlay
+      specificData {
+        possession
+      }
+    }
+  }
+`;
+
+export const FETCH_PREMIER_LEAGUE_POSTGAMES = gql`
+  query($myLeague: String!) {
+    getPostgamesByLeague(league: $myLeague) {
+      id
+      gameId
+      state
+      stateDetails
+      homeFullName
+      awayFullName
+      homeRecord
+      awayRecord
+      homeLogo
+      awayLogo
+      homeAbbreviation
+      awayAbbreviation
+      homeScore
+      awayScore
+      spread
+      overUnder
+      spreadWinner
+      ouResult
+    }
+  }
+`;
+
+
+
 //PLAY QUERIES
 
 export const FETCH_PLAYS_IN_NFL_GAME = gql`
@@ -685,6 +875,92 @@ export const FETCH_PLAYS_IN_NBA_GAME = gql`
     }
   }
 `;
+
+
+export const FETCH_PLAYS_IN_NHL_GAME = gql`
+  query($myGameId: String!) {
+    getPlaysInGame(gameId: $myGameId) {
+      id
+      playId
+      description
+      scoreValue
+      game {
+        homeLogo
+        awayLogo
+        homeFullName
+        awayFullName
+        homeAbbreviation
+        awayAbbreviation
+        homeId
+        awayId
+      }
+      specificData {
+        homeScore
+        awayScore
+        time
+        period
+        possession
+      }
+    }
+  }
+`;
+
+export const FETCH_PLAYS_IN_PREMIER_LEAGUE_GAME = gql`
+  query($myGameId: String!) {
+    getPlaysInGame(gameId: $myGameId) {
+      id
+      playId
+      description
+      scoreValue
+      game {
+        homeLogo
+        awayLogo
+        homeFullName
+        awayFullName
+        homeAbbreviation
+        awayAbbreviation
+        homeId
+        awayId
+      }
+      specificData {
+        homeScore
+        awayScore
+        time
+        half
+      }
+    }
+  }
+`;
+
+
+export const FETCH_PLAYS_IN_NBA_GAME_IN_PERIOD = gql`
+  query($myGameId: String!, $myPeriod: Int!) {
+    getPlaysInNBAGameInPeriod(gameId: $myGameId, currentPeriod: $myPeriod) {
+      id
+      playId
+      description
+      scoreValue
+      game {
+        homeLogo
+        awayLogo
+        homeFullName
+        awayFullName
+        homeAbbreviation
+        awayAbbreviation
+        homeId
+        awayId
+      }
+      specificData {
+        homeScore
+        awayScore
+        time
+        quarter
+        possession
+      }
+    }
+  }
+`;
+
 
 export const FETCH_NCCABMENS_GAMEPRES_QUERY = gql`
   {

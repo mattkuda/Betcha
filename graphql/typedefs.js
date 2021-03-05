@@ -405,7 +405,7 @@ module.exports = gql`
     getGameByID(gameId: String!): Mastergame
     getPlay(playId: String!): Play
     getPlaysInGame(gameId: String!): [Play]
-    getPlaysInGameInPeriod(gameId: String!, currentPeriod: Int!): [Play]
+    getPlaysInNBAGameInPeriod(gameId: String!, currentPeriod: Int!): [Play]
     getAllReactions: [Reaction]
     getReactionsForPlay(playId: String!): [Reaction]
     getReactionsForUser(userId: String!): [Reaction]
