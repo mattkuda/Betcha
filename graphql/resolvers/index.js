@@ -42,7 +42,7 @@ module.exports = {
     ...postResolvers.Subscription,
   },
   Reaction: {
-    ...reactionResolvers.React,
+    ...reactionResolvers.Reaction,
   },
   Notification: {
     ...notificationResolvers.Notification,

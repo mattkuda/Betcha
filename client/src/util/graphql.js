@@ -131,6 +131,58 @@ export const FETCH_POSTS_QUERY = gql`
   }
 `;
 
+//REACTIONS
+export const FETCH_REACTIONS_QUERY = gql`
+  {
+    getReactionsFromFollowees {
+      id
+      body
+      userId {
+        username
+        profilePicture
+        name
+      }
+      playId {
+        game{
+          gameId
+        }
+        description
+      }
+      createdAt
+      post {
+        id
+        body
+        betOdds
+        gameArray {
+          gameId {
+            gameId
+            stateDetails
+            homeScore
+            awayScore
+            period
+            time
+            awayAbbreviation
+            homeAbbreviation
+            awayScore
+            homeScore
+            spread
+            overUnder
+          }
+          betType
+          betAmount
+        }
+        createdAt
+        username
+        user {
+          id
+          name
+          profilePicture
+        }
+      }
+    }
+  }
+`;
+
 //NFL GAME QUERIES
 
 export const FETCH_NFL_PREGAMES = gql`

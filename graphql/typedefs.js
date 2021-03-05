@@ -94,10 +94,11 @@ module.exports = gql`
 
   type Reaction {
     id: ID!
-    user: User!
-    play: Play!
+    userId: User!
+    playId: Play!
     body: String!
     createdAt: String!
+    post: Post
   }
 
   type MixedPregameData {
@@ -408,6 +409,7 @@ module.exports = gql`
     getAllReactions: [Reaction]
     getReactionsForPlay(playId: String!): [Reaction]
     getReactionsForUser(userId: String!): [Reaction]
+    getReactionsFromFollowees: [Reaction]
   }
 
   type Mutation {
