@@ -1,5 +1,5 @@
 import React from "react";
-import { Input, Menu, Stackable, Grid, Container, Image } from 'semantic-ui-react';
+import { Input, Menu, Stackable, Grid, Container, Image, Popup } from 'semantic-ui-react';
 import './game.css';
 import { betTimeFormat } from "../../util/Extensions/betTimeFormat";
 
@@ -15,13 +15,17 @@ function Game(props) {
               <Grid.Row>
                 <Grid columns={3}>
                   <Grid.Column>
-                    <Image centered verticalAlign='middle' src={props.awayLogo} size='tiny'/>
+                    <Popup content={props.awayFullName} position='bottom center' size='tiny' trigger={
+                      <Image centered verticalAlign='middle' src={props.awayLogo} size='tiny'/>
+                    } />
                   </Grid.Column>
                   <Grid.Column>
                     <p>{betTimeFormat(props.startTime)}</p>
                   </Grid.Column>
                   <Grid.Column>
-                  <Image centered verticalAlign='middle' src={props.homeLogo} size='tiny'/>
+                    <Popup content={props.homeFullName} position='bottom center' size='tiny' trigger={
+                      <Image centered verticalAlign='middle' src={props.homeLogo} size='tiny'/>
+                    } />
                   </Grid.Column>
                 </Grid>
               </Grid.Row>
@@ -66,14 +70,18 @@ function Game(props) {
               <Grid.Row>
                 <Grid columns={3}>
                   <Grid.Column>
-                    <Image centered verticalAlign='middle' src={props.awayLogo} size='tiny'/>
+                    <Popup content={props.awayFullName} position='bottom center' size='tiny' trigger={
+                      <Image centered verticalAlign='middle' src={props.awayLogo} size='tiny'/>
+                    } />
                   </Grid.Column>
                   <Grid.Column>
                     <p>{props.period}</p>
                     <p>{props.time}</p>
                   </Grid.Column>
                   <Grid.Column>
-                  <Image centered verticalAlign='middle' src={props.homeLogo} size='tiny'/>
+                    <Popup content={props.homeFullName} position='bottom center' size='tiny' trigger={
+                      <Image centered verticalAlign='middle' src={props.homeLogo} size='tiny'/>
+                    } />
                   </Grid.Column>
                 </Grid>
               </Grid.Row>
@@ -114,13 +122,17 @@ function Game(props) {
               <Grid.Row>
                 <Grid columns={3}>
                   <Grid.Column>
-                    <Image centered verticalAlign='middle' src={props.awayLogo} size='tiny'/>
+                    <Popup content={props.awayFullName} position='bottom center' size='tiny' trigger={
+                      <Image centered verticalAlign='middle' src={props.awayLogo} size='tiny'/>
+                    } />
                   </Grid.Column>
                   <Grid.Column>
                     <p>{props.awayScore} - {props.homeScore}</p>
                   </Grid.Column>
                   <Grid.Column>
-                  <Image centered verticalAlign='middle' src={props.homeLogo} size='tiny'/>
+                    <Popup content={props.homeFullName} position='bottom center' size='tiny' trigger={
+                      <Image centered verticalAlign='middle' src={props.homeLogo} size='tiny'/>
+                    } />
                   </Grid.Column>
                 </Grid>
               </Grid.Row>
