@@ -17,12 +17,9 @@ import { postGameDescFormat } from "../../util/Extensions/postGameDescFormal";
 import { determineBetResult } from "../../util/Extensions/betCalculations";
 
 function ReactionCard({
-  reaction: { id, body, userId, playId, createdAt, post } = {},
+  reaction: { id, body, user, playId, createdAt, post } = {},
 }) {
   const { userME } = useContext(AuthContext);
-  console.log("THE POST gArr IS : " + JSON.stringify(post.gameArray));
-
-  console.log("THE playId IS : " + JSON.stringify(playId));
   const gameData = post.gameArray.find((o) => o.gameId.gameId === playId.game.gameId);
 
   console.log("gamedata alert" + gameData);
@@ -39,13 +36,13 @@ function ReactionCard({
               <img
                 className="pc-img"
                 alt="profile-pic"
-                src={`${userId.profilePicture}`}
+                src={`${user.profilePicture}`}
               ></img>
             </div>
           </div>
           <div className="pc-header">
-            <Link to={`/user/${userId.username}`}>
-              {userId.name} @{userId.username}
+            <Link to={`/user/${user.username}`}>
+              {user.name} @{user.username}
             </Link>
             <div
               style={{ display: "inline-block", color: "gray", float: "right" }}
@@ -95,13 +92,13 @@ function ReactionCard({
               <img
                 className="pc-img"
                 alt="profile-pic"
-                src={`${userId.profilePicture}`}
+                src={`${user.profilePicture}`}
               ></img>
             </div>
           </div>
           <div className="pc-header">
-            <Link to={`/user/${userId.username}`}>
-              {userId.name} @{userId.username}
+            <Link to={`/user/${user.username}`}>
+              {user.name} @{user.username}
             </Link>
             <div
               style={{ display: "inline-block", color: "gray", float: "right" }}

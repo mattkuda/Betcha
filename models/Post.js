@@ -6,7 +6,7 @@ const postSchema = new Schema({
   body: String,
   username: String,
   createdAt: String,
-  // tease: Boolean,
+  postType: String,
   betOdds: String,
   gameArray: [
     {
@@ -15,6 +15,7 @@ const postSchema = new Schema({
       gameId: String,
     }
   ],
+  playId: String,
   comments: [
     {
       body: String,

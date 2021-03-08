@@ -10,9 +10,7 @@ module.exports = gql`
   type Post {
     id: ID!
     body: String!
-    # tease: Boolean
-    gameArray: [gameBet]!
-    betOdds: String!
+    postType: String!
     user: User!
     createdAt: String!
     username: String!
@@ -20,6 +18,12 @@ module.exports = gql`
     likes: [Like]!
     commentCount: Int!
     likeCount: Int!
+    # Post Related fields
+    gameArray: [gameBet]
+    betOdds: String
+    # Post Related fields
+    post: Post
+    playId: Play
   }
 
   type gameBet{
@@ -95,10 +99,11 @@ module.exports = gql`
   type Reaction {
     id: ID!
     userId: User!
-    playId: Play!
+    
     body: String!
     createdAt: String!
     post: Post
+    playId: Play!
   }
 
   type MixedPregameData {
@@ -439,6 +444,7 @@ module.exports = gql`
     deleteComment(postId: ID!, commentId: ID!): Post!
     likePost(postId: ID!): Post!
     createReaction(body: String!, playId: String!): Reaction!
+    createPostReaction(body: String!, playId: String!): Post!
     followUser(followeeId: ID!): User!
   }
 

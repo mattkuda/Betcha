@@ -6,25 +6,25 @@ import { useForm } from "../../util/hooks";
 
 function ReactionModal(props) {
 
-  const { values, onChange, onSubmit } = useForm(createReactionCallback, {
+  const { values, onChange, onSubmit } = useForm(createPostReactionCallback, {
     body: "",
     playId: props.play.playId
   });
 
 
-  const [createReaction, { error }] = useMutation(CREATE_REACTION_MUTATION, {
+  const [createPostReaction, { error }] = useMutation(CREATE_POST_REACTION_MUTATION, {
     variables: values,
     update(proxy, result) {
-      //update the cache
-      const data = proxy.readQuery({
-        query: FETCH_REACTIONS_QUERY,
-      });
-      proxy.writeQuery({
-        query: FETCH_REACTIONS_QUERY,
-        data: {
-          getAllReactions: [result.data.createReaction, ...data.getAllReactions],
-        },
-      });
+      // //update the cache
+      // const data = proxy.readQuery({
+      //   query: FETCH_REACTIONS_QUERY,
+      // });
+      // proxy.writeQuery({
+      //   query: FETCH_REACTIONS_QUERY,
+      //   data: {
+      //     getAllReactions: [result.data.createPostReaction, ...data.getAllReactions],
+      //   },
+      // });
       values.body = "";
       values.playId = "";
     },
@@ -34,8 +34,9 @@ function ReactionModal(props) {
     },
   });
 
-  function createReactionCallback() {
-    createReaction();
+
+  function createPostReactionCallback() {
+    createPostReaction();
     props.handleClose();
   }
 
@@ -89,18 +90,11 @@ const FETCH_REACTIONS_QUERY = gql`
 `;
 
 
-const CREATE_REACTION_MUTATION = gql`
-  mutation createReaction($body: String!, $playId: String!) {
-    createReaction(body: $body, playId: $playId) {
+const CREATE_POST_REACTION_MUTATION = gql`
+  mutation createPostReaction($body: String!, $playId: String!) {
+    createPostReaction(body: $body, playId: $playId) {
       id
-      user {
-        username
-      }
-      play {
-        description
-      }
-      body
-      createdAt
+      
     }
   }
 `;

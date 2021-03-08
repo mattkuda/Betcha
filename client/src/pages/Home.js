@@ -90,7 +90,7 @@ function Home() {
               {posts &&
                 reactions &&
                 feedItems.map((item) =>
-                  item.__typename === "Post" ? (
+                  item.postType === "P" ? (
                     <Grid.Column key={item.id} style={{ marginBottom: 20 }}>
                       <PostCard post={item} key={item.id} />
                     </Grid.Column>
