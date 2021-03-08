@@ -16,7 +16,7 @@ module.exports = {
     },
     async getReactionsForPlay(_, { playId }) {
       try {
-        let reactions = await Reaction.find({playId: playId});
+        let reactions = await Reaction.find({ playId: playId });
         return reactions;
       } catch (err) {
         throw new Error(err);
@@ -24,7 +24,7 @@ module.exports = {
     },
     async getReactionsForUser(_, { userId }) {
       try {
-        let reactions = await Reaction.find({userId: userId});
+        let reactions = await Reaction.find({ userId: userId });
         return reactions;
       } catch (err) {
         throw new Error(err);
@@ -33,7 +33,6 @@ module.exports = {
     async getReactionsFromFollowees(_, {}, context) {
       try {
         // GETTING Reactionss FROM ONLY PPL YOU FOLLOW
-        console.log('IN the grango')
         const { id } = checkAuth(context);
         const userME = await User.findById(id);
         //Get array ids of all ppl you follow
@@ -41,52 +40,48 @@ module.exports = {
         //ADD YOURSELF TO THE FEED
         followingIds.push(id);
 
-        console.log("The followingIds for reacts are: " + followingIds);
-
         //Only get posts from ppl that are in that array
-        const reactions = await Reaction.find({ userId: { $in: followingIds } }).sort({
+        const reactions = await Reaction.find({
+          userId: { $in: followingIds },
+        }).sort({
           createdAt: -1,
         });
-        
-        console.log("these are the reactions we rounded up: " + reactions)
+
         return reactions;
       } catch (err) {
         throw new Error(err);
       }
-    }
+    },
   },
   Reaction: {
     async userId(parent) {
       let user = await User.findById(parent.userId);
-      //console.log(user);
       return user;
     },
     async playId(parent) {
-      let play = await Play.find({playId: parent.playId})
-      .then(plays => plays[0]);
-      //console.log(play);
+      let play = await Play.find({ playId: parent.playId }).then(
+        (plays) => plays[0]
+      );
       return play;
     },
     async post(parent) {
-      let gameIdInQuestion = await Play.findOne({playId: parent.playId});
-      let posts = await Post.find({user: parent.userId}).sort({
+      let gameIdInQuestion = await Play.findOne({ playId: parent.playId });
+      let posts = await Post.find({ user: parent.userId }).sort({
         createdAt: -1,
       });
 
-      for(const postIndex in posts){
-        for(const gameIndex in posts[postIndex].gameArray){
-          if(posts[postIndex].gameArray[gameIndex].gameId == gameIdInQuestion.gameId){
-            console.log("Post to attach to reaction FOUND");
-
+      for (const postIndex in posts) {
+        for (const gameIndex in posts[postIndex].gameArray) {
+          if (
+            posts[postIndex].gameArray[gameIndex].gameId ==
+            gameIdInQuestion.gameId
+          ) {
             return posts[postIndex];
           }
         }
       }
-      console.log("Post not found");
-
       return null;
-      
-    }
+    },
   },
   Mutation: {
     async createReaction(_, { body, playId }, context) {
@@ -100,7 +95,6 @@ module.exports = {
       });
 
       return newReaction.save();
-    }
+    },
   },
-
 };

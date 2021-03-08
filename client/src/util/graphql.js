@@ -83,6 +83,7 @@ export const FETCH_TOP_LIVEGAME_EVENTS = gql`
 export const FETCH_POSTS_QUERY = gql`
   {
     getPosts {
+      __typename
       id
       body
       betOdds
@@ -135,6 +136,7 @@ export const FETCH_POSTS_QUERY = gql`
 export const FETCH_REACTIONS_QUERY = gql`
   {
     getReactionsFromFollowees {
+      __typename
       id
       body
       userId {

@@ -13,18 +13,40 @@ import { FETCH_REACTIONS_QUERY } from "../util/graphql";
 
 function Home() {
   const { user } = useContext(AuthContext);
-  const { loading, data: { getPosts: posts } = {} } = useQuery(
-    FETCH_POSTS_QUERY
-  );
-
   var loadingFeed = true;
-  const { loading2, data: { getReactionsFromFollowees: reactions } = {} } = useQuery(
-    FETCH_REACTIONS_QUERY
-  );
 
-  const feedItems = [].concat(posts).concat(reactions).sort((a, b) => a.createdAt > b.createdAt ? -1 : 1);
+  const QueryMultiple = () => {
+    const res1 = useQuery(FETCH_POSTS_QUERY);
+    const res2 = useQuery(FETCH_REACTIONS_QUERY);
+    return [res1, res2];
+  };
+
+  const [
+    { loading, data: { getPosts: posts } = {} },
+    { loading2, data: { getReactionsFromFollowees: reactions } = {} },
+  ] = QueryMultiple();
+
+  // const { loading, data: { getPosts: posts } = {} } = useQuery(
+  //   FETCH_POSTS_QUERY
+  // );
+
+  // const {
+  //   loading2,
+  //   data: { getReactionsFromFollowees: reactions } = {},
+  // } = useQuery(FETCH_REACTIONS_QUERY);
+  const feedItems = mergeLists(posts, reactions)
+  
   loadingFeed = false;
   const [modalOpen, setModalOpen] = useState(false);
+
+  function mergeLists(list1, list2) {
+    var items = [];
+    items = items
+      .concat(list1)
+      .concat(list2)
+      .sort((a, b) => (a.createdAt > b.createdAt ? -1 : 1));
+    return items;
+  }
 
   return (
     <>
@@ -55,34 +77,31 @@ function Home() {
               </Button>
             )}
             <Button onClick={(e) => console.log(posts)}>Console Posts</Button>
-            <Button onClick={(e) => console.log(feedItems)}>Console Reacts</Button>
-            <Button onClick={(e) => feedItems.map(o => console.log(o.__typename))}>Console types</Button>
-
+            <Button onClick={(e) => console.log(feedItems)}>
+              Console Reacts
+            </Button>
           </Grid.Row>
-          {(loading2 || loading || loadingFeed == true) ? (
-              <h1>Loading feed...</h1>
-            ) : (
-              
-              //Transition group adds animation for when new post is added/deleted
-              <Transition.Group>
+          {loading2 || loading || loadingFeed === true ? (
+            <h1>Loading feed...</h1>
+          ) : (
+            //Transition group adds animation for when new post is added/deleted
+            <Transition.Group>
               <h1>feed mock</h1>
-                {feedItems &&
-                  feedItems.map((item) => (
-                    item.__typename == "Post" ?
+              {posts &&
+                reactions &&
+                feedItems.map((item) =>
+                  item.__typename === "Post" ? (
                     <Grid.Column key={item.id} style={{ marginBottom: 20 }}>
-
-                          <PostCard post={item} key={item.id} />
-
+                      <PostCard post={item} key={item.id} />
                     </Grid.Column>
-                    :
+                  ) : (
                     <Grid.Column key={item.id} style={{ marginBottom: 20 }}>
-
-                          <ReactionCard reaction={item} key={item.id} />
-
+                      <ReactionCard reaction={item} key={item.id} />
                     </Grid.Column>
-                  ))}
-              </Transition.Group>
-            )}
+                  )
+                )}
+            </Transition.Group>
+          )}
 
           {/* OLD SHIT v
           {(loading2 || loading) ? (
