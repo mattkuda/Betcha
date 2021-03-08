@@ -1,14 +1,13 @@
 const { AuthenticationError } = require("apollo-server");
 
 const Post = require("../../models/Post");
+const Play = require("../../models/Play");
 const User = require("../../models/User");
 const Pregame = require("../../models/Pregame");
 const Livegame = require("../../models/Livegame");
 const Postgame = require("../../models/Postgame");
 
 const checkAuth = require("../../util/check-auth");
-
-
 
 module.exports = {
   Query: {
@@ -26,7 +25,7 @@ module.exports = {
         const posts = await Post.find({ user: { $in: followingIds } }).sort({
           createdAt: -1,
         });
-        
+
         return posts;
       } catch (err) {
         throw new Error(err);
@@ -58,68 +57,87 @@ module.exports = {
   },
 
   Post: {
-    //This is what i'm talking about
+    //POST ATTACHMENTS
     async gameArray(parent) {
+      //Only works on real posts
+      if (parent.postType == "R") return null;
+
       var newGameArr = [];
-      
-      for(const gameBet of parent.gameArray){
+
+      for (const gameBet of parent.gameArray) {
         let game = await Postgame.find({ gameId: gameBet.gameId }).then(
           (games) => games[0]
         );
         if (game != null) {
-            newGameArr.push({betType: gameBet.betType, betAmount: gameBet.betAmount, gameId: game});
+          newGameArr.push({
+            betType: gameBet.betType,
+            betAmount: gameBet.betAmount,
+            gameId: game,
+          });
         } else {
           game = await Livegame.find({ gameId: gameBet.gameId }).then(
             (games) => games[0]
           );
-  
+
           if (game != null) {
-            newGameArr.push({betType: gameBet.betType, betAmount: gameBet.betAmount, gameId: game});
+            newGameArr.push({
+              betType: gameBet.betType,
+              betAmount: gameBet.betAmount,
+              gameId: game,
+            });
           } else {
             game = await Pregame.find({ gameId: gameBet.gameId }).then(
               (games) => games[0]
             );
-  
-            newGameArr.push({betType: gameBet.betType, betAmount: gameBet.betAmount, gameId: game});
+
+            newGameArr.push({
+              betType: gameBet.betType,
+              betAmount: gameBet.betAmount,
+              gameId: game,
+            });
           }
         }
-      };
+      }
 
-      //await Promise.all(newGameArr);
       return newGameArr;
-      
-
-      // return newGameArr;
-
-      // let game = await Postgame.find({ gameId: parent.gameId }).then(
-      //   (games) => games[0]
-      // );
-      // if (game != null) {
-      //   return game;
-      // } else {
-      //   game = await Livegame.find({ gameId: parent.gameId }).then(
-      //     (games) => games[0]
-      //   );
-
-      //   if (game != null) {
-      //     return game;
-      //   } else {
-      //     game = await Pregame.find({ gameId: parent.gameId }).then(
-      //       (games) => games[0]
-      //     );
-
-      //     return game;
-      //   }
-      // }
     },
 
+    //ATTACHED TO BOTH
     async user(parent) {
       let user = await User.find({ username: parent.username }).then(
         (users) => users[0]
       );
-        console.log("this user is being returned: " + JSON.stringify(user));
       return user;
     },
+    //REACTION ATTACHMENTS
+    async playId(parent) {
+      if (parent.postType == "P") return null;
+
+      let play = await Play.find({ playId: parent.playId }).then(
+        (plays) => plays[0]
+      );
+      return play;
+    },
+    async post(parent) {
+      if (parent.postType == "P") return null;
+      let gameIdInQuestion = await Play.findOne({ playId: parent.playId });
+      let posts = await Post.find({ user: parent.user }).sort({
+        createdAt: -1,
+      });
+
+      for (const postIndex in posts) {
+        for (const gameIndex in posts[postIndex].gameArray) {
+          if (
+            posts[postIndex].gameArray[gameIndex].gameId ==
+            gameIdInQuestion.gameId
+          ) {
+            return posts[postIndex];
+          }
+        }
+      }
+      return null;
+    },
+
   },
 
   User: {
@@ -157,6 +175,7 @@ module.exports = {
         body, //already destructured at the async line (above)
         gameArray, //already destructured at the async line (above)
         betOdds,
+        postType: "P",
         user: user.id,
         username: user.username,
         createdAt: new Date().toISOString(),
@@ -171,6 +190,33 @@ module.exports = {
         newPost: post,
       });
       console.log("4. About to return createPost");
+
+      return post;
+    },
+
+    async createPostReaction(_, { body, playId }, context) {
+      console.log("1. Entered createPostReaction");
+      const user = checkAuth(context);
+
+      if (body.trim() === "") {
+        throw new Error("Post body must not be empty");
+      }
+
+      //If we get here, that means no error was thrown during the checkAuth phase
+      const newPost = new Post({
+        body, //already destructured at the async line (above)
+        playId, //already destructured at the async line (above)
+        postType: "R",
+        user: user.id,
+        username: user.username,
+        createdAt: new Date().toISOString(),
+      });
+
+      const post = await newPost.save();
+
+      context.pubsub.publish("NEW_POST", {
+        newPost: post,
+      });
 
       return post;
     },

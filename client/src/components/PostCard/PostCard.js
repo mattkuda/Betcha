@@ -46,12 +46,6 @@ function PostCard({
           <div
             style={{ display: "inline-block", width: "auto", height: "100%" }}
           >
-            <Button
-              type="button"
-              onClick={() => console.log("user info:" + JSON.stringify(user))}
-            >
-              YO
-            </Button>
             <div>
               <img
                 className="pc-img"

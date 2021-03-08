@@ -1,13 +1,13 @@
-//Defines our MongoDB React model
-
+const { model, Schema } = require('mongoose');
 const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
 
 const reactionSchema = new Schema({
-  userId: String,
+  userId: {
+    type: Schema.Types.ObjectId,
+  },
   playId: String,
   body: String,
-  createdAt: String
+  createdAt: String,
 }, { strict: false });
 
-module.exports = mongoose.model('Reaction', reactionSchema);
+module.exports = model('Reaction', reactionSchema);

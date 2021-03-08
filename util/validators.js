@@ -1,8 +1,12 @@
+const {ACCESS_CODE} = require('../config');
+
+
 module.exports.validateRegisterInput = (
   username,
   email,
   password,
-  confirmPassword
+  confirmPassword,
+  accessCode
 ) => {
   const errors = {};
   if(username.trim() ===''){
@@ -23,6 +27,15 @@ module.exports.validateRegisterInput = (
   } else {
     if(password != confirmPassword){
       errors.confirmPassword = "Passwords must match."
+    }
+  }
+
+  if(accessCode.trim === ''){
+    errors.accessCode = 'Access code must not be empty.'
+  } else {
+    console.log("IN HERE. access code is: " + ACCESS_CODE)
+    if(accessCode != ACCESS_CODE){
+      errors.accessCode = "Invalid access code."
     }
   }
 

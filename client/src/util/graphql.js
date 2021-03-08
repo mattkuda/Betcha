@@ -84,8 +84,38 @@ export const FETCH_POSTS_QUERY = gql`
   {
     getPosts {
       id
+      postType
       body
       betOdds
+      post {
+        id
+        body
+        betOdds
+        gameArray {
+          gameId {
+            gameId
+            stateDetails
+            homeScore
+            awayScore
+            period
+            time
+            awayAbbreviation
+            homeAbbreviation
+            awayScore
+            homeScore
+            spread
+            overUnder
+          }
+          betType
+          betAmount
+        }
+      }
+      playId {
+        game {
+          gameId
+        }
+        description
+      }
       gameArray {
         gameId {
           homeFullName
@@ -126,6 +156,59 @@ export const FETCH_POSTS_QUERY = gql`
         username
         createdAt
         body
+      }
+    }
+  }
+`;
+
+//REACTIONS
+export const FETCH_REACTIONS_QUERY = gql`
+  {
+    getReactionsFromFollowees {
+      __typename
+      id
+      body
+      userId {
+        username
+        profilePicture
+        name
+      }
+      playId {
+        game {
+          gameId
+        }
+        description
+      }
+      createdAt
+      post {
+        id
+        body
+        betOdds
+        gameArray {
+          gameId {
+            gameId
+            stateDetails
+            homeScore
+            awayScore
+            period
+            time
+            awayAbbreviation
+            homeAbbreviation
+            awayScore
+            homeScore
+            spread
+            overUnder
+          }
+          betType
+          betAmount
+        }
+        createdAt
+        username
+        user {
+          id
+          name
+          profilePicture
+        }
       }
     }
   }
@@ -536,7 +619,6 @@ export const FETCH_NBA_GAME = gql`
   }
 `;
 
-
 //NHL GAME QUERIES
 
 export const FETCH_NHL_PREGAMES = gql`
@@ -630,7 +712,6 @@ export const FETCH_NHL_POSTGAMES = gql`
   }
 `;
 
-
 //PREMIER LEAGUE GAME QUERIES
 
 export const FETCH_PREMIER_LEAGUE_PREGAMES = gql`
@@ -723,8 +804,6 @@ export const FETCH_PREMIER_LEAGUE_POSTGAMES = gql`
     }
   }
 `;
-
-
 
 //PLAY QUERIES
 
@@ -824,7 +903,6 @@ export const FETCH_PLAYS_IN_NBA_GAME = gql`
   }
 `;
 
-
 export const FETCH_PLAYS_IN_NHL_GAME = gql`
   query($myGameId: String!) {
     getPlaysInGame(gameId: $myGameId) {
@@ -880,7 +958,6 @@ export const FETCH_PLAYS_IN_PREMIER_LEAGUE_GAME = gql`
   }
 `;
 
-
 export const FETCH_PLAYS_IN_NBA_GAME_IN_PERIOD = gql`
   query($myGameId: String!, $myPeriod: Int!) {
     getPlaysInNBAGameInPeriod(gameId: $myGameId, currentPeriod: $myPeriod) {
@@ -908,7 +985,6 @@ export const FETCH_PLAYS_IN_NBA_GAME_IN_PERIOD = gql`
     }
   }
 `;
-
 
 export const FETCH_NCCABMENS_GAMEPRES_QUERY = gql`
   {
