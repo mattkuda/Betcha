@@ -15,26 +15,26 @@ function Home() {
   const { user } = useContext(AuthContext);
   var loadingFeed = true;
 
-  const QueryMultiple = () => {
-    const res1 = useQuery(FETCH_POSTS_QUERY);
-    const res2 = useQuery(FETCH_REACTIONS_QUERY);
-    return [res1, res2];
-  };
+  // const QueryMultiple = () => {
+  //   const res1 = useQuery(FETCH_POSTS_QUERY);
+  //   const res2 = useQuery(FETCH_REACTIONS_QUERY);
+  //   return [res1, res2];
+  // };
 
-  const [
-    { loading, data: { getPosts: posts } = {} },
-    { loading2, data: { getReactionsFromFollowees: reactions } = {} },
-  ] = QueryMultiple();
+  // const [
+  //   { loading, data: { getPosts: posts } = {} },
+  //   { loading2, data: { getReactionsFromFollowees: reactions } = {} },
+  // ] = QueryMultiple();
 
-  // const { loading, data: { getPosts: posts } = {} } = useQuery(
-  //   FETCH_POSTS_QUERY
-  // );
+  const { loading, data: { getPosts: posts } = {} } = useQuery(
+    FETCH_POSTS_QUERY
+  );
 
   // const {
   //   loading2,
   //   data: { getReactionsFromFollowees: reactions } = {},
   // } = useQuery(FETCH_REACTIONS_QUERY);
-  const feedItems = mergeLists(posts, reactions)
+  // const feedItems = mergeLists(posts, reactions)
   
   loadingFeed = false;
   const [modalOpen, setModalOpen] = useState(false);
@@ -77,19 +77,16 @@ function Home() {
               </Button>
             )}
             <Button onClick={(e) => console.log(posts)}>Console Posts</Button>
-            <Button onClick={(e) => console.log(feedItems)}>
-              Console Reacts
-            </Button>
+            
           </Grid.Row>
-          {loading2 || loading || loadingFeed === true ? (
+          {loading || loadingFeed === true ? (
             <h1>Loading feed...</h1>
           ) : (
             //Transition group adds animation for when new post is added/deleted
             <Transition.Group>
               <h1>feed mock</h1>
-              {posts &&
-                reactions &&
-                feedItems.map((item) =>
+              {posts  &&
+                posts.map((item) =>
                   item.postType === "P" ? (
                     <Grid.Column key={item.id} style={{ marginBottom: 20 }}>
                       <PostCard post={item} key={item.id} />

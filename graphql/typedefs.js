@@ -389,6 +389,7 @@ module.exports = gql`
     password: String!
     confirmPassword: String!
     email: String!
+    accessCode: String!
   }
 
   type Query {
