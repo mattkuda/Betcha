@@ -19,6 +19,14 @@ TODO:
 
 class NCAABMensGame extends Component {
 
+  /*
+  Checks if an element exists within a JSON file before trying to access it. Used to handle
+  potential corner cases when working with the ESPN data.
+  */
+  elementExists(prop_parent, prop) {
+    return prop_parent.hasOwnProperty(prop);
+  }
+
   gameState = this.props.state;
 
   render() {
@@ -115,6 +123,8 @@ class NCAABMensGame extends Component {
 
     if (this.gameState === 'in') {
 
+      console.log("awayRank" in this.props.specificData);
+
       return (
         <div>
           <Container textAlign='center' className='scoreboard'>
@@ -123,7 +133,7 @@ class NCAABMensGame extends Component {
                 <Grid columns={3}>
                   <Grid.Column>
                     <Image centered verticalAlign='middle' src={this.props.awayLogo} size='tiny'/>
-                      {this.props.specificData.awayRank !== -1 ? (
+                      {this.props.specificData.awayRank !== -1 && this.elementExists(this.props.specificData, "awayRank") ? (
                         <Label circular
                           color="gray"
                           floating
