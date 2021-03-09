@@ -181,7 +181,7 @@ function GameDetails(props) {
                 {play.specificData.time}
               </Grid.Column>
               <Grid.Column width={1} className="timeColumn">
-                {play.scoreValue > 0 ? (
+                {play.scoreValue > 0 && play.description.includes('made') ? (
                   <p className="scoreVal">+{play.scoreValue}</p>
                   ):(
                   <p></p>

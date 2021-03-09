@@ -1,10 +1,12 @@
 import React, { useState, useContext } from "react";
-import { Menu, Icon, Label } from "semantic-ui-react";
+import { useQuery } from "@apollo/react-hooks";
+import { Menu, Icon, Label, Dropdown } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 
 import { AuthContext } from "../../context/auth";
-import SearchBar from "./SearchBar";
+import SearchBox from "./SearchBox";
 import NotificationsIcon from "./NotificationsIcon";
+import { FETCH_USERS_FOR_USER_SEARCH_QUERY } from "../../util/graphql";
 
 function MenuBar() {
   const { user, logout } = useContext(AuthContext);
@@ -12,8 +14,33 @@ function MenuBar() {
   // e.g. /about
   const path = pathname === "/" ? "home" : pathname.substr(1);
   const [activeItem, setActiveItem] = useState(path);
+  const [search, setSearch] = useState('');
 
   const handleItemClick = (e, { name }) => setActiveItem(name);
+  const handleSearchChange = ( val ) => setSearch(val.target.value);
+
+  const { loading, error, data: { getAllUsers: users } = {} } = useQuery(FETCH_USERS_FOR_USER_SEARCH_QUERY);
+
+
+  function fillOptionsArray(users) {
+    var options = [];
+    for (var i = 1; i <= users.length; i++) {
+      console.log(i);
+      options.push({
+        key: i,
+        text: users[i-1].name,
+        value: i
+      });
+    }
+    return options;
+  }
+
+  let filteredNames = [];
+  let options = [];
+  if (users) {
+    filteredNames = users.filter(user => user.name.toLowerCase().includes(search.toLowerCase()));
+    options = fillOptionsArray(filteredNames);
+  }
 
   const menuBar = user ? (
     <Menu pointing secondary size="massive" color="teal">
@@ -40,7 +67,8 @@ function MenuBar() {
       />
 
       <Menu.Item style={{ margin: "0 0 3px 0", padding: "0 0 0 0" }}>
-        <SearchBar />
+        <SearchBox placeholder="Search for a user..." handleChange={handleSearchChange} filtered={filteredNames}/>
+        <Dropdown text='Search Results' options={options} simple item />
       </Menu.Item>
 
       <Menu.Menu position="right">

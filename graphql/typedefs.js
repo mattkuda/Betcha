@@ -346,8 +346,8 @@ module.exports = gql`
     playId: String!
     game: Mastergame
     reactions: [Reaction]
-    description: String!
-    scoreValue: Int!
+    description: String
+    scoreValue: Int
     createdAt: String!
     specificData: MixedPlayData!
   }
