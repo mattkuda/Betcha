@@ -165,6 +165,7 @@ query($first: Int!, $offset: Int!) {
         id
         name
         profilePicture
+        username
       }
       commentCount
       comments {
