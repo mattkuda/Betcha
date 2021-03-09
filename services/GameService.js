@@ -160,6 +160,8 @@ class GameService {
       let league = item.leagueName;
       let allCollegeTeams = "";
 
+      console.log("SPORT: "+sport, ", LEAGUE: "+league);
+
       //if this is a college sport, make sure we're querying all D1 games
       if (league.indexOf("college") !== -1) {
         allCollegeTeams="&groups=50"
@@ -171,17 +173,13 @@ class GameService {
       if (this.ctr % (TODAYS_GAMES_ODDS_UPDATE_INTERVAL / LIVE_TICK_INTERVAL) === 0) {
         this.updateOddsForTodaysGames(sport, league, allCollegeTeams);
       }
-      if (this.ctr % (TOP_EVENT_INTERVAL / LIVE_TICK_INTERVAL) === 0) {
-        const url = "http://site.api.espn.com/apis/v2/scoreboard/header?id=0";
-        const response = await fetch(url);
-        const data = await response.json();
-        console.log("Processing top events");
-        this.processTopEvents(data.sports);
-      }
       if (this.ctr % (GENERAL_UPDATE_INTERVAL / LIVE_TICK_INTERVAL) === 0) {
         this.updateVariableGameInfo(sport, league, allCollegeTeams);
       }
       this.processData(sport, league, allCollegeTeams);   //livegames and postgames
+    }
+    if (this.ctr % (TOP_EVENT_INTERVAL / LIVE_TICK_INTERVAL) === 0) {
+      this.processTopEvents();
     }
   }
 
@@ -189,10 +187,17 @@ class GameService {
   /*
   Used to process the top upcoming events (determined by ESPN) and update the DB accordingly.
   */
-  async processTopEvents(sports) {
-    for (const sport of sports) {
+  async processTopEvents() {
+
+    const url = "http://site.api.espn.com/apis/v2/scoreboard/header?id=0";
+    const response = await fetch(url);
+    const data = await response.json();
+    console.log("Processing top events...");
+
+    for (const sport of data.sports) {
       for (const league of sport.leagues) {
         for (const game of league.events) {
+          console.log(game.name);
           const gameExists = await TopEvent.exists({ gameId: game.id });
           const gameInPregame = await Pregame.exists({ gameId: game.id });
           if (gameExists === false && gameInPregame === true && game.status === "pre") {
@@ -204,9 +209,11 @@ class GameService {
             });
             await topEvent.save();
           }
+          else { console.log("Top event already found in DB, moving on..."); }
         }
       }
     }
+    console.log("Done with top events!");
   }
 
 
@@ -386,11 +393,6 @@ class GameService {
               result.specificData.awayRank = game.competitors[1].rank;
             }
             break;
-          case "nhl":
-            if (this.elementExists(game, "seriesSummary")) {
-              result.specificData.seriesSummary = game.seriesSummary;
-            }
-            break;
           default:
         }
         await result.save();
@@ -409,11 +411,13 @@ class GameService {
     sport+"&league="+league+college+"&dates="+this.convertDate(day)+"&enable=odds";
     const response = await fetch(url);
     const data = await response.json();
-    console.log("Processing data for " + league);
+    console.log("Processing data for " + league+"...");
 
     //if there's "events" today, loop through and update odds for each event
     if (this.elementExists(data.sports[0].leagues[0], "events")) {
+      console.log("Events found for today...");
       for (const game of data.sports[0].leagues[0].events) {
+        console.log("Updating odds for "+game.name+"...");
 
         let result = await Pregame.findOne({ gameId: game.id });
         if (result) {
@@ -483,6 +487,7 @@ class GameService {
           await result.save();
         }
       }
+      console.log("Done with events for "+league+"!");
     }
   }
 
@@ -636,11 +641,6 @@ class GameService {
             }
             if (this.elementExists(game.competitors[1], "rank")) {
               contents.specificData.awayRank = game.competitors[1].rank;
-            }
-            break;
-          case "nhl":
-            if (this.elementExists(game, "seriesSummary")) {
-              contents.specificData.seriesSummary = game.seriesSummary;
             }
             break;
           default:

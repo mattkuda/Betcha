@@ -99,7 +99,7 @@ module.exports = gql`
   type Reaction {
     id: ID!
     userId: User!
-    
+
     body: String!
     createdAt: String!
     post: Post

@@ -56,7 +56,7 @@ function MenuBar() {
         active={activeItem === "my bets"}
         onClick={handleItemClick}
         as={Link}
-        to="/mybetsTODO"
+        to="/mybets"
       />
       <Menu.Item
         name="scores"

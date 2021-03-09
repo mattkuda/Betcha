@@ -357,7 +357,8 @@ function LeagueScoreboard(props) {
         <Grid.Row>
           <Fragment>
             {
-              NCAABMENSpregameData.getPregamesByLeague.map(game => (
+              NCAABMENSpregameData.getPregamesByLeague.filter((game) => game.awayAbbreviation !== "TBD" &&
+              game.homeAbbreviation !== "TBD").map(game => (
                 <Grid.Column>
                   <Link to={`/scoreboard/${myLeague}/${game.gameId}`}>
                     <span className="card" style={{"display": "block"}}>
@@ -424,7 +425,8 @@ function LeagueScoreboard(props) {
         <Grid.Row>
           <Fragment>
             {
-              NBApregameData.getPregamesByLeague.map(game => (
+              NBApregameData.getPregamesByLeague.filter((game) => game.awayAbbreviation !== "TBD" &&
+              game.homeAbbreviation !== "TBD").map(game => (
                 <Grid.Column>
                   <Link to={`/scoreboard/${myLeague}/${game.gameId}`}>
                     <span className="card" style={{"display": "block"}}>
@@ -490,7 +492,8 @@ function LeagueScoreboard(props) {
         <Grid.Row>
           <Fragment>
             {
-              NHLpregameData.getPregamesByLeague.map(game => (
+              NHLpregameData.getPregamesByLeague.filter((game) => game.awayAbbreviation !== "TBD" &&
+              game.homeAbbreviation !== "TBD").map(game => (
                 <Grid.Column>
                   <Link to={`/scoreboard/${myLeague}/${game.gameId}`}>
                     <span className="card" style={{"display": "block"}}>
@@ -557,7 +560,8 @@ function LeagueScoreboard(props) {
         <Grid.Row>
           <Fragment>
             {
-              PremierLeaguepregameData.getPregamesByLeague.map(game => (
+              PremierLeaguepregameData.getPregamesByLeague.filter((game) => game.awayAbbreviation !== "TBD" &&
+              game.homeAbbreviation !== "TBD").map(game => (
                 <Grid.Column>
                   <Link to={`/scoreboard/${myLeague}/${game.gameId}`}>
                     <span className="card" style={{"display": "block"}}>

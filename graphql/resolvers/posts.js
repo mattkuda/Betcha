@@ -55,7 +55,6 @@ module.exports = {
       }
     },
   },
-
   Post: {
     //POST ATTACHMENTS
     async gameArray(parent) {
