@@ -220,7 +220,7 @@ class GameService {
     while (day_ctr < TOTAL_PREGAME_DAYS) {
       let url = "http://site.api.espn.com/apis/v2/scoreboard/header?sport="+
       sport+"&league="+league+college+"&dates="+this.convertDate(day)+"&enable=odds";
-      if (isToday(day)) {
+      if (this.isToday(day)) {
         url = "http://site.api.espn.com/apis/v2/scoreboard/header?sport="+
         sport+"&league="+league+college+"&enable=odds";
       }
@@ -248,7 +248,7 @@ class GameService {
     while (day_ctr < TOTAL_PREGAME_DAYS) {
       let url = "http://site.api.espn.com/apis/v2/scoreboard/header?sport="+
       sport+"&league="+league+college+"&dates="+this.convertDate(day)+"&enable=odds";
-      if (isToday(day)) {
+      if (this.isToday(day)) {
         url = "http://site.api.espn.com/apis/v2/scoreboard/header?sport="+
         sport+"&league="+league+college+"&enable=odds";
       }
