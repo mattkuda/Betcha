@@ -81,8 +81,8 @@ export const FETCH_TOP_LIVEGAME_EVENTS = gql`
 `;
 
 export const FETCH_POSTS_QUERY = gql`
-  {
-    getPosts {
+query($first: Int!, $offset: Int!) {
+    getPosts(first: $first, offset: $offset) {
       id
       postType
       body
@@ -112,7 +112,23 @@ export const FETCH_POSTS_QUERY = gql`
       }
       playId {
         game {
-          gameId
+          homeFullName
+          awayFullName
+          stateDetails
+          homeRecord
+          awayRecord
+          homeScore
+          awayScore
+          period
+          time
+          awayLogo
+          homeLogo
+          awayAbbreviation
+          homeAbbreviation
+          startTime
+          broadcasts
+          spread
+          overUnder
         }
         description
       }

@@ -1,8 +1,8 @@
 import React, { useContext, useState } from "react";
 import { useQuery } from "@apollo/react-hooks";
-import { Grid, Transition, Modal, Button, Feed, Icon } from "semantic-ui-react";
+import { Grid, Transition, Modal, Button, Loader, Icon } from "semantic-ui-react";
 import { Link } from "react-router-dom";
-
+import { Waypoint } from "react-waypoint";
 import { AuthContext } from "../context/auth";
 import PostCard from "../components/PostCard/PostCard";
 import ReactionCard from "../components/ReactionCard/ReactionCard";
@@ -26,8 +26,11 @@ function Home() {
   //   { loading2, data: { getReactionsFromFollowees: reactions } = {} },
   // ] = QueryMultiple();
 
-  const { loading, data: { getPosts: posts } = {} } = useQuery(
-    FETCH_POSTS_QUERY
+  const { loading, data: { getPosts: posts } = {}, fetchMore } = useQuery(
+    FETCH_POSTS_QUERY,
+    {
+      variables: { first: 5, offset: 0 },
+    },
   );
 
   // const {
@@ -35,7 +38,7 @@ function Home() {
   //   data: { getReactionsFromFollowees: reactions } = {},
   // } = useQuery(FETCH_REACTIONS_QUERY);
   // const feedItems = mergeLists(posts, reactions)
-  
+
   loadingFeed = false;
   const [modalOpen, setModalOpen] = useState(false);
 
@@ -77,7 +80,6 @@ function Home() {
               </Button>
             )}
             <Button onClick={(e) => console.log(posts)}>Console Posts</Button>
-            
           </Grid.Row>
           {loading || loadingFeed === true ? (
             <h1>Loading feed...</h1>
@@ -85,15 +87,66 @@ function Home() {
             //Transition group adds animation for when new post is added/deleted
             <Transition.Group>
               <h1>feed mock</h1>
-              {posts  &&
-                posts.map((item) =>
+              {posts &&
+                posts.map((item, i) =>
                   item.postType === "P" ? (
                     <Grid.Column key={item.id} style={{ marginBottom: 20 }}>
                       <PostCard post={item} key={item.id} />
+                      {i === posts.length - 1 && (
+                        <Waypoint
+                          onEnter={() =>
+                            fetchMore({
+                              variables: { 
+                                first: 5, 
+                                offset: posts[posts.length - 1].id 
+                              }, 
+                              updateQuery: (pv, {fetchMoreResult}) => {
+                                if(!fetchMoreResult){
+                                  return pv;
+                                }
+                                return {
+                                  posts: {
+                                    __typename:'Post',
+                                    posts:[...pv.posts, fetchMoreResult.posts]
+                                    
+                                  }
+                                }
+                              }
+                            })
+                          }
+                        />
+                      )}
                     </Grid.Column>
                   ) : (
                     <Grid.Column key={item.id} style={{ marginBottom: 20 }}>
                       <ReactionCard reaction={item} key={item.id} />
+                      {i === posts.length - 1 && (
+                        <Waypoint
+                          onEnter={() =>
+                            fetchMore({
+                              variables: { 
+                                first: 5, 
+                                offset: posts.length - 1 
+                              }, 
+                              updateQuery: (pv, {fetchMoreResult}) => {
+                                if(!fetchMoreResult){
+                                  return pv;
+                                }
+                                //console.log("The posts are: " +posts)
+                                console.log("The pv are: " + JSON.stringify(pv))
+                                //console.log("The fetchMoreResult are: " + JSON.stringify(fetchMoreResult))
+                                return {
+                                  
+                                    __typename:"Post",
+                                    getPosts:[...pv.getPosts, ...fetchMoreResult.getPosts],
+                                    hasNextPage: true
+                                  
+                                }
+                              }
+                            })
+                          }
+                        />
+                      )}
                     </Grid.Column>
                   )
                 )}
@@ -136,6 +189,7 @@ function Home() {
               </Transition.Group>
             )}
           </Grid.Row> */}
+          
         </Grid.Column>
         <Grid.Column width={4}>
           <Grid.Row className="page-title">

@@ -20,11 +20,17 @@ function ReactionCard({
   reaction: { id, body, user, playId, createdAt, post } = {},
 }) {
   const { userME } = useContext(AuthContext);
-  const gameData = post.gameArray.find((o) => o.gameId.gameId === playId.game.gameId);
+  const betData =
+    post != null
+      ? post.gameArray.find((o) => o.gameId.gameId === playId.game.gameId)
+      : null;
+
+
+    const gameData = playId.game;
 
   console.log("gamedata alert" + gameData);
 
-  let LiveGameMarkup = (
+  let LiveGamePostedAboutMarkup = (
     <>
       <Card fluid floated="right" style={{ width: "100%" }}>
         <Card.Content>
@@ -50,7 +56,7 @@ function ReactionCard({
               {moment(createdAt).fromNow(true)} ago
             </div>
 
-            {gameData.gameId == null ? (
+            {gameData && gameData.gameId == null ? (
               <div className="pc-bet">Failed to load game data</div>
             ) : (
               <div className="pc-bet">
@@ -80,11 +86,45 @@ function ReactionCard({
     </>
   );
 
-  let PostGameMarkup = (
+  let LiveGameNormalMarkup = (
     <>
       <Card fluid floated="right" style={{ width: "100%" }}>
         <Card.Content>
-        <h1>THIS IS A REACTIOn</h1>
+          <h1>THIS IS A REACTIOn</h1>
+          <div
+            style={{ display: "inline-block", width: "auto", height: "100%" }}
+          >
+            <div>
+              <img
+                className="pc-img"
+                alt="profile-pic"
+                src={`${user.profilePicture}`}
+              ></img>
+            </div>
+          </div>
+          <div className="pc-header">
+            <Link to={`/user/${user.username}`}>
+              {user.name} @{user.username}
+            </Link>
+            <div
+              style={{ display: "inline-block", color: "gray", float: "right" }}
+            >
+              {moment(createdAt).fromNow(true)} ago
+            </div>
+            <div className="pc-bet">Game not posted about</div>}
+            <div className="pc-betBody">The reaction: {body}</div>
+            <div className="pc-betBody">The play: {playId.description}</div>
+          </div>
+        </Card.Content>
+      </Card>
+    </>
+  );
+
+  let PostGamePostedAboutMarkup = (
+    <>
+      <Card fluid floated="right" style={{ width: "100%" }}>
+        <Card.Content>
+          <h1>THIS IS A REACTIOn</h1>
           <div
             style={{ display: "inline-block", width: "auto", height: "100%" }}
           >
@@ -106,7 +146,7 @@ function ReactionCard({
               {moment(createdAt).fromNow(true)} ago
             </div>
 
-            {gameData.gameId == null ? (
+            {gameData && gameData.gameId == null ? (
               <div className="pc-bet">Failed to load game data</div>
             ) : (
               <div className="pc-bet">
@@ -145,11 +185,49 @@ function ReactionCard({
     </>
   );
 
-  if (gameData.gameId.stateDetails === "STATUS_IN_PROGRESS") {
-    return LiveGameMarkup;
-  } else if (gameData.gameId.stateDetails === "STATUS_FINAL") {
-    return PostGameMarkup;
-  } else;
+  let PostGameNormalMarkup = (
+    <>
+      <Card fluid floated="right" style={{ width: "100%" }}>
+        <Card.Content>
+          <h1>THIS IS A REACTIOn</h1>
+          <div
+            style={{ display: "inline-block", width: "auto", height: "100%" }}
+          >
+            <div>
+              <img
+                className="pc-img"
+                alt="profile-pic"
+                src={`${user.profilePicture}`}
+              ></img>
+            </div>
+          </div>
+          <div className="pc-header">
+            <Link to={`/user/${user.username}`}>
+              {user.name} @{user.username}
+            </Link>
+            <div
+              style={{ display: "inline-block", color: "gray", float: "right" }}
+            >
+              {moment(createdAt).fromNow(true)} ago
+            </div>
+
+            <div className="pc-bet">Game not posted about</div>
+
+            <div className="pc-betBody">The reaction: {body}</div>
+            <div className="pc-betBody">The play: {playId.description}</div>
+          </div>
+        </Card.Content>
+      </Card>
+    </>
+  );
+
+  if (gameData.stateDetails === "STATUS_IN_PROGRESS") {
+    if (post != null) return LiveGamePostedAboutMarkup;
+    else return LiveGameNormalMarkup;
+  } else if (gameData.stateDetails === "STATUS_FINAL") {
+    if (post != null) return PostGamePostedAboutMarkup;
+    else return PostGameNormalMarkup;
+  }
 }
 
 export default ReactionCard;

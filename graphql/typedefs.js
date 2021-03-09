@@ -393,7 +393,7 @@ module.exports = gql`
   }
 
   type Query {
-    getPosts: [Post]
+    getPosts(first: Int!, offset: Int): [Post]
     getUser(username: String!): User
     getUserPosts(username: String!): [Post]
     getUserNotifications: [Notification]

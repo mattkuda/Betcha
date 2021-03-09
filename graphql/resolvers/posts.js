@@ -11,7 +11,7 @@ const checkAuth = require("../../util/check-auth");
 
 module.exports = {
   Query: {
-    async getPosts(_, {}, context) {
+    async getPosts(_, {first, offset}, context) {
       try {
         // GETTING POSTS FROM ONLY PPL YOU FOLLOW
         const { id } = checkAuth(context);
@@ -24,7 +24,7 @@ module.exports = {
         //Only get posts from ppl that are in that array
         const posts = await Post.find({ user: { $in: followingIds } }).sort({
           createdAt: -1,
-        });
+        }).skip(offset).limit(first);
 
         return posts;
       } catch (err) {
