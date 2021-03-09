@@ -20,6 +20,10 @@ function ReactionCard({
   reaction: { id, body, user, playId, createdAt, post } = {},
 }) {
   const { userME } = useContext(AuthContext);
+
+  console.log("The Post is: " + post)
+  console.log("The body is: " + body)
+  console.log("The playId.description is: " + playId.description)
   const betData =
     post != null
       ? post.gameArray.find((o) => o.gameId.gameId === playId.game.gameId)
@@ -28,7 +32,8 @@ function ReactionCard({
 
     const gameData = playId.game;
 
-  console.log("gamedata alert" + gameData);
+  console.log("gamedata alert" + JSON.stringify(gameData));
+  console.log("user alert" + JSON.stringify(user));
 
   let LiveGamePostedAboutMarkup = (
     <>
@@ -225,8 +230,14 @@ function ReactionCard({
     if (post != null) return LiveGamePostedAboutMarkup;
     else return LiveGameNormalMarkup;
   } else if (gameData.stateDetails === "STATUS_FINAL") {
-    if (post != null) return PostGamePostedAboutMarkup;
-    else return PostGameNormalMarkup;
+    if (post != null){
+      console.log("12312312")
+      return PostGamePostedAboutMarkup;
+    } 
+    else{
+      console.log("666666")
+      return PostGameNormalMarkup;
+    } 
   }
 }
 

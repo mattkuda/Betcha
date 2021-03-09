@@ -16,7 +16,7 @@ const SearchBox = (props) => {
         placeholder = {props.placeholder}
         onChange = {props.handleChange}
         />
-        <i class="fas fa-search"></i>
+        <i className="fas fa-search"></i>
       </div>
       <ul className="list">
         {props.filtered.map(item => (

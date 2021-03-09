@@ -15,17 +15,6 @@ function Home() {
   const { user } = useContext(AuthContext);
   var loadingFeed = true;
 
-  // const QueryMultiple = () => {
-  //   const res1 = useQuery(FETCH_POSTS_QUERY);
-  //   const res2 = useQuery(FETCH_REACTIONS_QUERY);
-  //   return [res1, res2];
-  // };
-
-  // const [
-  //   { loading, data: { getPosts: posts } = {} },
-  //   { loading2, data: { getReactionsFromFollowees: reactions } = {} },
-  // ] = QueryMultiple();
-
   const { loading, data: { getPosts: posts } = {}, fetchMore } = useQuery(
     FETCH_POSTS_QUERY,
     {
@@ -33,23 +22,8 @@ function Home() {
     },
   );
 
-  // const {
-  //   loading2,
-  //   data: { getReactionsFromFollowees: reactions } = {},
-  // } = useQuery(FETCH_REACTIONS_QUERY);
-  // const feedItems = mergeLists(posts, reactions)
-
   loadingFeed = false;
   const [modalOpen, setModalOpen] = useState(false);
-
-  function mergeLists(list1, list2) {
-    var items = [];
-    items = items
-      .concat(list1)
-      .concat(list2)
-      .sort((a, b) => (a.createdAt > b.createdAt ? -1 : 1));
-    return items;
-  }
 
   return (
     <>
@@ -98,18 +72,21 @@ function Home() {
                             fetchMore({
                               variables: { 
                                 first: 5, 
-                                offset: posts[posts.length - 1].id 
+                                offset: posts.length - 1 
                               }, 
                               updateQuery: (pv, {fetchMoreResult}) => {
                                 if(!fetchMoreResult){
                                   return pv;
                                 }
+                                //console.log("The posts are: " +posts)
+                                console.log("The pv are: " + JSON.stringify(pv))
+                                //console.log("The fetchMoreResult are: " + JSON.stringify(fetchMoreResult))
                                 return {
-                                  posts: {
-                                    __typename:'Post',
-                                    posts:[...pv.posts, fetchMoreResult.posts]
-                                    
-                                  }
+                                  
+                                    __typename:"Post",
+                                    getPosts:[...pv.getPosts, ...fetchMoreResult.getPosts],
+                                    hasNextPage: true
+                                  
                                 }
                               }
                             })
