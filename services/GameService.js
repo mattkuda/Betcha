@@ -492,8 +492,10 @@ class GameService {
   */
   async addGamesForDay(data, sport, league) {
     for (const game of data) {
-      const gameExists = await Pregame.exists({ gameId: game.id });
-      if (gameExists === false) {
+      const gameExistsInPregame = await Pregame.exists({ gameId: game.id });
+      const gameExistsInLivegame = await Livegame.exists({ gameId: game.id });
+      const gameExistsInPostgame = await Postgame.exists({ gameId: game.id });
+      if (gameExistsInPregame === false && gameExistsInLivegame === false && gameExistsInPostgame === false && game.status === "pre") {
         console.log("Adding new upcoming game...");
 
         //adding default data
