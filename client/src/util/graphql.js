@@ -90,6 +90,7 @@ query($first: Int!, $offset: Int!) {
       post {
         id
         body
+        username
         betOdds
         gameArray {
           gameId {

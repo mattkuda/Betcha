@@ -17,7 +17,7 @@ import { postGameDescFormat } from "../../util/Extensions/postGameDescFormal";
 import { determineBetResult } from "../../util/Extensions/betCalculations";
 
 function ReactionCard({
-  reaction: { id, body, user, playId, createdAt, post } = {},
+  reaction: { id, body, user, playId, createdAt, post, commentCount, likeCount, likes, } = {},
 }) {
   const { userME } = useContext(AuthContext);
 
@@ -184,6 +184,35 @@ function ReactionCard({
 
             <div className="pc-betBody">The reaction: {body}</div>
             <div className="pc-betBody">The play: {playId.description}</div>
+            <div className="pc-buttons">
+              <Button onClick={(e) => console.log(userME)}>userME</Button>
+              <LikeButton
+                user={userME}
+                receiver={user.id}
+                post={{ id, likes, likeCount }}
+              />
+              <MyPopup content="Commment on post" inverted>
+                <Button labelPosition="right" as={Link} to={`/posts/${id}`}>
+                  <Button color="blue" basic>
+                    <Icon name="comments" />
+                  </Button>
+                  <Label basic color="blue" pointing="left">
+                    {commentCount}
+                  </Label>
+                </Button>
+              </MyPopup>
+              {userME && userME.username === post.username && (
+                <div
+                  style={{
+                    display: "inline-block",
+                    color: "gray",
+                    float: "right",
+                  }}
+                >
+                  <DeleteButton postId={id} />
+                </div>
+              )}
+            </div>
           </div>
         </Card.Content>
       </Card>
@@ -220,6 +249,35 @@ function ReactionCard({
 
             <div className="pc-betBody">The reaction: {body}</div>
             <div className="pc-betBody">The play: {playId.description}</div>
+            <div className="pc-buttons">
+              <Button onClick={(e) => console.log(userME)}>userME</Button>
+              <LikeButton
+                user={userME}
+                receiver={user.id}
+                post={{ id, likes, likeCount }}
+              />
+              <MyPopup content="Commment on post" inverted>
+                <Button labelPosition="right" as={Link} to={`/posts/${id}`}>
+                  <Button color="blue" basic>
+                    <Icon name="comments" />
+                  </Button>
+                  <Label basic color="blue" pointing="left">
+                    {commentCount}
+                  </Label>
+                </Button>
+              </MyPopup>
+              {userME && userME.username === post.username && (
+                <div
+                  style={{
+                    display: "inline-block",
+                    color: "gray",
+                    float: "right",
+                  }}
+                >
+                  <DeleteButton postId={id} />
+                </div>
+              )}
+            </div>
           </div>
         </Card.Content>
       </Card>

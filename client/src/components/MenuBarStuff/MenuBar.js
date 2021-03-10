@@ -25,7 +25,6 @@ function MenuBar() {
   function fillOptionsArray(users) {
     var options = [];
     for (var i = 1; i <= users.length; i++) {
-      console.log(i);
       options.push({
         key: i,
         text: users[i-1].name,
@@ -43,7 +42,7 @@ function MenuBar() {
   }
 
   const menuBar = user ? (
-    <Menu pointing secondary size="massive" color="teal">
+    <Menu pointing secondary size="massive" color="teal" >
       <Menu.Item
         name="home"
         active={activeItem === "home"}

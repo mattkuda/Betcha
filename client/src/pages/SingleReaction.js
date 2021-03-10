@@ -20,7 +20,7 @@ import MyPopup from "../util/MyPopup";
 import { betDescFormat } from "../util/Extensions/betDescFormat";
 import { betTimeFormat } from "../util/Extensions/betTimeFormat";
 
-function SinglePost(props) {
+function SingleReaction(props) {
   const postId = props.match.params.postId;
   const { user } = useContext(AuthContext);
 
@@ -63,13 +63,7 @@ function SinglePost(props) {
   }
 
   const handleButtonClick = async () => {
-
-    
-
     await submitComment();
-
-    console.log("AS WE SEND postId is " +postId)
-    console.log("AS WE SEND receiverId is " )
     try {
       await createNotification();
     } catch (error) {
@@ -89,18 +83,10 @@ function SinglePost(props) {
     postMarkup = <p>Loading post...</p>;
   } else {
     const {
-      id,
-      body,
-      gameArray,
-      betOdds,
-      createdAt,
-      username,
-      comments,
-      likes,
-      likeCount,
-      commentCount,
-      user
+      id, body, user, playId, createdAt, post, comments, commentCount, likeCount, likes, username
     } = getPost;
+
+    const gameData = playId.game;
 
     values.receiverId = getPost.user.id;
 
@@ -121,25 +107,23 @@ function SinglePost(props) {
               <Card.Content>
                 <Card.Header>{username}</Card.Header>
                 <Card.Meta>{moment(createdAt).fromNow()}</Card.Meta>
-                {gameArray[0].gameId == null ? (
-              <div className="pc-bet">Failed to load game data :-(</div>
-            ) : (
-              gameArray && gameArray.map((game) => (
+                
+              {gameData.gameArray && gameData.gameArray.map((game) => (
                    
               <div>
               <div className="pc-bet">
-                {betDescFormat(game.betType, game.betAmount, game.gameId)} {" ("}{betOdds}{")"}
+                {betDescFormat(gameData.betType, gameData.betAmount, gameData.gameId)} 
                 <div
                   style={{
                     fontWeight: "normal",
                     fontStyle: "italic",
                   }}
                 >
-                  {game.gameId.awayAbbreviation} @ {game.gameId.homeAbbreviation},{" "}
-                  {betTimeFormat(game.gameId.startTime)}
+                  {gameData.gameId.awayAbbreviation} @ {gameData.gameId.homeAbbreviation},{" "}
+                  {betTimeFormat(gameData.gameId.startTime)}
                 </div>
               </div></div>))
-            )}
+            }
                 <Card.Description>This is the body: {body}</Card.Description>
               </Card.Content>
               <hr />
@@ -323,6 +307,7 @@ const FETCH_POST_QUERY = gql`
         createdAt
         body
       }
+      
     }
   }
 `;
@@ -343,4 +328,4 @@ const CREATE_NOTIFICATION_MUTATION = gql`
   }
 `;
 
-export default SinglePost;
+export default SingleReaction;

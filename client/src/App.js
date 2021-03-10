@@ -6,7 +6,7 @@ import "semantic-ui-css/semantic.min.css";
 import "./App.css";
 
 import { AuthProvider, AuthContext } from "./context/auth";
-import AuthRoute from './util/AuthRoute';
+import AuthRoute from "./util/AuthRoute";
 
 import MenuBar from "./components/MenuBarStuff/MenuBar";
 import Home from "./pages/Home";
@@ -28,8 +28,8 @@ function App() {
   return (
     <AuthProvider>
       <Router>
-      {/* add fluid = true to contatiner to make it full screen */}
-        <Container >
+        {/* add fluid = true to contatiner to make it full screen */}
+        <Container>
           <MenuBar />
           <Route exact path="/" component={Home} />
           <Route exact path="/home2" component={Home2} />
@@ -62,7 +62,11 @@ function App() {
           <Route exact path="/scoreboard/eng.1">
             <LeagueScoreboard league="eng.1" />
           </Route>
-          <Route exact path="/scoreboard/:league/:gameId" component={GameDetails} />
+          <Route
+            exact
+            path="/scoreboard/:league/:gameId"
+            component={GameDetails}
+          />
         </Container>
       </Router>
     </AuthProvider>

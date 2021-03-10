@@ -1,4 +1,5 @@
 import React, { useContext, useState, useRef } from "react";
+import { Waypoint } from "react-waypoint";
 import gql from "graphql-tag";
 import { useQuery, useMutation } from "@apollo/react-hooks";
 import {
@@ -14,6 +15,7 @@ import {
 import moment from "moment";
 
 import PostCard from "../components/PostCard/PostCard";
+import ReactionCard from "../components/ReactionCard/ReactionCard";
 import FollowButton from "../components/Buttons/FollowButton";
 import { AuthContext } from "../context/auth";
 import MyPopup from "../util/MyPopup";
@@ -32,11 +34,10 @@ function Profile(props) {
     },
   });
 
-  const { data: { getUserPosts } = {} } = useQuery(FETCH_USER_POSTS_QUERY, {
-    variables: {
-      profileUsername,
-    },
-  });
+  const {loading, data: { getUserPosts: posts } = {}, fetchMore } = useQuery(
+    FETCH_USER_POSTS_QUERY,
+    {variables: {first: 20, offset: 0, profileUsername }}
+  );
 
   const [modalOpen, setModalOpen] = useState(false);
 
@@ -44,7 +45,7 @@ function Profile(props) {
   let userMarkup;
 
   // if (!getUser || !getUserPosts) {
-  if (!getUser || !getUserPosts) {
+  if (!getUser || loading) {
     //todo fix
     userMarkup = <p>Loading user...</p>;
   } else {
@@ -60,9 +61,8 @@ function Profile(props) {
       followingCount,
       followersCount,
       followers,
-      
     } = getUser;
-    const posts = getUserPosts;
+ 
 
     userMarkup = (
       <>
@@ -81,18 +81,13 @@ function Profile(props) {
               bio={bio}
               location={location}
               website={website}
-            
             />
           </Modal.Content>
         </Modal>
-        <Grid>
+        <Grid >
           <Grid.Row>
             <Grid.Column width={2}>
-              <Image
-                src={profilePicture}
-                size="small"
-                float="right"
-              />
+              <Image src={profilePicture} size="small" float="right" />
             </Grid.Column>
             <Grid.Column width={14}>
               <Card fluid>
@@ -123,7 +118,11 @@ function Profile(props) {
                   )}
                   {website && (
                     <Card.Meta>
-                      <a href={`https://${website}`} target="_blank" rel="noopener noreferrer">
+                      <a
+                        href={`https://${website}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
                         <Icon fitted name="linkify" /> {website}
                       </a>
                     </Card.Meta>
@@ -138,22 +137,73 @@ function Profile(props) {
           </Grid.Row>
           <Grid.Row>
             {posts &&
-              posts.map((post) => (
-                <Grid.Column
-                  key={post.id}
-                  style={{ marginBottom: 20 }}
-                  width={16}
-                >
-                  <Link
-                    to={`/posts/${post.id}`}
-                    style={{ textDecoration: "normal" }}
-                  >
-                    <span className="card" style={{ display: "block" }}>
-                      <PostCard post={post} />
-                    </span>
-                  </Link>
-                </Grid.Column>
-              ))}
+              posts.map((item, i) =>
+                item.postType === "P" ? (
+                  <>
+                    <PostCard post={item} key={item.id} />
+                    {i === posts.length - 5 && (
+                      <Waypoint
+                        onEnter={() =>
+                          fetchMore({
+                            variables: {
+                              first: 20,
+                              offset: posts.length - 1,
+                            },
+                            updateQuery: (pv, { fetchMoreResult }) => {
+                              if (!fetchMoreResult) {
+                                return pv;
+                              }
+                              //console.log("The posts are: " +posts)
+                              console.log("The pv are: " + JSON.stringify(pv));
+                              //console.log("The fetchMoreResult are: " + JSON.stringify(fetchMoreResult))
+                              return {
+                                __typename: "Post",
+                                getUserPosts: [
+                                  ...pv.getUserPosts,
+                                  ...fetchMoreResult.getUserPosts,
+                                ],
+                                hasNextPage: true,
+                              };
+                            },
+                          })
+                        }
+                      />
+                    )}
+                  </>
+                ) : (
+                  <>
+                    <ReactionCard reaction={item} key={item.id} />
+                    {i === posts.length - 5 && (
+                      <Waypoint
+                        onEnter={() =>
+                          fetchMore({
+                            variables: {
+                              first: 20,
+                              offset: posts.length - 1,
+                            },
+                            updateQuery: (pv, { fetchMoreResult }) => {
+                              if (!fetchMoreResult) {
+                                return pv;
+                              }
+                              //console.log("The posts are: " +posts)
+                              console.log("The pv are: " + JSON.stringify(pv));
+                              //console.log("The fetchMoreResult are: " + JSON.stringify(fetchMoreResult))
+                              return {
+                                __typename: "Post",
+                                getUserPosts: [
+                                  ...pv.getUserPosts,
+                                  ...fetchMoreResult.getUserPosts,
+                                ],
+                                hasNextPage: true,
+                              };
+                            },
+                          })
+                        }
+                      />
+                    )}
+                  </>
+                )
+              )}
           </Grid.Row>
         </Grid>{" "}
       </>
@@ -188,11 +238,57 @@ const FETCH_PROFILE_QUERY = gql`
 `;
 
 export const FETCH_USER_POSTS_QUERY = gql`
-  query($profileUsername: String!) {
-    getUserPosts(username: $profileUsername) {
+  query($profileUsername: String!, $first: Int!, $offset: Int!) {
+    getUserPosts(username: $profileUsername, first: $first, offset: $offset,) {
       id
+      postType
       body
       betOdds
+      post {
+        id
+        body
+        betOdds
+        gameArray {
+          gameId {
+            gameId
+            stateDetails
+            homeScore
+            awayScore
+            period
+            time
+            awayAbbreviation
+            homeAbbreviation
+            awayScore
+            homeScore
+            spread
+            overUnder
+          }
+          betType
+          betAmount
+        }
+      }
+      playId {
+        game {
+          homeFullName
+          awayFullName
+          stateDetails
+          homeRecord
+          awayRecord
+          homeScore
+          awayScore
+          period
+          time
+          awayLogo
+          homeLogo
+          awayAbbreviation
+          homeAbbreviation
+          startTime
+          broadcasts
+          spread
+          overUnder
+        }
+        description
+      }
       gameArray {
         gameId {
           homeFullName
