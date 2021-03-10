@@ -949,9 +949,7 @@ class GameService {
               if (this.elementExists(game.situation, "lastPlay")) {
                 existingGame.lastPlay = game.situation.lastPlay.text;
                 if (this.elementExists(game.situation.lastPlay, "team")) {
-                  existingGame.specificData = {
-                    possession: game.situation.lastPlay.team.id,
-                  };
+                  existingGame.specificData.possession = game.situation.lastPlay.team.id;
                 }
               }
               await existingGame.save();
@@ -972,10 +970,8 @@ class GameService {
               if (this.elementExists(game.situation, "lastPlay")) {
                 existingGame.lastPlay = game.situation.lastPlay.text;
                 if (this.elementExists(game.situation.lastPlay, "team")) {
-                  existingGame.specificData = {
-                    possession: game.situation.lastPlay.team.id,
-                    addedClock: game.addedClock
-                  };
+                  existingGame.specificData.possession = game.situation.lastPlay.team.id;
+                  existingGame.specificData.addedClock = game.addedClock;
                 }
               }
               await existingGame.save();
@@ -996,9 +992,7 @@ class GameService {
               if (this.elementExists(game.situation, "lastPlay")) {
                 existingGame.lastPlay = game.situation.lastPlay.text;
                 if (this.elementExists(game.situation.lastPlay, "team")) {
-                  existingGame.specificData = {
-                    possession: game.situation.lastPlay.team.id,
-                  };
+                  existingGame.specificData.possession = game.situation.lastPlay.team.id;
                 }
               }
               await existingGame.save();
