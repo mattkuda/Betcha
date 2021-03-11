@@ -280,7 +280,7 @@ class GameService {
     for (const game of data) {
       let result = await Pregame.findOne({ gameId: game.id });
       if (result) {
-        console.log("Updating variable data for upcoming game...");
+        //console.log("Updating variable data for upcoming game...");
 
         if (this.elementExists(game, "broadcasts")) {
           if (game.broadcasts.length > 0) {

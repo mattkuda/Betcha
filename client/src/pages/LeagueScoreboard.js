@@ -7,7 +7,10 @@ import NCAAFGame from "../components/GameTypes/NCAAFGame";
 import NCAABMensGame from "../components/GameTypes/NCAABMensGame";
 import NBAGame from "../components/GameTypes/NBAGame";
 import Game from "../components/GameTypes/Game";
+import GameDatePicker from "../components/GameDatePicker";
 import { Grid } from "semantic-ui-react";
+import Carousel from '@brainhubeu/react-carousel';
+import '@brainhubeu/react-carousel/lib/style.css';
 import { FETCH_NFL_PREGAMES, FETCH_NFL_LIVEGAMES, FETCH_NFL_POSTGAMES,
          FETCH_NCAAF_PREGAMES, FETCH_NCAAF_LIVEGAMES, FETCH_NCAAF_POSTGAMES,
          FETCH_NCAABMENS_PREGAMES, FETCH_NCAABMENS_LIVEGAMES, FETCH_NCAABMENS_POSTGAMES,
@@ -16,6 +19,13 @@ import { FETCH_NFL_PREGAMES, FETCH_NFL_LIVEGAMES, FETCH_NFL_POSTGAMES,
          FETCH_PREMIER_LEAGUE_LIVEGAMES, FETCH_PREMIER_LEAGUE_POSTGAMES } from "../util/graphql";
 import './scoreboard.css';
 
+
+function assembleDates(start, end) {
+  for ( var arr=[], dt=new Date(start); dt<=end; dt.setDate(dt.getDate()+1)) {
+    arr.push(new Date(dt));
+  }
+  return arr;
+}
 
 
 function LeagueScoreboard(props) {
@@ -330,6 +340,20 @@ function LeagueScoreboard(props) {
 
   //NFL
   if (myLeague === "mens-college-basketball") {
+
+    //const firstDate = new Date(NCAABMENSpostgameData.getPostgamesByLeague.slice(-1)[0].startTime).toLocaleString();
+    //console.log(firstDate);
+    //console.log("Day of week: "+firstDate.getDay() + ", Day of month: "+firstDate.getDate() + ", Month: "+firstDate.getMonth());
+
+    // const myDate = new Date(NCAABMENSpregameData.getPregamesByLeague.slice(-1)[0].startTime);
+    // console.log("Day of week: "+myDate.getDay() + ", Day of month: "+myDate.getDate() + ", Month: "+myDate.getMonth());
+    //
+    // const current = new Date();
+    // const weekdays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    // const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    // const myDates = assembleDates(current, myDate);
+
+
     return (
       <div>
 

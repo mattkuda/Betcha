@@ -522,6 +522,43 @@ export const FETCH_NCAABMENS_POSTGAMES = gql`
   }
 `;
 
+
+export const FETCH_HEADER_INFO_FOR_GAME = gql`
+  query($myGameId: String!) {
+    getGameByID(gameId: $myGameId) {
+      homeId
+      awayId
+      favoredTeamId
+      homeFullName
+      awayFullName
+      homeRecord
+      awayRecord
+      homeLogo
+      awayLogo
+      homeAbbreviation
+      awayAbbreviation
+      homeScore
+      awayScore
+      homeColor
+      awayColor
+      spread
+      overUnder
+      awayML
+      homeML
+      spread
+      overUnder
+      awaySpreadOdds
+      homeSpreadOdds
+      spreadWinner
+      ouResult
+      specificData {
+        homeRank
+        awayRank
+      }
+    }
+  }
+`;
+
 //NBA GAME QUERIES
 
 export const FETCH_NBA_PREGAMES = gql`

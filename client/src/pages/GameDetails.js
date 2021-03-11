@@ -170,6 +170,8 @@ function GameDetails(props) {
         </Modal.Content>
       </Modal>
 
+      <GameDetailsHeader gameId={myGameId} league={myLeague} />
+
 
       <h1>Plays In Game</h1>
       <Fragment>

@@ -107,7 +107,6 @@ module.exports = gql`
   }
 
   type MixedPregameData {
-    weatherDescription: String
     homeRank: Int
     awayRank: Int
   }
@@ -125,6 +124,16 @@ module.exports = gql`
   type MixedPostgameData {
     homeRank: Int
     awayRank: Int
+  }
+
+  type MasterSpecificData {
+    homeRank: Int
+    awayRank: Int
+    down: Int
+    distance: Int
+    yardLine: Int
+    isRedZone: Boolean
+    possession: String
   }
 
   type TopEvent {
@@ -287,6 +296,7 @@ module.exports = gql`
     location: String
     spreadWinner: String
     ouResult: String
+    specificData: MasterSpecificData
   }
 
   input MastergameInput {

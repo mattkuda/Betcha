@@ -36,7 +36,7 @@ class NCAABMensGame extends Component {
                     <Image centered verticalAlign='middle' src={this.props.awayLogo} size='tiny'/>
                       {this.props.specificData.awayRank !== -1 ? (
                         <Label circular
-                          color="gray"
+                          color="grey"
                           floating
                           style={{ padding: "2px 2px", top: "10px", left: "47px" }}
                         >
@@ -51,7 +51,7 @@ class NCAABMensGame extends Component {
                   <Image centered verticalAlign='middle' src={this.props.homeLogo} size='tiny'/>
                     {this.props.specificData.homeRank !== -1 ? (
                       <Label circular
-                        color="gray"
+                        color="grey"
                         floating
                         style={{ padding: "2px 2px", top: "10px", left: "47px" }}
                       >
@@ -125,7 +125,7 @@ class NCAABMensGame extends Component {
                     <Image centered verticalAlign='middle' src={this.props.awayLogo} size='tiny'/>
                       {this.props.specificData.awayRank !== -1 ? (
                         <Label circular
-                          color="gray"
+                          color="grey"
                           floating
                           style={{ padding: "2px 2px", top: "10px", left: "47px" }}
                         >
@@ -150,7 +150,7 @@ class NCAABMensGame extends Component {
                   <Image centered verticalAlign='middle' src={this.props.homeLogo} size='tiny'/>
                     {this.props.specificData.homeRank !== -1 ? (
                       <Label circular
-                        color="gray"
+                        color="grey"
                         floating
                         style={{ padding: "2px 2px", top: "10px", left: "47px" }}
                       >
@@ -203,7 +203,7 @@ class NCAABMensGame extends Component {
                     <Image centered verticalAlign='middle' src={this.props.awayLogo} size='tiny'/>
                       {this.props.specificData.awayRank !== -1 ? (
                         <Label circular
-                          color="gray"
+                          color="grey"
                           floating
                           style={{ padding: "2px 2px", top: "10px", left: "47px" }}
                         >
@@ -218,7 +218,7 @@ class NCAABMensGame extends Component {
                   <Image centered verticalAlign='middle' src={this.props.homeLogo} size='tiny'/>
                     {this.props.specificData.homeRank !== -1 ? (
                       <Label circular
-                        color="gray"
+                        color="grey"
                         floating
                         style={{ padding: "2px 2px", top: "10px", left: "47px" }}
                       >
