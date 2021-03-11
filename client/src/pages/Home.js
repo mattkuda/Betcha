@@ -34,8 +34,10 @@ function Home() {
         // dimmer="blurring" TODO
         style={{ height: "90%" }}
       >
-        <Modal.Content image scrolling style={{padding: "0px", width: "100%", height: "100%"}}>
-          <PostModal handleClose={(e) => setModalOpen(false)} />
+        <Modal.Content long image scrolling style={{padding: "1px", width: "100%", height: "210%"}}>
+      
+          <PostModal handleClose={(e) => setModalOpen(false)} style={{height: "100%"}}/>
+         
         </Modal.Content>
       </Modal>
 

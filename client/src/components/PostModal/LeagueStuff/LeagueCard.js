@@ -6,7 +6,7 @@ import MyPopup from "../../../util/MyPopup";
 
 function LeagueCard(props) {
   return (
-    <Card fluid onClick={() => props.pickLeague(props.leagueName)} style={{margin: "20px"}}>
+    <Card fluid onClick={() => props.pickLeague(props.leagueName)} style={{padding: "10px"}}>
       <Card.Content style={{ display: "table", padding: "10px", verticalAlign: "middle", top: "50%"}}>
         <Image
           floated="left"

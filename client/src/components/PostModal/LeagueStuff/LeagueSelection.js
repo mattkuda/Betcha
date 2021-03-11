@@ -41,7 +41,7 @@ function LeagueSelection(props) {
 
   return (
     <div style={{padding: "0px"}}>
-      <Grid columns="two" style={{width: "100%",padding: "0px"}}>
+      <Grid columns="two" style={{width: "100%",padding: "0px", margin: "0px"}}>
         <Grid.Row>
           {loading2 ? (
             <h1>Loading leagues...</h1>

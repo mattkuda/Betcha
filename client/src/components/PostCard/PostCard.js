@@ -30,6 +30,18 @@ function PostCard({
     user,
   } = {},
 }) {
+
+  console.log("body: " + body);
+  console.log("betOdds: " + betOdds);
+  console.log("gameArray: " + gameArray);
+  console.log("createdAt: " + createdAt);
+  console.log("id: " + id);
+  console.log("username: " + username);
+  console.log("likeCount: " + likeCount);
+  console.log("commentCount: " + commentCount);
+  console.log("likes: " + likes);
+  console.log("user: " + likes);
+
   const { userME } = useContext(AuthContext);
 
   let PreGameMarkup = (

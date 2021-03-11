@@ -253,25 +253,30 @@ function PostModal(props) {
         )}
 
         {modalState === "BetAdjust" && (
-          <div style={{ display: "inline-block" }}>
+          <div style={{ display: "inline-block",
+                padding: "15px", width: "100%" }}>
             <Icon
               onClick={goBackGames}
               size="big"
               fitted
               name="arrow left"
+              className="hardLeft"
               style={{
+                left: "0px",
                 display: "inline-block",
-                color: "#545454",
                 cursor: "pointer",
-                padding: "0px 15px",
-                marginTop: "90px",
+                color: "#545454",
+                padding: "0px 0px",
+                marginTop: "90px"
               }}
             />
+
             <h2
               style={{
                 color: "#545454",
                 display: "inline-block",
                 margin: "auto",
+                textAlign: "center"
               }}
             >
               Adjust your bet...

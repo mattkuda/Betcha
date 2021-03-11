@@ -6,11 +6,12 @@ import { faCoffee } from "@fortawesome/free-solid-svg-icons";
 class BetIncrementer extends Component {
   constructor(props) {
     super(props);
+
     this.state = {
       count: parseFloat(props.defValue).toFixed(1),
     };
-    this.regularSpread = props.defValue;
 
+    this.regularSpread = props.defValue;
     this.handleChange = this.handleChange.bind(this);
     this.increment = this.increment.bind(this);
     this.decrement = this.decrement.bind(this);
@@ -59,7 +60,7 @@ class BetIncrementer extends Component {
             <input
               className="jumbotron__window"
               type="number"
-              style={{ display: "inline-block" }}
+              style={{ display: "inline-block" , width: "170px"}}
               value={this.state.count}
               onChange={this.handleChange}
             />

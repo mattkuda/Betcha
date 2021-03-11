@@ -1054,6 +1054,7 @@ export const FETCH_ALL_PREGAMES = gql`
       overUnder
       overOdds
       underOdds
+      favoredTeam
     }
   }
 `;
