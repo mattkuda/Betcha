@@ -10,6 +10,7 @@ import {
 } from "semantic-ui-react";
 import gql from "graphql-tag";
 import { useMutation } from "@apollo/react-hooks";
+import "./PostModal.css";
 
 import { useForm } from "../../util/hooks";
 
@@ -177,145 +178,168 @@ function PostModal(props) {
   }
 
   return (
-    <>
-      <Grid style={{ padding: "0" }}>
-        <Grid.Row style={{ backgroundColor: "#f2f2f2" }}>
-          {modalState === "Leagues" && (
-            <div style={{ display: "inline-block" }}>
-              <div style={{paddingRight: "30px"}}></div>
+    <div style={{ padding: "0px", margin: "0px", width: "100%", height: "100%"}}>
+      <div
+        centered
+        style={{
+          textAlign: "center",
+          backgroundColor: "#f2f2f2",
+          width: "100%",
+          display: "block",
+          borderBottom: "3px solid #545454"
+        }}
+      >
+        {modalState === "Leagues" && (
+          <div style={{ display: "inline-block",
+                padding: "15px", width: "100%" }}>
+            <Icon
               
-              <h2
-                style={{
-                  color: "#545454",
-                  display: "inline-block",
-                  margin: "auto",
-                }}
-              >
-                Select your league...
-              </h2>
-            </div>
+              size="big"
+              fitted
+              name="arrow left"
+              className="hardLeft"
+              style={{
+                left: "0px",
+                display: "inline-block",
+                color: "#f2f2f2",
+                padding: "0px 0px",
+                marginTop: "90px"
+              }}
+            />
+
+            <h2
+              style={{
+                color: "#545454",
+                display: "inline-block",
+                margin: "auto",
+                textAlign: "center"
+              }}
+            >
+              Select your league...
+            </h2>
+          </div>
+        )}
+
+        {modalState === "Games" && (
+          <div style={{ display: "inline-block",
+                padding: "15px", width: "100%" }}>
+            <Icon
+              onClick={goBackLeagues}
+              size="big"
+              fitted
+              name="arrow left"
+              className="hardLeft"
+              style={{
+                left: "0px",
+                display: "inline-block",
+                cursor: "pointer",
+                color: "#545454",
+                padding: "0px 0px",
+                marginTop: "90px"
+              }}
+            />
+
+            <h2
+              style={{
+                color: "#545454",
+                display: "inline-block",
+                margin: "auto",
+                textAlign: "center"
+              }}
+            >
+              Select your game...
+            </h2>
+          </div>
+        )}
+
+        {modalState === "BetAdjust" && (
+          <div style={{ display: "inline-block" }}>
+            <Icon
+              onClick={goBackGames}
+              size="big"
+              fitted
+              name="arrow left"
+              style={{
+                display: "inline-block",
+                color: "#545454",
+                cursor: "pointer",
+                padding: "0px 15px",
+                marginTop: "90px",
+              }}
+            />
+            <h2
+              style={{
+                color: "#545454",
+                display: "inline-block",
+                margin: "auto",
+              }}
+            >
+              Adjust your bet...
+            </h2>
+          </div>
+        )}
+      </div>
+
+      <div style={{ display: "block" }}>
+        <div>
+          {modalState === "Leagues" && (
+            <LeagueSelection chooseLeague={selectLeague} />
           )}
 
           {modalState === "Games" && (
-            <div style={{ display: "inline-block" }}>
-              <Icon
-                onClick={goBackLeagues}
-                size="big"
-                fitted
-                name="arrow left"
-                style={{
-                  display: "inline-block",
-                  cursor: "pointer",
-                  color: "#545454",
-                  padding: "0px 15px",
-                  marginTop: "90px",
-                }}
+            <div>
+              <GameSelection
+                league={xleagueId}
+                chooseGameId={selectGameId}
+                chooseBetType={selectBetType}
+                chooseBetOdds={selectxdefBetOdds}
+                chooseBetAmount={selectxdefBetAmount}
               />
-
-              <h2
-                style={{
-                  color: "#545454",
-                  display: "inline-block",
-                  margin: "auto",
-                }}
-              >
-                Select your game...
-              </h2>
             </div>
           )}
 
           {modalState === "BetAdjust" && (
-            <div style={{ display: "inline-block" }}>
-              <Icon
-                onClick={goBackGames}
-                size="big"
-                fitted
-                name="arrow left"
-                style={{
-                  display: "inline-block",
-                  color: "#545454",
-                  cursor: "pointer",
-                  padding: "0px 15px",
-                  marginTop: "90px",
-                }}
+            <>
+              Change the spread o/u:
+              <BetSelection
+                defValue={xdefBetAmount}
+                chooseBetAmount={selectBetAmount}
+                betValue={betAmount}
               />
-              <h2
-                style={{
-                  color: "#545454",
-                  display: "inline-block",
-                  margin: "auto",
-                }}
+              Change the odds:
+              <BetSelection
+                defValue={xdefBetOdds}
+                chooseBetAmount={selectBetOdds}
+                betValue={betOdds}
+              />
+              <Input
+                placeholder="Why are you taking this bet?"
+                noValidate
+                name="body"
+                onChange={onChange}
+                value={values.body}
+                error={error ? true : false}
+              />
+              <Button
+                type="button"
+                color="teal"
+                onClick={() => handleSingleBetSubmitClick()}
               >
-                Adjust your bet...
-              </h2>
-            </div>
+                Submit
+              </Button>
+              <Button
+                type="button"
+                color="purple"
+                onClick={() => handleAddGameClick()}
+                disabled={values.gameArray.length > 9}
+              >
+                Add another game
+              </Button>
+            </>
           )}
-        </Grid.Row>
-
-        <Grid.Row>
-          <p>The gameArray is: {JSON.stringify(values.gameArray)}</p>
-          {/* sdfsdf */}
-          <div>
-            {modalState === "Leagues" && (
-              <LeagueSelection chooseLeague={selectLeague} />
-            )}
-
-            {modalState === "Games" && (
-              <div>
-                <p>in game sleec</p>
-                <GameSelection
-                  league={xleagueId}
-                  chooseGameId={selectGameId}
-                  chooseBetType={selectBetType}
-                  chooseBetOdds={selectxdefBetOdds}
-                  chooseBetAmount={selectxdefBetAmount}
-                />
-              </div>
-            )}
-
-            {modalState === "BetAdjust" && (
-              <>
-                Change the spread o/u:
-                <BetSelection
-                  defValue={xdefBetAmount}
-                  chooseBetAmount={selectBetAmount}
-                  betValue={betAmount}
-                />
-                Change the odds:
-                <BetSelection
-                  defValue={xdefBetOdds}
-                  chooseBetAmount={selectBetOdds}
-                  betValue={betOdds}
-                />
-                <Input
-                  placeholder="Why are you taking this bet?"
-                  noValidate
-                  name="body"
-                  onChange={onChange}
-                  value={values.body}
-                  error={error ? true : false}
-                />
-                <Button
-                  type="button"
-                  color="teal"
-                  onClick={() => handleSingleBetSubmitClick()}
-                >
-                  Submit
-                </Button>
-                <Button
-                  type="button"
-                  color="purple"
-                  onClick={() => handleAddGameClick()}
-                  disabled={values.gameArray.length > 9}
-                >
-                  Add another game
-                </Button>
-              </>
-            )}
-          </div>
-        </Grid.Row>
-      </Grid>
-    </>
+        </div>
+      </div>
+    </div>
   );
 }
 

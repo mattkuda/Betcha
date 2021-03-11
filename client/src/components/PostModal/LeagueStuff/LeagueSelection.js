@@ -40,8 +40,8 @@ function LeagueSelection(props) {
   // ];
 
   return (
-    <>
-      <Grid columns="two">
+    <div style={{padding: "0px"}}>
+      <Grid columns="two" style={{width: "100%",padding: "0px"}}>
         <Grid.Row>
           {loading2 ? (
             <h1>Loading leagues...</h1>
@@ -51,7 +51,7 @@ function LeagueSelection(props) {
 
               {leagues &&
                 leagues.map((league) => (
-                  <Grid.Column key={league.id} style={{ marginBottom: 20, marginTop: 20}}>
+                  <Grid.Column key={league.id} style={{  marginTop: 20}}>
                     <LeagueCard  displayName={league.displayName} leagueName={league.leagueName} image={league.image} pickLeague = {props.chooseLeague}/>
                   </Grid.Column>
                 ))}
@@ -59,7 +59,7 @@ function LeagueSelection(props) {
           )}
         </Grid.Row>
       </Grid>
-    </>
+    </div>
   );
 }
 
