@@ -90,6 +90,7 @@ query($first: Int!, $offset: Int!) {
       post {
         id
         body
+        username
         betOdds
         gameArray {
           gameId {
@@ -1090,6 +1091,7 @@ export const FETCH_ALL_PREGAMES = gql`
       overUnder
       overOdds
       underOdds
+      favoredTeam
     }
   }
 `;

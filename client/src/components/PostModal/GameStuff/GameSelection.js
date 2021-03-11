@@ -39,8 +39,8 @@ function GameSelection(props) {
 
 
   return (
-    <>
-      <Grid columns="two">
+    <div style={{padding: "0px"}}>
+      <Grid columns="two" style={{width: "100%",padding: "0px", margin: "0px"}}>
         <Grid.Row>
           {loading2 ? (
             <h1>Loading Games...</h1>
@@ -66,7 +66,7 @@ function GameSelection(props) {
           )}
         </Grid.Row>
       </Grid>
-    </>
+    </div>
   );
 }
 

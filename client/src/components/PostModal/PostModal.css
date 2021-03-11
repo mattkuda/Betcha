@@ -1,0 +1,6 @@
+.hardLeft{
+  float: left !important;
+  text-align: left !important; 
+  vertical-align: center !important;
+  left: 0px;
+}

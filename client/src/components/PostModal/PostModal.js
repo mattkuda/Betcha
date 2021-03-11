@@ -1,7 +1,16 @@
 import React, { useState } from "react";
-import { Button, Form, Transition, Modal } from "semantic-ui-react";
+import {
+  Button,
+  Form,
+  Transition,
+  Modal,
+  Input,
+  Grid,
+  Icon,
+} from "semantic-ui-react";
 import gql from "graphql-tag";
 import { useMutation } from "@apollo/react-hooks";
+import "./PostModal.css";
 
 import { useForm } from "../../util/hooks";
 
@@ -24,8 +33,6 @@ function PostModal(props) {
     xdefBetAmount: "",
     xleagueId: "",
   });
-
-  
 
   const [createPost, { error }] = useMutation(CREATE_POST_MUTATION, {
     variables: values,
@@ -73,14 +80,13 @@ function PostModal(props) {
   const [xdefBetAmount, setxdefBetAmount] = React.useState("");
   const [xleagueId, setxleagueId] = React.useState("");
   const [modalState, setModalState] = React.useState("Leagues");
- 
+
   function selectLeague(event) {
     console.log("param pass in: " + event);
     setxleagueId(event);
     setModalState("Games");
-    console.log("the league id is: " + xleagueId)
-    console.log("modalState: " + modalState)
-
+    console.log("the league id is: " + xleagueId);
+    console.log("modalState: " + modalState);
   }
 
   function selectGameId(pickedGameId) {
@@ -88,20 +94,19 @@ function PostModal(props) {
     values.gameId = pickedGameId;
     setGameId(pickedGameId);
     setModalState("BetAdjust");
-    console.log("modalState: " + modalState)
+    console.log("modalState: " + modalState);
   }
 
   function selectBetType(pickedBetType) {
     // values.betType = pickedBetType;
     values.betType = pickedBetType;
-    setbetType(pickedBetType)
-    
+    setbetType(pickedBetType);
   }
 
   function selectBetOdds(pickedBetOdds) {
     // values.betOdds = pickedBetOdds;
     values.betOdds = pickedBetOdds.toString();
-    setBetOdds(pickedBetOdds.toString())
+    setBetOdds(pickedBetOdds.toString());
   }
 
   function selectxdefBetOdds(pickedxdefBetOdds) {
@@ -117,7 +122,7 @@ function PostModal(props) {
   function selectBetAmount(pickedBetAmount) {
     // values.betAmount = pickedBetAmount.toString();
     values.betAmount = pickedBetAmount.toString();
-    
+
     setBetAmount(pickedBetAmount);
   }
 
@@ -139,16 +144,22 @@ function PostModal(props) {
     };
 
     values.gameArray.push(gameBetTemp);
-    
-    
 
     console.log("3");
   }
 
   function handleSingleBetSubmitClick() {
     addBetToArray();
-    console.log("SUBMITTING: "+JSON.stringify(values));
+    console.log("SUBMITTING: " + JSON.stringify(values));
     createPostCallback();
+  }
+
+  function goBackLeagues() {
+    setModalState("Leagues");
+  }
+
+  function goBackGames() {
+    setModalState("Games");
   }
 
   function handleAddGameClick() {
@@ -167,27 +178,130 @@ function PostModal(props) {
   }
 
   return (
-    <>
-      <p>xlid: {xleagueId}</p>
-      <Form onSubmit={onSubmit}>
-        <p>The gameArray is: {JSON.stringify(values.gameArray)}</p>
-        {/* sdfsdf */}
-        <Form.Field>
+    <div style={{ padding: "0px", margin: "0px", width: "100%", height: "100%"}}>
+      <div
+        centered
+        style={{
+          textAlign: "center",
+          backgroundColor: "#f2f2f2",
+          width: "100%",
+          display: "block",
+          borderBottom: "3px solid #545454"
+        }}
+      >
+        {modalState === "Leagues" && (
+          <div style={{ display: "inline-block",
+                padding: "15px", width: "100%" }}>
+            <Icon
+              
+              size="big"
+              fitted
+              name="arrow left"
+              className="hardLeft"
+              style={{
+                left: "0px",
+                display: "inline-block",
+                color: "#f2f2f2",
+                padding: "0px 0px",
+                marginTop: "90px"
+              }}
+            />
+
+            <h2
+              style={{
+                color: "#545454",
+                display: "inline-block",
+                margin: "auto",
+                textAlign: "center"
+              }}
+            >
+              Select your league...
+            </h2>
+          </div>
+        )}
+
+        {modalState === "Games" && (
+          <div style={{ display: "inline-block",
+                padding: "15px", width: "100%" }}>
+            <Icon
+              onClick={goBackLeagues}
+              size="big"
+              fitted
+              name="arrow left"
+              className="hardLeft"
+              style={{
+                left: "0px",
+                display: "inline-block",
+                cursor: "pointer",
+                color: "#545454",
+                padding: "0px 0px",
+                marginTop: "90px"
+              }}
+            />
+
+            <h2
+              style={{
+                color: "#545454",
+                display: "inline-block",
+                margin: "auto",
+                textAlign: "center"
+              }}
+            >
+              Select your game...
+            </h2>
+          </div>
+        )}
+
+        {modalState === "BetAdjust" && (
+          <div style={{ display: "inline-block",
+                padding: "15px", width: "100%" }}>
+            <Icon
+              onClick={goBackGames}
+              size="big"
+              fitted
+              name="arrow left"
+              className="hardLeft"
+              style={{
+                left: "0px",
+                display: "inline-block",
+                cursor: "pointer",
+                color: "#545454",
+                padding: "0px 0px",
+                marginTop: "90px"
+              }}
+            />
+
+            <h2
+              style={{
+                color: "#545454",
+                display: "inline-block",
+                margin: "auto",
+                textAlign: "center"
+              }}
+            >
+              Adjust your bet...
+            </h2>
+          </div>
+        )}
+      </div>
+
+      <div style={{ display: "block" }}>
+        <div>
           {modalState === "Leagues" && (
             <LeagueSelection chooseLeague={selectLeague} />
-          ) }
+          )}
 
-          {modalState === "Games"  && (
-            <div><p>in game sleec</p>
-            <GameSelection
-              league={xleagueId}
-              chooseGameId={selectGameId}
-              chooseBetType={selectBetType}
-              chooseBetOdds={selectxdefBetOdds}
-              chooseBetAmount={selectxdefBetAmount}
-            />
+          {modalState === "Games" && (
+            <div>
+              <GameSelection
+                league={xleagueId}
+                chooseGameId={selectGameId}
+                chooseBetType={selectBetType}
+                chooseBetOdds={selectxdefBetOdds}
+                chooseBetAmount={selectxdefBetAmount}
+              />
             </div>
-          ) }
+          )}
 
           {modalState === "BetAdjust" && (
             <>
@@ -203,8 +317,7 @@ function PostModal(props) {
                 chooseBetAmount={selectBetOdds}
                 betValue={betOdds}
               />
-
-              <Form.Input
+              <Input
                 placeholder="Why are you taking this bet?"
                 noValidate
                 name="body"
@@ -213,7 +326,7 @@ function PostModal(props) {
                 error={error ? true : false}
               />
               <Button
-                type="submit"
+                type="button"
                 color="teal"
                 onClick={() => handleSingleBetSubmitClick()}
               >
@@ -229,15 +342,19 @@ function PostModal(props) {
               </Button>
             </>
           )}
-        </Form.Field>
-      </Form>
-    </>
+        </div>
+      </div>
+    </div>
   );
 }
 
 const CREATE_POST_MUTATION = gql`
-  mutation createPost($body: String!,$betOdds: String!, $gameArray: [gameBetInput]) {
-    createPost(body: $body,betOdds: $betOdds, gameArray: $gameArray) {
+  mutation createPost(
+    $body: String!
+    $betOdds: String!
+    $gameArray: [gameBetInput]
+  ) {
+    createPost(body: $body, betOdds: $betOdds, gameArray: $gameArray) {
       id
       body
       betOdds

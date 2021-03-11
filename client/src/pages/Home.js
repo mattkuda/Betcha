@@ -18,7 +18,7 @@ function Home() {
   const { loading, data: { getPosts: posts } = {}, fetchMore } = useQuery(
     FETCH_POSTS_QUERY,
     {
-      variables: { first: 5, offset: 0 },
+      variables: { first: 20, offset: 0 },
     },
   );
 
@@ -34,9 +34,10 @@ function Home() {
         // dimmer="blurring" TODO
         style={{ height: "90%" }}
       >
-        <Modal.Header>Share Bet</Modal.Header>
-        <Modal.Content image scrolling>
-          <PostModal handleClose={(e) => setModalOpen(false)} />
+        <Modal.Content long image scrolling style={{padding: "1px", width: "100%", height: "210%"}}>
+      
+          <PostModal handleClose={(e) => setModalOpen(false)} style={{height: "100%"}}/>
+         
         </Modal.Content>
       </Modal>
 
@@ -60,18 +61,17 @@ function Home() {
           ) : (
             //Transition group adds animation for when new post is added/deleted
             <Transition.Group>
-              <h1>feed mock</h1>
               {posts &&
                 posts.map((item, i) =>
                   item.postType === "P" ? (
                     <Grid.Column key={item.id} style={{ marginBottom: 20 }}>
                       <PostCard post={item} key={item.id} />
-                      {i === posts.length - 1 && (
+                      {i === posts.length - 5 && (
                         <Waypoint
                           onEnter={() =>
                             fetchMore({
                               variables: { 
-                                first: 5, 
+                                first: 20, 
                                 offset: posts.length - 1 
                               }, 
                               updateQuery: (pv, {fetchMoreResult}) => {
@@ -97,12 +97,12 @@ function Home() {
                   ) : (
                     <Grid.Column key={item.id} style={{ marginBottom: 20 }}>
                       <ReactionCard reaction={item} key={item.id} />
-                      {i === posts.length - 1 && (
+                      {i === posts.length - 5 && (
                         <Waypoint
                           onEnter={() =>
                             fetchMore({
                               variables: { 
-                                first: 5, 
+                                first: 20, 
                                 offset: posts.length - 1 
                               }, 
                               updateQuery: (pv, {fetchMoreResult}) => {

@@ -43,12 +43,16 @@ module.exports = {
         throw new Error(err);
       }
     },
-    async getUserPosts(_, { username }) {
+    async getUserPosts(_, { username, first, offset}) {
       try {
+        console.log("first: " + first)
+        console.log("offset: " + offset)
+
         const posts = await Post.find({ username: username }).sort({
           createdAt: -1,
-        });
+        }).skip(offset).limit(first);;
         //FORMERLY const posts = await Post.find().sort({ createdAt: -1 }).populate('gameId').exec()
+        console.log("THE AMT OF POSTS" + posts.length) 
         return posts;
       } catch (err) {
         throw new Error(err);
