@@ -406,13 +406,14 @@ module.exports = gql`
     getPosts(first: Int!, offset: Int): [Post]
     getUser(username: String!): User
     getUserPosts(username: String!, first: Int, offset: Int): [Post]
+    getPostsAboutGame(gameId: String!): [Post]
     getUserNotifications: [Notification]
     getAllUsers: [User]
     getLeagues: [League]
     getActiveLeagues: [League]
     getPost(postId: ID!): Post
     getAllPregames: [Pregame]
-    getPregamesByLeague(league: String!): [Pregame]
+    getPregamesByLeague(league: String!, first: Int, offset: Int): [Pregame]
     getLivegamesByLeague(league: String!): [Livegame]
     getPostgamesByLeague(league: String!): [Postgame]
     getTopPregameEvents: [TopEvent]

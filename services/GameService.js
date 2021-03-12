@@ -20,7 +20,7 @@ const TOTAL_PREGAME_DAYS = 16;
 const ONE_DAY_IN_MS = 86400000;   //24 hrs
 const TODAYS_GAMES_ODDS_UPDATE_INTERVAL = 1800000  //30 mins
 const TOP_EVENT_INTERVAL = 3600000  //60 mins
-const GENERAL_UPDATE_INTERVAL = 10800000  //3 hrs
+const GENERAL_UPDATE_INTERVAL = 5400000  //2 hrs
 
 
 class GameService {
@@ -253,12 +253,12 @@ class GameService {
     var next;
     var day_ctr = 1;
     while (day_ctr < TOTAL_PREGAME_DAYS) {
-      let url = "http://site.api.espn.com/apis/v2/scoreboard/header?sport="+
+      const url = "http://site.api.espn.com/apis/v2/scoreboard/header?sport="+
       sport+"&league="+league+college+"&dates="+this.convertDate(day)+"&enable=odds";
-      if (this.isToday(day)) {
-        url = "http://site.api.espn.com/apis/v2/scoreboard/header?sport="+
-        sport+"&league="+league+college+"&enable=odds";
-      }
+      // if (this.isToday(day)) {
+      //   url = "http://site.api.espn.com/apis/v2/scoreboard/header?sport="+
+      //   sport+"&league="+league+college+"&enable=odds";
+      // }
       const response = await fetch(url);
       const data = await response.json();
       console.log("Processing data for " + league);

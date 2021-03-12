@@ -1,12 +1,27 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { useQuery } from "@apollo/react-hooks";
 import { Menu, Icon, Label, Dropdown } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 
 import { AuthContext } from "../../context/auth";
-import SearchBox from "./SearchBox";
+import SearchBoxSemantic from "./SearchBoxSemantic";
 import NotificationsIcon from "./NotificationsIcon";
 import { FETCH_USERS_FOR_USER_SEARCH_QUERY } from "../../util/graphql";
+
+
+function fillOptionsArray(users) {
+  var options = [];
+  for (var i = 0; i < users.length; i++) {
+    options.push({
+      title: users[i].name,
+      description: users[i].username,
+      image: users[i].profilePicture,
+      as: Link,
+      to: "/user/" + users[i].username,
+    });
+  }
+  return options;
+}
 
 function MenuBar() {
   const { user, logout } = useContext(AuthContext);
@@ -21,28 +36,13 @@ function MenuBar() {
 
   const { loading, error, data: { getAllUsers: users } = {} } = useQuery(FETCH_USERS_FOR_USER_SEARCH_QUERY);
 
-
-  function fillOptionsArray(users) {
-    var options = [];
-    for (var i = 1; i <= users.length; i++) {
-      options.push({
-        key: i,
-        text: users[i-1].name,
-        value: i
-      });
-    }
-    return options;
-  }
-
-  let filteredNames = [];
-  let options = [];
+  let myOptions = [];
   if (users) {
-    filteredNames = users.filter(user => user.name.toLowerCase().includes(search.toLowerCase()));
-    options = fillOptionsArray(filteredNames);
+    myOptions = fillOptionsArray(users);
   }
 
   const menuBar = user ? (
-    <Menu pointing secondary size="massive" color="teal" >
+    <Menu pointing secondary size="massive" color="teal">
       <Menu.Item
         name="home"
         active={activeItem === "home"}
@@ -66,8 +66,7 @@ function MenuBar() {
       />
 
       <Menu.Item style={{ margin: "0 0 3px 0", padding: "0 0 0 0" }}>
-        <SearchBox placeholder="Search for a user..." handleChange={handleSearchChange} filtered={filteredNames}/>
-        <Dropdown text='Search Results' options={options} simple item />
+        <SearchBoxSemantic options={myOptions}/>
       </Menu.Item>
 
       <Menu.Menu position="right">

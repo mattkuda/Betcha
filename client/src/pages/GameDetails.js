@@ -2,7 +2,7 @@ import React, { useState, useContext, Fragment } from "react";
 import { useQuery } from "@apollo/react-hooks";
 import { Link, useParams } from 'react-router-dom';
 import gql from "graphql-tag";
-import { Input, Menu, Grid, Modal, Button, Image, Loader } from 'semantic-ui-react';
+import { Input, Menu, Grid, Modal, Button, Image, Loader, List, Container, Header, Icon } from 'semantic-ui-react';
 import { AuthContext } from "../context/auth";
 import ReactionModal from "../components/ReactionModal/ReactionModal";
 import GameDetailsHeader from "../components/GameDetailsHeader";
@@ -13,6 +13,7 @@ import "./GameDetails.css";
 import NBAPlaysAccordion from "../components/NBAPlaysAccordion";
 import NCAABPlaysAccordion from "../components/NCAABPlaysAccordion";
 import NHLPlaysAccordion from "../components/NHLPlaysAccordion";
+import FriendLinker from "../components/FriendLinker";
 
 
 function GameDetails(props) {
@@ -167,6 +168,14 @@ function GameDetails(props) {
 
       <GameDetailsHeader gameId={myGameId} league={myLeague} />
 
+
+      <Header as='h2'>
+        <Icon name='user' />
+        <Header.Content>Activity Center</Header.Content>
+      </Header>
+
+      <FriendLinker gameId={myGameId}/>
+
       {NCAABMENSdata.getPlaysInGame.length > 0 ? (
         <>
         <h1>Plays In Game</h1>
@@ -184,7 +193,7 @@ function GameDetails(props) {
 
     return (
 
-      <div>
+      <div className = "page-wrapper">
 
       <Modal open={modalOpen} onClose={() => setModalOpen(false)} closeIcon dimmer='blurring' style={{height: '90%'}}>
         <Modal.Header>Play Reaction</Modal.Header>
@@ -195,6 +204,13 @@ function GameDetails(props) {
 
       <GameDetailsHeader gameId={myGameId} league={myLeague} />
 
+      <Header as='h2'>
+        <Icon name='user' />
+        <Header.Content>Activity Center</Header.Content>
+      </Header>
+
+      <FriendLinker gameId={myGameId}/>
+
       {NBAdata.getPlaysInGame.length > 0 ? (
         <>
         <h1>Plays In Game</h1>
@@ -202,7 +218,6 @@ function GameDetails(props) {
         </>
       ):(<></>)
       }
-
 
       </div>
     )

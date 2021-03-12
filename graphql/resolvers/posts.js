@@ -62,6 +62,20 @@ module.exports = {
         throw new Error(err);
       }
     },
+    async getPostsAboutGame(_, { gameId }) {
+      try {
+        const posts = await Post.find(
+          { postType: "P", gameArray: { $elemMatch: { gameId: gameId } } }
+        );
+        if (posts) {
+          return posts;
+        } else {
+          throw new Error("Posts not found");
+        }
+      } catch (err) {
+        throw new Error(err);
+      }
+    },
   },
   Post: {
     //POST ATTACHMENTS

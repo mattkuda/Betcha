@@ -15,9 +15,14 @@ module.exports = {
         throw new Error(err);
       }
     },
-    async getPregamesByLeague(_, { league }) {
+    async getPregamesByLeague(_, { league, first, offset }) {
       try {
-        let pregames = await Pregame.find({league: league}).sort({startTime: 1});
+        if (!first && !offset) {
+          return await Pregame.find({league: league}).sort({startTime: 1});
+        }
+        let pregames = await Pregame.find({league: league}).sort({
+          startTime: 1}).skip(offset).limit(first);
+        //console.log("THE AMT OF GAMES" + pregames.length);
         return pregames;
       } catch (err) {
         throw new Error(err);

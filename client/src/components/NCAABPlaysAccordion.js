@@ -32,10 +32,10 @@ function NCAABPlaysAccordion(props) {
             {myPlays.filter((play) => play.specificData.half >= 3).map(play => (
               <Grid>
                 <Grid.Row>
-                <Grid.Column width={1} className="timeColumn">
+                <Grid.Column width={2} className="timeColumn">
                   {play.specificData.time}
                 </Grid.Column>
-                <Grid.Column width={1} className="timeColumn">
+                <Grid.Column width={2} className="timeColumn">
                   {play.scoreValue > 0 ? (
                     <p className="scoreVal">+{play.scoreValue}</p>
                     ):(
@@ -51,7 +51,7 @@ function NCAABPlaysAccordion(props) {
                     )
                   ):(<div></div>)}
                 </Grid.Column>
-                <Grid.Column width={6}>
+                <Grid.Column width={8}>
                   <p>{play.description}</p>
                 </Grid.Column>
                 <Grid.Column width={2}>
@@ -79,10 +79,10 @@ function NCAABPlaysAccordion(props) {
           {myPlays.filter((play) => play.specificData.half === 2).map(play => (
             <Grid>
               <Grid.Row>
-              <Grid.Column width={1} className="timeColumn">
+              <Grid.Column width={2} className="timeColumn">
                 {play.specificData.time}
               </Grid.Column>
-              <Grid.Column width={1} className="timeColumn">
+              <Grid.Column width={2} className="timeColumn">
                 {play.scoreValue > 0 ? (
                   <p className="scoreVal">+{play.scoreValue}</p>
                   ):(
@@ -98,7 +98,7 @@ function NCAABPlaysAccordion(props) {
                   )
                 ):(<div></div>)}
               </Grid.Column>
-              <Grid.Column width={6}>
+              <Grid.Column width={8}>
                 <p>{play.description}</p>
               </Grid.Column>
               <Grid.Column width={2}>
@@ -126,10 +126,10 @@ function NCAABPlaysAccordion(props) {
           {myPlays.filter((play) => play.specificData.half === 1).map(play => (
             <Grid>
               <Grid.Row>
-              <Grid.Column width={1} className="timeColumn">
+              <Grid.Column width={2} className="timeColumn">
                 {play.specificData.time}
               </Grid.Column>
-              <Grid.Column width={1} className="timeColumn">
+              <Grid.Column width={2} className="timeColumn">
                 {play.scoreValue > 0 ? (
                   <p className="scoreVal">+{play.scoreValue}</p>
                   ):(
@@ -145,7 +145,7 @@ function NCAABPlaysAccordion(props) {
                   )
                 ):(<div></div>)}
               </Grid.Column>
-              <Grid.Column width={6}>
+              <Grid.Column width={8}>
                 <p>{play.description}</p>
               </Grid.Column>
               <Grid.Column width={2}>

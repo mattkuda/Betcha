@@ -26,11 +26,6 @@ function GameDetailsHeader(props) {
   const awayColorRgb = hexToRgb(data.getGameByID.awayColor);
   const homeColorRgb = hexToRgb(data.getGameByID.homeColor);
 
-
-
-  console.log(awayColorRgb);
-  console.log(homeColorRgb);
-
   return (
     <div className="header-wrapper">
 

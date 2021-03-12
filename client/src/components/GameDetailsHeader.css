@@ -2,14 +2,18 @@
   height: 200px;
   padding-top: 10px;
   border-top: 2px solid #8c8c8c;
+  margin-bottom: 50px;
 }
 
 .header-content-left {
   float: left;
+  border-bottom-left-radius: 10px;
 }
 
 .header-content-right {
   float: right;
+  border-bottom-right-radius: 10px;
+
 }
 
 .header-main-content-grid {

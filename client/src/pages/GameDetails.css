@@ -8,3 +8,7 @@
   color: green;
   font-family: "Helvetica";
 }
+
+.page-wrapper {
+  margin-bottom: 20px;
+}

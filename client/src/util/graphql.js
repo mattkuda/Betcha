@@ -15,8 +15,32 @@ export const FETCH_USERS_FOR_USER_SEARCH_QUERY = gql`
       id
       username
       name
+      profilePicture
     }
   }
+`;
+
+export const FETCH_USERS_WHO_POSTED_ABOUT_GAME = gql`
+query($myGameId: String!) {
+  getPostsAboutGame(gameId: $myGameId) {
+    gameArray {
+      betAmount
+      betType
+      gameId {
+        gameId
+        homeAbbreviation
+        awayAbbreviation
+      }
+    }
+    user {
+      id
+      username
+      name
+      profilePicture
+    }
+    betOdds
+  }
+}
 `;
 
 export const FETCH_TOP_PREGAME_EVENTS = gql`
@@ -423,8 +447,8 @@ export const FETCH_NCAAF_POSTGAMES = gql`
 //NCAAB MENS GAME QUERIES
 
 export const FETCH_NCAABMENS_PREGAMES = gql`
-  query($myLeague: String!) {
-    getPregamesByLeague(league: $myLeague) {
+  query($myLeague: String!, $myFirst: Int, $myOffset: Int) {
+    getPregamesByLeague(league: $myLeague, first: $myFirst, offset: $myOffset) {
       id
       gameId
       state
