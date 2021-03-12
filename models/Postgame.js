@@ -37,6 +37,7 @@ const postgameSchema = new Schema({
   awayML: Number,
   spreadWinner: String,
   ouResult: String,
+  createdAt: String,
   specificData: mongoose.Mixed
 }, { strict: false });
 

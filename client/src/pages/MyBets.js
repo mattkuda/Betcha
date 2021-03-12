@@ -2,7 +2,7 @@ import React, { useContext, useState, Fragment } from "react";
 import { useQuery } from "@apollo/react-hooks";
 import { Link } from "react-router-dom";
 import gql from "graphql-tag";
-import Game from "../components/GameTypes/Game";
+import MyBetGame from "../components/GameTypes/MyBetGame";
 import { Grid } from "semantic-ui-react";
 import { AuthContext } from "../context/auth";
 //import { FETCH_ACTIVE_LEAGUES_QUERY } from "../util/graphql";
@@ -56,7 +56,7 @@ function MyBets() {
                           to={`/scoreboard/${game.gameId.league}/${game.gameId.gameId}`}
                         >
                           <span className="card" style={{ display: "block" }}>
-                            <Game key={game.gameId.gameId} {...game.gameId} />
+                            <MyBetGame key={game.gameId.gameId} {...game} />
                           </span>
                         </Link>
                       ))
@@ -80,6 +80,8 @@ const FETCH_USER_GAMES = gql`
     getUserPosts(username: $myUsername) {
       id
       gameArray {
+        betType
+        betAmount
         gameId {
           id
           gameId

@@ -860,6 +860,101 @@ export const FETCH_PREMIER_LEAGUE_POSTGAMES = gql`
   }
 `;
 
+
+//MLS GAME QUERIES
+
+export const FETCH_CHAMPIONS_LEAGUE_PREGAMES = gql`
+  query($myLeague: String!) {
+    getPregamesByLeague(league: $myLeague) {
+      id
+      gameId
+      state
+      stateDetails
+      homeFullName
+      awayFullName
+      homeRecord
+      awayRecord
+      awayLogo
+      homeLogo
+      awayAbbreviation
+      homeAbbreviation
+      startTime
+      broadcasts
+      spread
+      homeSpreadOdds
+      awaySpreadOdds
+      homeML
+      awayML
+      overUnder
+      overOdds
+      underOdds
+    }
+  }
+`;
+
+export const FETCH_CHAMPIONS_LEAGUE_LIVEGAMES = gql`
+  query($myLeague: String!) {
+    getLivegamesByLeague(league: $myLeague) {
+      id
+      gameId
+      state
+      stateDetails
+      homeFullName
+      awayFullName
+      homeRecord
+      awayRecord
+      awayLogo
+      homeLogo
+      awayAbbreviation
+      homeAbbreviation
+      homeScore
+      awayScore
+      startTime
+      broadcasts
+      time
+      period
+      spread
+      homeSpreadOdds
+      awaySpreadOdds
+      homeML
+      awayML
+      overUnder
+      overOdds
+      underOdds
+      lastPlay
+      specificData {
+        possession
+      }
+    }
+  }
+`;
+
+export const FETCH_CHAMPIONS_LEAGUE_POSTGAMES = gql`
+  query($myLeague: String!) {
+    getPostgamesByLeague(league: $myLeague) {
+      id
+      gameId
+      state
+      stateDetails
+      homeFullName
+      awayFullName
+      homeRecord
+      awayRecord
+      homeLogo
+      awayLogo
+      homeAbbreviation
+      awayAbbreviation
+      homeScore
+      awayScore
+      spread
+      overUnder
+      spreadWinner
+      ouResult
+    }
+  }
+`;
+
+
 //PLAY QUERIES
 
 export const FETCH_PLAYS_IN_NFL_GAME = gql`
@@ -951,7 +1046,7 @@ export const FETCH_PLAYS_IN_NBA_GAME = gql`
         homeScore
         awayScore
         time
-        period
+        quarter
         possession
       }
     }

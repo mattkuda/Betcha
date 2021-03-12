@@ -278,125 +278,138 @@ class GameService {
   */
   async updateGameInfoForDay(data, sport, league) {
     for (const game of data) {
-      let result = await Pregame.findOne({ gameId: game.id });
-      if (result) {
-        //console.log("Updating variable data for upcoming game...");
 
-        if (this.elementExists(game, "broadcasts")) {
-          if (game.broadcasts.length > 0) {
-            let myBroadcasts = []
-            for (const broadcast of game.broadcasts) {
-              myBroadcasts.push(broadcast.name);
-            }
-            result.broadcasts = myBroadcasts;
-          }
-        }
-        if (this.elementExists(game.competitors[0], "record")) {
-          if (sport === "hockey") {
-            result.homeRecord = game.competitors[0].shortenedRecord;
-          }
-          else { result.homeRecord = game.competitors[0].record; }
-        }
-        if (this.elementExists(game.competitors[1], "record")) {
-          if (sport === "hockey") {
-            result.awayRecord= game.competitors[1].shortenedRecord;
-          }
-          else { result.awayRecord = game.competitors[1].record; }
-        }
+      //assemble updated fields
+      let updatedFields = {
+        stateDetails: game.fullStatus.type.name,
+        homeId: parseInt(game.competitors[0].id),
+        awayId: parseInt(game.competitors[1].id),
+        homeLogo: game.competitors[0].logo,
+        awayLogo: game.competitors[1].logo,
+        homeAbbreviation: game.competitors[0].abbreviation,
+        awayAbbreviation: game.competitors[1].abbreviation,
+        homeFullName: game.competitors[0].displayName,
+        awayFullName: game.competitors[1].displayName,
+        homeColor: game.competitors[0].color,
+        awayColor: game.competitors[1].color,
+        startTime: game.date,
+        playByPlayAvailable: game.playByPlayAvailable,
+        location: game.location,
+        broadcasts: [],
+        homeRecord: "0-0",
+        awayRecord: "0-0",
+        spread: -1,
+        homeSpreadOdds: 0,
+        awaySpreadOdds: 0,
+        favoredTeamId: 0,
+        favoredTeam: "",
+        overUnder: -1,
+        overOdds: 0,
+        underOdds: 0,
+        homeML: 0,
+        awayML: 0,
+        drawML: 0,
+        specificData: {},
 
-
-        if (this.elementExists(game, "odds")) {
-
-          if (this.elementExists(game.odds, "overUnder")) {
-            result.overUnder = game.odds.overUnder;
-          }
-
-          if (this.elementExists(game.odds, "spread")) {
-            result.spread = Math.abs(game.odds.spread);
-          }
-
-          if (this.elementExists(game.odds, "overOdds")) {
-            result.overOdds = game.odds.overOdds;
-          }
-
-          if (this.elementExists(game.odds, "underOdds")) {
-            result.underOdds = game.odds.underOdds;
-          }
-
-          if (this.elementExists(game.odds, "awayTeamOdds")) {
-
-            if (this.elementExists(game.odds.awayTeamOdds, "moneyLine")) {
-              result.awayML = game.odds.awayTeamOdds.moneyLine;
-            }
-
-            if (this.elementExists(game.odds.awayTeamOdds, "favorite") &&
-            game.odds.awayTeamOdds.favorite === true) {
-              result.favoredTeam = game.odds.awayTeamOdds.team.abbreviation;
-              result.favoredTeamId = game.odds.awayTeamOdds.team.id;
-            }
-
-            if (this.elementExists(game.odds.awayTeamOdds, "spreadOdds")) {
-              result.awaySpreadOdds = game.odds.awayTeamOdds.spreadOdds;
-            }
-
-          }
-
-
-          if (this.elementExists(game.odds, "homeTeamOdds")) {
-
-            if (this.elementExists(game.odds.homeTeamOdds, "moneyLine")) {
-              result.homeML = game.odds.homeTeamOdds.moneyLine;
-            }
-
-            if (this.elementExists(game.odds.homeTeamOdds, "favorite") &&
-            game.odds.homeTeamOdds.favorite === true) {
-              result.favoredTeam = game.odds.homeTeamOdds.team.abbreviation;
-              result.favoredTeamId = game.odds.homeTeamOdds.team.id;
-            }
-
-            if (this.elementExists(game.odds.homeTeamOdds, "spreadOdds")) {
-              result.homeSpreadOdds = game.odds.homeTeamOdds.spreadOdds;
-            }
-
-          }
-
-          if (result.sport === "soccer" && this.elementExists(game.odds, "drawOdds")) {
-            if (this.elementExists(game.odds.drawOdds, "moneyLine")) {
-              result.drawML = game.odds.drawOdds.moneyLine;
-            }
-          }
-        }
-
-        result.stateDetails = game.fullStatus.type.name;
-        result.homeId = parseInt(game.competitors[0].id);
-        result.awayId = parseInt(game.competitors[1].id);
-        result.homeLogo = game.competitors[0].logo;
-        result.awayLogo = game.competitors[1].logo;
-        result.homeAbbreviation = game.competitors[0].abbreviation;
-        result.awayAbbreviation = game.competitors[1].abbreviation;
-        result.homeFullName = game.competitors[0].displayName;
-        result.awayFullName = game.competitors[1].displayName;
-        result.homeColor = game.competitors[0].color;
-        result.awayColor = game.competitors[1].color;
-        result.startTime = game.date;
-        result.playByPlayAvailable = game.playByPlayAvailable;
-        result.location = game.location;
-
-        //adding league-specific data
-        switch (league) {
-          case "college-football":
-          case "mens-college-basketball":
-            if (this.elementExists(game.competitors[0], "rank")) {
-              result.specificData.homeRank = game.competitors[0].rank;
-            }
-            if (this.elementExists(game.competitors[1], "rank")) {
-              result.specificData.awayRank = game.competitors[1].rank;
-            }
-            break;
-          default:
-        }
-        await result.save();
       }
+
+      //broadcasts
+      if (this.elementExists(game, "broadcasts")) {
+        if (game.broadcasts.length > 0) {
+          let myBroadcasts = []
+          for (const broadcast of game.broadcasts) {
+            myBroadcasts.push(broadcast.name);
+          }
+          updatedFields.broadcasts = myBroadcasts;
+        }
+      }
+
+      //records
+      if (this.elementExists(game.competitors[0], "record")) {
+        if (sport === "hockey") {
+          updatedFields.homeRecord = game.competitors[0].shortenedRecord;
+        }
+        else { updatedFields.homeRecord = game.competitors[0].record; }
+      }
+      if (this.elementExists(game.competitors[1], "record")) {
+        if (sport === "hockey") {
+          updatedFields.awayRecord= game.competitors[1].shortenedRecord;
+        }
+        else { updatedFields.awayRecord = game.competitors[1].record; }
+      }
+
+
+      //odds
+      if (this.elementExists(game, "odds")) {
+        if (this.elementExists(game.odds, "overUnder")) {
+          updatedFields.overUnder = game.odds.overUnder;
+        }
+        if (this.elementExists(game.odds, "spread")) {
+          updatedFields.spread = Math.abs(game.odds.spread);
+        }
+        if (this.elementExists(game.odds, "overOdds")) {
+          updatedFields.overOdds = game.odds.overOdds;
+        }
+        if (this.elementExists(game.odds, "underOdds")) {
+          updatedFields.underOdds = game.odds.underOdds;
+        }
+        if (this.elementExists(game.odds, "awayTeamOdds")) {
+          if (this.elementExists(game.odds.awayTeamOdds, "moneyLine")) {
+            updatedFields.awayML = game.odds.awayTeamOdds.moneyLine;
+          }
+          if (this.elementExists(game.odds.awayTeamOdds, "favorite") &&
+          game.odds.awayTeamOdds.favorite === true) {
+            updatedFields.favoredTeam = game.odds.awayTeamOdds.team.abbreviation;
+            updatedFields.favoredTeamId = game.odds.awayTeamOdds.team.id;
+          }
+          if (this.elementExists(game.odds.awayTeamOdds, "spreadOdds")) {
+            updatedFields.awaySpreadOdds = game.odds.awayTeamOdds.spreadOdds;
+          }
+        }
+        if (this.elementExists(game.odds, "homeTeamOdds")) {
+          if (this.elementExists(game.odds.homeTeamOdds, "moneyLine")) {
+            updatedFields.homeML = game.odds.homeTeamOdds.moneyLine;
+          }
+          if (this.elementExists(game.odds.homeTeamOdds, "favorite") &&
+          game.odds.homeTeamOdds.favorite === true) {
+            updatedFields.favoredTeam = game.odds.homeTeamOdds.team.abbreviation;
+            updatedFields.favoredTeamId = game.odds.homeTeamOdds.team.id;
+          }
+          if (this.elementExists(game.odds.homeTeamOdds, "spreadOdds")) {
+            updatedFields.homeSpreadOdds = game.odds.homeTeamOdds.spreadOdds;
+          }
+        }
+        if (sport === "soccer" && this.elementExists(game.odds, "drawOdds")) {
+          if (this.elementExists(game.odds.drawOdds, "moneyLine")) {
+            updatedFields.drawML = game.odds.drawOdds.moneyLine;
+          }
+        }
+      }
+
+      //league-specific data
+      switch (league) {
+        case "college-football":
+        case "mens-college-basketball":
+          let rankUpdates = {
+            homeRank: -1,
+            awayRank: -1,
+          };
+          if (this.elementExists(game.competitors[0], "rank")) {
+            rankUpdates.homeRank = game.competitors[0].rank;
+          }
+          if (this.elementExists(game.competitors[1], "rank")) {
+            rankUpdates.awayRank = game.competitors[1].rank;
+          }
+          updatedFields.specificData = rankUpdates;
+          break;
+        default:
+      }
+
+      Pregame.findOneAndUpdate({ gameId: game.id }, updatedFields, (err, result) => {
+        if (err) {
+          console.log(err);
+        }
+      });
     }
   }
 
@@ -419,75 +432,73 @@ class GameService {
       for (const game of data.sports[0].leagues[0].events) {
         console.log("Updating odds for "+game.name+"...");
 
-        let result = await Pregame.findOne({ gameId: game.id });
-        if (result) {
-          if (this.elementExists(game, "odds")) {
-
-            if (this.elementExists(game.odds, "overUnder")) {
-              result.overUnder = game.odds.overUnder;
-            }
-
-            if (this.elementExists(game.odds, "spread")) {
-              result.spread = Math.abs(game.odds.spread);
-            }
-
-            if (this.elementExists(game.odds, "overOdds")) {
-              result.overOdds = game.odds.overOdds;
-            }
-
-            if (this.elementExists(game.odds, "underOdds")) {
-              result.underOdds = game.odds.underOdds;
-            }
-
-
-            if (this.elementExists(game.odds, "awayTeamOdds")) {
-
-              if (this.elementExists(game.odds.awayTeamOdds, "moneyLine")) {
-                result.awayML = game.odds.awayTeamOdds.moneyLine;
-              }
-
-              if (this.elementExists(game.odds.awayTeamOdds, "favorite") &&
-              game.odds.awayTeamOdds.favorite === true) {
-                result.favoredTeam = game.odds.awayTeamOdds.team.abbreviation;
-                result.favoredTeamId = game.odds.awayTeamOdds.team.id;
-              }
-
-              if (this.elementExists(game.odds.awayTeamOdds, "spreadOdds")) {
-                result.awaySpreadOdds = game.odds.awayTeamOdds.spreadOdds;
-              }
-
-            }
-
-
-            if (this.elementExists(game.odds, "homeTeamOdds")) {
-
-              if (this.elementExists(game.odds.homeTeamOdds, "moneyLine")) {
-                result.homeML = game.odds.homeTeamOdds.moneyLine;
-              }
-
-              if (this.elementExists(game.odds.homeTeamOdds, "favorite") &&
-              game.odds.homeTeamOdds.favorite === true) {
-                result.favoredTeam = game.odds.homeTeamOdds.team.abbreviation;
-                result.favoredTeamId = game.odds.homeTeamOdds.team.id;
-              }
-
-              if (this.elementExists(game.odds.homeTeamOdds, "spreadOdds")) {
-                result.homeSpreadOdds = game.odds.homeTeamOdds.spreadOdds;
-              }
-
-            }
-
-            if (result.sport === "soccer" && this.elementExists(game.odds, "drawOdds")) {
-              if (this.elementExists(game.odds.drawOdds, "moneyLine")) {
-                result.drawML = game.odds.drawOdds.moneyLine;
-              }
-            }
-
-          }
-          await result.save();
+        //assemble updatedOdds
+        let updatedOdds = {
+          overUnder: -1,
+          spread: -1,
+          overOdds: 0,
+          underOdds: 0,
+          awayML: 0,
+          awaySpreadOdds: 0,
+          homeML: 0,
+          homeSpreadOdds: 0,
+          favoredTeamId: 0,
+          favoredTeam: "",
+          drawML: 0,
         }
+
+        if (this.elementExists(game, "odds")) {
+          if (this.elementExists(game.odds, "overUnder")) {
+            updatedOdds.overUnder = game.odds.overUnder;
+          }
+          if (this.elementExists(game.odds, "spread")) {
+            updatedOdds.spread = Math.abs(game.odds.spread);
+          }
+          if (this.elementExists(game.odds, "overOdds")) {
+            updatedOdds.overOdds = game.odds.overOdds;
+          }
+          if (this.elementExists(game.odds, "underOdds")) {
+            updatedOdds.underOdds = game.odds.underOdds;
+          }
+          if (this.elementExists(game.odds, "awayTeamOdds")) {
+            if (this.elementExists(game.odds.awayTeamOdds, "moneyLine")) {
+              updatedOdds.awayML = game.odds.awayTeamOdds.moneyLine;
+            }
+            if (this.elementExists(game.odds.awayTeamOdds, "favorite") &&
+            game.odds.awayTeamOdds.favorite === true) {
+              updatedOdds.favoredTeam = game.odds.awayTeamOdds.team.abbreviation;
+              updatedOdds.favoredTeamId = game.odds.awayTeamOdds.team.id;
+            }
+            if (this.elementExists(game.odds.awayTeamOdds, "spreadOdds")) {
+              updatedOdds.awaySpreadOdds = game.odds.awayTeamOdds.spreadOdds;
+            }
+          }
+          if (this.elementExists(game.odds, "homeTeamOdds")) {
+            if (this.elementExists(game.odds.homeTeamOdds, "moneyLine")) {
+              updatedOdds.homeML = game.odds.homeTeamOdds.moneyLine;
+            }
+            if (this.elementExists(game.odds.homeTeamOdds, "favorite") &&
+            game.odds.homeTeamOdds.favorite === true) {
+              updatedOdds.favoredTeam = game.odds.homeTeamOdds.team.abbreviation;
+              updatedOdds.favoredTeamId = game.odds.homeTeamOdds.team.id;
+            }
+            if (this.elementExists(game.odds.homeTeamOdds, "spreadOdds")) {
+              updatedOdds.homeSpreadOdds = game.odds.homeTeamOdds.spreadOdds;
+            }
+          }
+          if (sport === "soccer" && this.elementExists(game.odds, "drawOdds")) {
+            if (this.elementExists(game.odds.drawOdds, "moneyLine")) {
+              updatedOdds.drawML = game.odds.drawOdds.moneyLine;
+            }
+          }
+        }
+
+        Pregame.findOneAndUpdate({ gameId: game.id }, updatedOdds, (err, result) => {
+          if (err) {
+            console.log(err);
+          }
+        });
       }
-      console.log("Done with events for "+league+"!");
     }
   }
 
@@ -1170,6 +1181,7 @@ class GameService {
             drawML: 0,
             spreadWinner: "P",
             ouResult: "P",
+            createdAt: new Date().toISOString(),
             specificData: {},
           };
 

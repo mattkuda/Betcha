@@ -313,7 +313,11 @@ function PostCard({
 
   if (gameArray[0].gameId.stateDetails === "STATUS_SCHEDULED") {
     return PreGameMarkup;
-  } else if (gameArray[0].gameId.stateDetails === "STATUS_IN_PROGRESS") {
+  } else if (gameArray[0].gameId.stateDetails === "STATUS_IN_PROGRESS" ||
+             gameArray[0].gameId.stateDetails === "STATUS_FIRST_HALF" ||
+             gameArray[0].gameId.stateDetails === "STATUS_SECOND_HALF" ||
+             gameArray[0].gameId.stateDetails === "STATUS_HALFTIME" ||
+             gameArray[0].gameId.stateDetails === "STATUS_END_OF_PERIOD") {
     return LiveGameMarkup;
   } else if (gameArray[0].gameId.stateDetails === "STATUS_FINAL") {
     return PostGameMarkup;

@@ -45,6 +45,10 @@ module.exports = {
     },
     async getUserPosts(_, { username, first, offset}) {
       try {
+
+        if (!first && !offset) {
+          return await Post.find({ username: username }).sort({createdAt: -1});
+        }
         console.log("first: " + first)
         console.log("offset: " + offset)
 
@@ -52,7 +56,7 @@ module.exports = {
           createdAt: -1,
         }).skip(offset).limit(first);;
         //FORMERLY const posts = await Post.find().sort({ createdAt: -1 }).populate('gameId').exec()
-        console.log("THE AMT OF POSTS" + posts.length) 
+        console.log("THE AMT OF POSTS" + posts.length)
         return posts;
       } catch (err) {
         throw new Error(err);

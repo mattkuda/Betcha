@@ -112,6 +112,30 @@ function ScoreboardNav() {
           />
           )
         }
+        {isLeagueInactive("usa.1") ? (<></>):
+          (
+          <Menu.Item
+            name="usa.1"
+            content="MLS"
+            active={activeItem === "usa.1"}
+            onClick={handleItemClick}
+            as={Link}
+            to="/scoreboard/usa.1"
+          />
+          )
+        }
+        {isLeagueInactive("uefa.champions") ? (<></>):
+          (
+          <Menu.Item
+            name="uefa.champions"
+            content="UEFA Champions League"
+            active={activeItem === "uefa.champions"}
+            onClick={handleItemClick}
+            as={Link}
+            to="/scoreboard/uefa.champions"
+          />
+          )
+        }
       </Menu>
   )
 }

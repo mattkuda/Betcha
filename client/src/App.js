@@ -62,6 +62,12 @@ function App() {
           <Route exact path="/scoreboard/eng.1">
             <LeagueScoreboard league="eng.1" />
           </Route>
+          <Route exact path="/scoreboard/usa.1">
+            <LeagueScoreboard league="usa.1" />
+          </Route>
+          <Route exact path="/scoreboard/uefa.champions">
+            <LeagueScoreboard league="uefa.champions" />
+          </Route>
           <Route
             exact
             path="/scoreboard/:league/:gameId"

@@ -7,16 +7,14 @@ import NCAAFGame from "../components/GameTypes/NCAAFGame";
 import NCAABMensGame from "../components/GameTypes/NCAABMensGame";
 import NBAGame from "../components/GameTypes/NBAGame";
 import Game from "../components/GameTypes/Game";
-import GameDatePicker from "../components/GameDatePicker";
 import { Grid } from "semantic-ui-react";
-import Carousel from '@brainhubeu/react-carousel';
-import '@brainhubeu/react-carousel/lib/style.css';
 import { FETCH_NFL_PREGAMES, FETCH_NFL_LIVEGAMES, FETCH_NFL_POSTGAMES,
          FETCH_NCAAF_PREGAMES, FETCH_NCAAF_LIVEGAMES, FETCH_NCAAF_POSTGAMES,
          FETCH_NCAABMENS_PREGAMES, FETCH_NCAABMENS_LIVEGAMES, FETCH_NCAABMENS_POSTGAMES,
          FETCH_NBA_PREGAMES, FETCH_NBA_LIVEGAMES, FETCH_NBA_POSTGAMES, FETCH_ACTIVE_LEAGUES_QUERY,
          FETCH_NHL_PREGAMES, FETCH_NHL_LIVEGAMES, FETCH_NHL_POSTGAMES, FETCH_PREMIER_LEAGUE_PREGAMES,
-         FETCH_PREMIER_LEAGUE_LIVEGAMES, FETCH_PREMIER_LEAGUE_POSTGAMES } from "../util/graphql";
+         FETCH_PREMIER_LEAGUE_LIVEGAMES, FETCH_PREMIER_LEAGUE_POSTGAMES, FETCH_CHAMPIONS_LEAGUE_PREGAMES,
+         FETCH_CHAMPIONS_LEAGUE_LIVEGAMES, FETCH_CHAMPIONS_LEAGUE_POSTGAMES } from "../util/graphql";
 import './scoreboard.css';
 
 
@@ -138,6 +136,22 @@ function LeagueScoreboard(props) {
     skip: (myLeague !== "eng.1")
   });
 
+  const { loading: ChampionsLeaguepregameloading, error: ChampionsLeaguepregameError, data: ChampionsLeaguepregameData } = useQuery(FETCH_CHAMPIONS_LEAGUE_PREGAMES, {
+    variables: { myLeague },
+    pollInterval: 30000,
+    skip: (myLeague !== "uefa.champions")
+  });
+  const { loading: ChampionsLeaguelivegameloading, error: ChampionsLeaguelivegameError, data: ChampionsLeaguelivegameData } = useQuery(FETCH_CHAMPIONS_LEAGUE_LIVEGAMES, {
+    variables: { myLeague },
+    pollInterval: 30000,
+    skip: (myLeague !== "uefa.champions")
+  });
+  const { loading: ChampionsLeaguepostgameloading, error: ChampionsLeaguepostgameError, data: ChampionsLeaguepostgameData } = useQuery(FETCH_CHAMPIONS_LEAGUE_POSTGAMES, {
+    variables: { myLeague },
+    pollInterval: 30000,
+    skip: (myLeague !== "uefa.champions")
+  });
+
 
 
   const { loading: LeagueLoading, error: LeagueError, data: LeagueData } = useQuery(FETCH_ACTIVE_LEAGUES_QUERY);
@@ -196,6 +210,15 @@ function LeagueScoreboard(props) {
 
   if (PremierLeaguepostgameLoading) return 'Loading postgames...';
   if (PremierLeaguepostgameError) return `Error! ${PremierLeaguepostgameError.message}`;
+
+  if (ChampionsLeaguepregameloading) return 'Loading pregames...';
+  if (ChampionsLeaguepregameError) return `Error! ${ChampionsLeaguepregameError.message}`;
+
+  if (ChampionsLeaguelivegameloading) return 'Loading livegames...';
+  if (ChampionsLeaguelivegameError) return `Error! ${ChampionsLeaguelivegameError.message}`;
+
+  if (ChampionsLeaguepostgameloading) return 'Loading postgames...';
+  if (ChampionsLeaguepostgameError) return `Error! ${ChampionsLeaguepostgameError.message}`;
 
 
 
@@ -555,7 +578,7 @@ function LeagueScoreboard(props) {
   }
 
 
-  //NHL
+  //PREMIER LEAGUE
   if (myLeague === "eng.1") {
     return (
       <div>
@@ -605,6 +628,74 @@ function LeagueScoreboard(props) {
           <Fragment>
             {
               PremierLeaguepostgameData.getPostgamesByLeague.map(game => (
+                <Grid.Column>
+                  <Link to={`/scoreboard/${myLeague}/${game.gameId}`}>
+                    <span className="card" style={{"display": "block"}}>
+                      <Game key={game.gameId} {...game} />
+                    </span>
+                  </Link>
+                </Grid.Column>
+              ))
+            }
+          </Fragment>
+        </Grid.Row>
+      </Grid>
+
+      </div>
+    )
+  }
+
+
+  //UEFA CHAMPIONS LEAGUE
+  if (myLeague === "uefa.champions") {
+    return (
+      <div>
+
+        <h1>Live Games</h1>
+        <Grid columns="two">
+          <Grid.Row>
+            <Fragment>
+              {
+                ChampionsLeaguelivegameData.getLivegamesByLeague.map(game => (
+                  <Grid.Column>
+                    <Link to={`/scoreboard/${myLeague}/${game.gameId}`}>
+                      <span className="card" style={{"display": "block"}}>
+                        <Game key={game.gameId} {...game} />
+                      </span>
+                    </Link>
+                  </Grid.Column>
+                ))
+              }
+            </Fragment>
+          </Grid.Row>
+        </Grid>
+
+      <h1>Upcoming Games</h1>
+      <Grid columns="two">
+        <Grid.Row>
+          <Fragment>
+            {
+              ChampionsLeaguepregameData.getPregamesByLeague.filter((game) => game.awayAbbreviation !== "TBD" &&
+              game.homeAbbreviation !== "TBD").map(game => (
+                <Grid.Column>
+                  <Link to={`/scoreboard/${myLeague}/${game.gameId}`}>
+                    <span className="card" style={{"display": "block"}}>
+                      <Game key={game.gameId} {...game} />
+                    </span>
+                  </Link>
+                </Grid.Column>
+              ))
+            }
+          </Fragment>
+        </Grid.Row>
+      </Grid>
+
+      <h1>Completed Games</h1>
+      <Grid columns="two">
+        <Grid.Row>
+          <Fragment>
+            {
+              ChampionsLeaguepostgameData.getPostgamesByLeague.map(game => (
                 <Grid.Column>
                   <Link to={`/scoreboard/${myLeague}/${game.gameId}`}>
                     <span className="card" style={{"display": "block"}}>
