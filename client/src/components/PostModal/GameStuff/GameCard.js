@@ -1,7 +1,5 @@
 import React, { useContext } from "react";
-import { Card, Icon, Grid, Label, Image, Button } from "semantic-ui-react";
-import { Link } from "react-router-dom";
-import moment from "moment";
+import { Card, Image, Button } from "semantic-ui-react";
 import "./GameCard.css";
 
 import { betTimeFormat } from "../../../util/Extensions/betTimeFormat";
@@ -21,11 +19,12 @@ function GameCard(props) {
     awaySpread = "-" + spreadNumber;
   }
 
-  function handleClick(gameId, betType, betAmount, betOdds) {
+  function handleClick(gameId, betType, betAmount, betOdds, betGameData) {
     props.pickGameId(gameId);
     props.pickBetType(betType);
     props.pickBetAmount(betAmount);
     props.pickBetOdds(betOdds);
+    props.pickGameData(betGameData)
   }
 
   return (
@@ -55,7 +54,8 @@ function GameCard(props) {
                     props.gameData.gameId,
                     "AWAY",
                     parseFloat(awaySpread.replace("+", "")),
-                    props.gameData.awaySpreadOdds
+                    props.gameData.awaySpreadOdds, 
+                    props.gameData
                   )
                 }
                 style={{ display: "inline-block", backgroundColor: "#ededed"  }}
@@ -71,7 +71,8 @@ function GameCard(props) {
                     props.gameData.gameId,
                     "AWAY",
                     0,
-                    props.gameData.awaySpreadOdds
+                    props.gameData.awaySpreadOdds, 
+                    props.gameData
                   )
                 }
                 style={{ display: "inline-block", backgroundColor: "#ededed" }}
@@ -88,7 +89,8 @@ function GameCard(props) {
                     props.gameData.gameId,
                     "OVER",
                     parseFloat(props.gameData.overUnder),
-                    props.gameData.underOdds
+                    props.gameData.underOdds, 
+                    props.gameData
                   )
                 }
               >
@@ -108,9 +110,10 @@ function GameCard(props) {
                 onClick={() =>
                   handleClick(
                     props.gameData.gameId,
-                    "AWAY",
+                    "HOME",
                     parseFloat(homeSpread.replace("+", "")),
-                    props.gameData.homeSpreadOdds
+                    props.gameData.homeSpreadOdds, 
+                    props.gameData
                   )
                 }
                 style={{ display: "inline-block", backgroundColor: "#ededed"  }}
@@ -124,9 +127,10 @@ function GameCard(props) {
                 onClick={() =>
                   handleClick(
                     props.gameData.gameId,
-                    "AWAY",
+                    "HOME",
                     0,
-                    props.gameData.homeSpreadOdds
+                    props.gameData.homeSpreadOdds, 
+                    props.gameData
                   )
                 }
                 style={{ display: "inline-block", backgroundColor: "#ededed"  }}
@@ -142,7 +146,8 @@ function GameCard(props) {
                     props.gameData.gameId,
                     "UNDER",
                     parseFloat(props.gameData.overUnder),
-                    props.gameData.underOdds
+                    props.gameData.underOdds, 
+                    props.gameData
                   )
                 }
                 style={{ display: "inline-block", backgroundColor: "#ededed"  }}
@@ -155,57 +160,6 @@ function GameCard(props) {
         </table>
       {betTimeFormat(props.gameData.startTime)}
       </Card.Content>
-
-      {/* <Card.Content>
-        <div style={{ display: "inline-block" }}>
-          <Image floated="left" size="mini" src={props.gameData.homeLogo} />
-          {props.gameData.homeAbbreviation}
-          <Button
-            onClick={() =>
-              handleClick(
-                props.gameData.gameId,
-                "HOME",
-                parseFloat(
-                  homeSpread.replace("+", ""),
-                  props.gameData.homeSpreadOdds
-                )
-              )
-            }
-            style={{ display: "inline-block" }}
-          >
-            <div>{homeSpread}</div>
-            <div className="odds">{props.gameData.homeSpreadOdds}</div>
-          </Button>
-          <Button
-            onClick={() =>
-              handleClick(
-                props.gameData.gameId,
-                "HOME",
-                0,
-                props.gameData.homeSpreadOdds
-              )
-            }
-            style={{ display: "inline-block" }}
-          >
-            <div>ML</div>
-            <div className="odds">{props.gameData.homeML}</div>
-          </Button>
-          <Button
-            onClick={() =>
-              handleClick(
-                props.gameData.gameId,
-                "UNDER",
-                parseFloat(props.gameData.overUnder),
-                props.gameData.overOdds
-              )
-            }
-            style={{ display: "inline-block" }}
-          >
-            <div>U {props.gameData.overUnder}</div>
-            <div className="odds">{props.gameData.underOdds}</div>
-          </Button>
-        </div>
-      </Card.Content> */}
     </Card>
   );
 }

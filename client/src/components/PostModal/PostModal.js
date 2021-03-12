@@ -11,7 +11,7 @@ import {
 import gql from "graphql-tag";
 import { useMutation } from "@apollo/react-hooks";
 import "./PostModal.css";
-
+import { betTimeFormat } from "../../util/Extensions/betTimeFormat";
 import { useForm } from "../../util/hooks";
 
 import LeagueSelection from "./LeagueStuff/LeagueSelection";
@@ -62,6 +62,7 @@ function PostModal(props) {
     },
   });
 
+  var plusSign = "+";
   function createPostCallback() {
     try {
       createPost();
@@ -70,7 +71,6 @@ function PostModal(props) {
     }
   }
 
-  //const [inputValue, setInputValue] = React.useState(""); //EX.
   const [betType, setbetType] = React.useState("");
   const [betAmount, setBetAmount] = React.useState("");
   const [gameId, setGameId] = React.useState("");
@@ -80,6 +80,9 @@ function PostModal(props) {
   const [xdefBetAmount, setxdefBetAmount] = React.useState("");
   const [xleagueId, setxleagueId] = React.useState("");
   const [modalState, setModalState] = React.useState("Leagues");
+  const [gameData, setGameData] = React.useState({});
+  const [editAmount, setEditAmount] = React.useState(false);
+  const [editOdds, setEditOdds] = React.useState(false);
 
   function selectLeague(event) {
     console.log("param pass in: " + event);
@@ -178,7 +181,9 @@ function PostModal(props) {
   }
 
   return (
-    <div style={{ padding: "0px", margin: "0px", width: "100%", height: "100%"}}>
+    <div
+      style={{ padding: "0px", margin: "0px", width: "100%", height: "100%" }}
+    >
       <div
         centered
         style={{
@@ -186,14 +191,14 @@ function PostModal(props) {
           backgroundColor: "#f2f2f2",
           width: "100%",
           display: "block",
-          borderBottom: "3px solid #545454"
+          borderBottom: "3px solid #545454",
         }}
       >
         {modalState === "Leagues" && (
-          <div style={{ display: "inline-block",
-                padding: "15px", width: "100%" }}>
+          <div
+            style={{ display: "inline-block", padding: "15px", width: "100%" }}
+          >
             <Icon
-              
               size="big"
               fitted
               name="arrow left"
@@ -203,7 +208,7 @@ function PostModal(props) {
                 display: "inline-block",
                 color: "#f2f2f2",
                 padding: "0px 0px",
-                marginTop: "90px"
+                marginTop: "90px",
               }}
             />
 
@@ -212,7 +217,7 @@ function PostModal(props) {
                 color: "#545454",
                 display: "inline-block",
                 margin: "auto",
-                textAlign: "center"
+                textAlign: "center",
               }}
             >
               Select your league...
@@ -221,8 +226,9 @@ function PostModal(props) {
         )}
 
         {modalState === "Games" && (
-          <div style={{ display: "inline-block",
-                padding: "15px", width: "100%" }}>
+          <div
+            style={{ display: "inline-block", padding: "15px", width: "100%" }}
+          >
             <Icon
               onClick={goBackLeagues}
               size="big"
@@ -235,7 +241,7 @@ function PostModal(props) {
                 cursor: "pointer",
                 color: "#545454",
                 padding: "0px 0px",
-                marginTop: "90px"
+                marginTop: "90px",
               }}
             />
 
@@ -244,7 +250,7 @@ function PostModal(props) {
                 color: "#545454",
                 display: "inline-block",
                 margin: "auto",
-                textAlign: "center"
+                textAlign: "center",
               }}
             >
               Select your game...
@@ -253,8 +259,9 @@ function PostModal(props) {
         )}
 
         {modalState === "BetAdjust" && (
-          <div style={{ display: "inline-block",
-                padding: "15px", width: "100%" }}>
+          <div
+            style={{ display: "inline-block", padding: "15px", width: "100%" }}
+          >
             <Icon
               onClick={goBackGames}
               size="big"
@@ -267,7 +274,7 @@ function PostModal(props) {
                 cursor: "pointer",
                 color: "#545454",
                 padding: "0px 0px",
-                marginTop: "90px"
+                marginTop: "90px",
               }}
             />
 
@@ -276,7 +283,7 @@ function PostModal(props) {
                 color: "#545454",
                 display: "inline-block",
                 margin: "auto",
-                textAlign: "center"
+                textAlign: "center",
               }}
             >
               Adjust your bet...
@@ -299,47 +306,127 @@ function PostModal(props) {
                 chooseBetType={selectBetType}
                 chooseBetOdds={selectxdefBetOdds}
                 chooseBetAmount={selectxdefBetAmount}
+                chooseGameData={setGameData}
               />
             </div>
           )}
 
           {modalState === "BetAdjust" && (
             <>
-              Change the spread o/u:
-              <BetSelection
-                defValue={xdefBetAmount}
-                chooseBetAmount={selectBetAmount}
-                betValue={betAmount}
-              />
-              Change the odds:
-              <BetSelection
-                defValue={xdefBetOdds}
-                chooseBetAmount={selectBetOdds}
-                betValue={betOdds}
-              />
-              <Input
-                placeholder="Why are you taking this bet?"
-                noValidate
-                name="body"
-                onChange={onChange}
-                value={values.body}
-                error={error ? true : false}
-              />
-              <Button
-                type="button"
-                color="teal"
-                onClick={() => handleSingleBetSubmitClick()}
-              >
-                Submit
-              </Button>
-              <Button
-                type="button"
-                color="purple"
-                onClick={() => handleAddGameClick()}
-                disabled={values.gameArray.length > 9}
-              >
-                Add another game
-              </Button>
+              <div className="betHeader">
+                {gameData.awayFullName} @ {gameData.homeFullName}{" "}
+              </div>
+              <div className="betTime">{betTimeFormat(gameData.startTime)}</div>
+              <div className="betSpreadLine">
+                {betType === "OVER" && (
+                  <div style={{ display: "inline-block" }}>Over: </div>
+                )}
+                {betType === "UNDER" && (
+                  <div style={{ display: "inline-block" }}>Under: </div>
+                )}
+                {betType === "HOME" && (
+                  <div style={{ display: "inline-block" }}>
+                    {gameData.homeAbbreviation}:{" "}
+                  </div>
+                )}
+                {betType === "AWAY" && (
+                  <div style={{ display: "inline-block" }}>
+                    {gameData.awayAbbreviation}:{" "}
+                  </div>
+                )}{" "}
+                {(betAmount > 0 && (betType === "AWAY" || betType === "HOME")) && plusSign}
+                {!editAmount && betAmount}
+                {editAmount && (
+                  <BetSelection
+                    defValue={xdefBetAmount}
+                    chooseBetAmount={selectBetAmount}
+                    betValue={betAmount}
+                    chooseEditAmount={setEditAmount}
+                    chooseEditOdds={setEditOdds}
+                    style={{ display: "inline-block" }}
+                  />
+                )}{" "}
+                <div style={{ display: "inline-block" }}>
+                  <Icon
+                    onClick={() => setEditAmount(!editAmount)}
+                    size="tiny"
+                    fitted
+                    float="top"
+                    name="pencil"
+                    style={{
+                      display: "inline-block",
+                      cursor: "pointer",
+                      color: "teal",
+                      padding: "0px 0px",
+                    }}
+                  />
+                </div>
+              </div>
+              <br />
+              <div className="betSpreadLine">
+                Odds:
+                {!editOdds && betOdds > 0 && plusSign}
+                {!editOdds && betOdds}
+                {editOdds && (
+                  <BetSelection
+                    defValue={xdefBetOdds}
+                    chooseBetAmount={selectBetOdds}
+                    betValue={betOdds}
+                    chooseEditAmount={setEditAmount}
+                    chooseEditOdds={setEditOdds}
+                  />
+                )}
+                <Icon
+                  onClick={() => setEditOdds(!editOdds)}
+                  size="tiny"
+                  fitted
+                  name="pencil"
+                  style={{
+                    display: "inline-block",
+                    cursor: "pointer",
+                    color: "teal",
+                    padding: "0px 0px",
+                  }}
+                />
+              </div>
+              <br />
+              
+              
+              <div className="betTextBox">
+                <Input
+                  placeholder="Why are you taking this bet?"
+                  noValidate
+                  fluid
+                  size="big"
+                  name="body"
+                  onChange={onChange}
+                  value={values.body}
+                  error={error ? true : false}
+                  style={{ width: "80%", margin: "auto" }}
+                />
+              </div>
+              {values.gameArray.length > 0 &&(
+                <div className="otherGames">
+                    Total number of games in this parlay: {values.gameArray.length + 1}
+                </div>
+              )}
+              <div className="betTextBox">
+                <Button
+                  type="button"
+                  color="purple"
+                  onClick={() => handleAddGameClick()}
+                  disabled={values.gameArray.length > 9}
+                >
+                  Add another game
+                </Button>
+                <Button
+                  type="button"
+                  color="teal"
+                  onClick={() => handleSingleBetSubmitClick()}
+                >
+                  Submit
+                </Button>
+              </div>
             </>
           )}
         </div>
