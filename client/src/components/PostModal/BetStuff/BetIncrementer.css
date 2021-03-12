@@ -3,10 +3,10 @@
   display: inline-block;
   align-items: center;
   flex-direction: column;
-
+  width: 130px;
   padding: 10px 10px;
   border-radius: 10px;
-  margin-top: 20px ;
+  /* margin-top: 20px ; */
 }
 .BI button{
   background-color: #8b9dc3;

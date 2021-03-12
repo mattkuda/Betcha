@@ -45,27 +45,26 @@ class BetIncrementer extends Component {
   handleChange(event) {
     this.setState({ count: event.target.value });
      console.log("1: " + this.state.count);
-    this.props.finalizeBet(parseFloat(this.state.count));
-    console.log("2");
+    this.props.finalizeBet(parseFloat(event.target.value));
   }
 
   render() {
     return (
       <div className="BI">
         <div className="jumbotron">
-          <button onClick={this.decrement}>
+          {/* <button onClick={this.decrement}>
             <i className="fas fa-minus"></i>
-          </button>
+          </button> */}
           <form style={{ display: "inline-block" }}>
             <input
               className="jumbotron__window"
-              type="number"
-              style={{ display: "inline-block" , width: "170px"}}
+          
+              style={{ display: "inline-block" , width: "120px"}}
               value={this.state.count}
               onChange={this.handleChange}
             />
           </form>
-          <div
+          {/* <div
             className="jumbotron__plus-minus"
             style={{ display: "inline-block" }}
           >
@@ -75,7 +74,7 @@ class BetIncrementer extends Component {
           </div>
           <button className="jumbotron__delete" onClick={this.reset}>
             <i className="fas fa-undo"></i>
-          </button>
+          </button> */}
         </div>
       </div>
     );
