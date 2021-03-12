@@ -1,0 +1,166 @@
+import React, { useState, useEffect } from "react";
+import { useQuery } from "@apollo/react-hooks";
+import { Accordion, Icon, Grid, Image, Button, Link } from 'semantic-ui-react';
+
+
+function NCAABPlaysAccordion(props) {
+
+  const [activeIndex, setActiveIndex] = useState(0);
+  const handleClick = (e, { index }) => activeIndex !== index ? (setActiveIndex(index)) : setActiveIndex(-1);
+
+  const myPlays = props.plays;
+  const currentHalf = myPlays[0].specificData.half;
+  console.log(currentHalf);
+
+  useEffect(() => {
+    setActiveIndex( currentHalf < 3 ? currentHalf-1 : 2);
+  }, []);
+
+  return (
+      <Accordion styled fluid>
+        { currentHalf >= 3 ? (
+          <>
+          <Accordion.Title
+            active={activeIndex === 2}
+            index={2}
+            onClick={handleClick}
+          >
+            <Icon name='dropdown' />
+            OT
+          </Accordion.Title>
+          <Accordion.Content active={activeIndex === 2}>
+            {myPlays.filter((play) => play.specificData.half >= 3).map(play => (
+              <Grid>
+                <Grid.Row>
+                <Grid.Column width={1} className="timeColumn">
+                  {play.specificData.time}
+                </Grid.Column>
+                <Grid.Column width={1} className="timeColumn">
+                  {play.scoreValue > 0 ? (
+                    <p className="scoreVal">+{play.scoreValue}</p>
+                    ):(
+                    <p></p>
+                    )
+                  }
+                </Grid.Column>
+                <Grid.Column width={2}>
+                  {play.specificData.possession !== "" ? (
+                    (parseInt(play.specificData.possession) === play.game.homeId ?
+                      (<Image centered verticalAlign='middle' src={play.game.homeLogo} className="playImage"/>):
+                      (<Image centered verticalAlign='middle' src={play.game.awayLogo} className="playImage"/>)
+                    )
+                  ):(<div></div>)}
+                </Grid.Column>
+                <Grid.Column width={6}>
+                  <p>{play.description}</p>
+                </Grid.Column>
+                <Grid.Column width={2}>
+                  <p>{play.specificData.awayScore} - {play.specificData.homeScore}</p>
+                </Grid.Column>
+                </Grid.Row>
+              </Grid>
+            ))
+          }
+          </Accordion.Content>
+          </>
+          ):(<></>)
+        }
+        { currentHalf >= 2 ? (
+        <>
+        <Accordion.Title
+          active={activeIndex === 1}
+          index={1}
+          onClick={handleClick}
+        >
+          <Icon name='dropdown' />
+          2nd Half
+        </Accordion.Title>
+        <Accordion.Content active={activeIndex === 1}>
+          {myPlays.filter((play) => play.specificData.half === 2).map(play => (
+            <Grid>
+              <Grid.Row>
+              <Grid.Column width={1} className="timeColumn">
+                {play.specificData.time}
+              </Grid.Column>
+              <Grid.Column width={1} className="timeColumn">
+                {play.scoreValue > 0 ? (
+                  <p className="scoreVal">+{play.scoreValue}</p>
+                  ):(
+                  <p></p>
+                  )
+                }
+              </Grid.Column>
+              <Grid.Column width={2}>
+                {play.specificData.possession !== "" ? (
+                  (parseInt(play.specificData.possession) === play.game.homeId ?
+                    (<Image centered verticalAlign='middle' src={play.game.homeLogo} className="playImage"/>):
+                    (<Image centered verticalAlign='middle' src={play.game.awayLogo} className="playImage"/>)
+                  )
+                ):(<div></div>)}
+              </Grid.Column>
+              <Grid.Column width={6}>
+                <p>{play.description}</p>
+              </Grid.Column>
+              <Grid.Column width={2}>
+                <p>{play.specificData.awayScore} - {play.specificData.homeScore}</p>
+              </Grid.Column>
+              </Grid.Row>
+            </Grid>
+          ))
+        }
+        </Accordion.Content>
+        </>
+        ):(<></>)
+        }
+        { currentHalf >= 1 ? (
+        <>
+        <Accordion.Title
+          active={activeIndex === 0}
+          index={0}
+          onClick={handleClick}
+        >
+          <Icon name='dropdown' />
+          1st Half
+        </Accordion.Title>
+        <Accordion.Content active={activeIndex === 0}>
+          {myPlays.filter((play) => play.specificData.half === 1).map(play => (
+            <Grid>
+              <Grid.Row>
+              <Grid.Column width={1} className="timeColumn">
+                {play.specificData.time}
+              </Grid.Column>
+              <Grid.Column width={1} className="timeColumn">
+                {play.scoreValue > 0 ? (
+                  <p className="scoreVal">+{play.scoreValue}</p>
+                  ):(
+                  <p></p>
+                  )
+                }
+              </Grid.Column>
+              <Grid.Column width={2}>
+                {play.specificData.possession !== "" ? (
+                  (parseInt(play.specificData.possession) === play.game.homeId ?
+                    (<Image centered verticalAlign='middle' src={play.game.homeLogo} className="playImage"/>):
+                    (<Image centered verticalAlign='middle' src={play.game.awayLogo} className="playImage"/>)
+                  )
+                ):(<div></div>)}
+              </Grid.Column>
+              <Grid.Column width={6}>
+                <p>{play.description}</p>
+              </Grid.Column>
+              <Grid.Column width={2}>
+                <p>{play.specificData.awayScore} - {play.specificData.homeScore}</p>
+              </Grid.Column>
+              </Grid.Row>
+            </Grid>
+          ))
+        }
+        </Accordion.Content>
+        </>
+        ):(<></>)
+        }
+      </Accordion>
+    )
+}
+
+export default NCAABPlaysAccordion;

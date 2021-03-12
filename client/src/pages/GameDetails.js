@@ -2,7 +2,7 @@ import React, { useState, useContext, Fragment } from "react";
 import { useQuery } from "@apollo/react-hooks";
 import { Link, useParams } from 'react-router-dom';
 import gql from "graphql-tag";
-import { Input, Menu, Grid, Modal, Button, Image } from 'semantic-ui-react';
+import { Input, Menu, Grid, Modal, Button, Image, Loader } from 'semantic-ui-react';
 import { AuthContext } from "../context/auth";
 import ReactionModal from "../components/ReactionModal/ReactionModal";
 import GameDetailsHeader from "../components/GameDetailsHeader";
@@ -10,7 +10,9 @@ import { FETCH_PLAYS_IN_NFL_GAME, FETCH_PLAYS_IN_NCAAF_GAME,
          FETCH_PLAYS_IN_NCAABMENS_GAME, FETCH_PLAYS_IN_NBA_GAME,
          FETCH_PLAYS_IN_NHL_GAME, FETCH_PLAYS_IN_PREMIER_LEAGUE_GAME } from "../util/graphql";
 import "./GameDetails.css";
-import PlaysAccordion from "../components/PlaysAccordion";
+import NBAPlaysAccordion from "../components/NBAPlaysAccordion";
+import NCAABPlaysAccordion from "../components/NCAABPlaysAccordion";
+import NHLPlaysAccordion from "../components/NHLPlaysAccordion";
 
 
 function GameDetails(props) {
@@ -62,24 +64,16 @@ function GameDetails(props) {
     skip: (myLeague !== "eng.1")
   });
 
-  if (NFLloading) return 'Loading...';
-  if (NFLerror) return `Error! ${NFLerror.message}`;
 
-  if (NCAAFloading) return 'Loading...';
-  if (NCAAFerror) return `Error! ${NCAAFerror.message}`;
+  if (NFLloading || NCAAFloading || NCAABMENSloading ||
+      NBAloading || NHLloading || PremierLeagueloading) return (
+    <>
+    <Loader active inline='centered' size='large'>Loading</Loader>
+    </>
+  )
 
-  if (NCAABMENSloading) return 'Loading...';
-  if (NCAABMENSerror) return `Error! ${NCAABMENSerror.message}`;
-
-  if (NBAloading) return 'Loading...';
-  if (NBAerror) return `Error! ${NBAerror.message}`;
-
-  if (NHLloading) return 'Loading...';
-  if (NHLerror) return `Error! ${NHLerror.message}`;
-
-  if (PremierLeagueloading) return 'Loading...';
-  if (PremierLeagueerror) return `Error! ${PremierLeagueerror.message}`;
-
+  if (NFLerror || NCAAFerror || NCAABMENSerror ||
+      NBAerror || NHLerror || PremierLeagueerror) return "Error occurred!";
 
 
   if (myLeague === "nfl") {
@@ -173,49 +167,14 @@ function GameDetails(props) {
 
       <GameDetailsHeader gameId={myGameId} league={myLeague} />
 
+      {NCAABMENSdata.getPlaysInGame.length > 0 ? (
+        <>
+        <h1>Plays In Game</h1>
+        <NCAABPlaysAccordion plays={NCAABMENSdata.getPlaysInGame} />
+        </>
+        ):(<></>)
+      }
 
-      <h1>Plays In Game</h1>
-      <Fragment>
-        {
-          NCAABMENSdata.getPlaysInGame.map(play => (
-            <Grid>
-              <Grid.Row>
-              <Grid.Column width={1} className="timeColumn">
-                {play.specificData.time}
-              </Grid.Column>
-              <Grid.Column width={1} className="timeColumn">
-                {play.scoreValue > 0 && play.description.includes('made') ? (
-                  <p className="scoreVal">+{play.scoreValue}</p>
-                  ):(
-                  <p></p>
-                  )
-                }
-              </Grid.Column>
-              <Grid.Column width={2}>
-                {play.specificData.possession !== "" ? (
-                  (parseInt(play.specificData.possession) === play.game.homeId ?
-                    (<Image centered verticalAlign='middle' src={play.game.homeLogo} className="playImage"/>):
-                    (<Image centered verticalAlign='middle' src={play.game.awayLogo} className="playImage"/>)
-                  )
-                ):(<div></div>)}
-              </Grid.Column>
-              <Grid.Column width={6}>
-                <p>{play.description}</p>
-              </Grid.Column>
-              <Grid.Column width={2}>
-                <p>{play.specificData.awayScore} - {play.specificData.homeScore}</p>
-              </Grid.Column>
-              <Grid.Column width={2}>
-                {user ? <Button onClick={() => {
-                  setModalOpen(true);
-                  setCurrentPlay(play);
-                }}>React</Button>: <Button as={Link} to="/login">React</Button>}
-              </Grid.Column>
-              </Grid.Row>
-            </Grid>
-          ))
-        }
-      </Fragment>
       </div>
     )
 
@@ -234,9 +193,16 @@ function GameDetails(props) {
         </Modal.Content>
       </Modal>
 
-      <h1>Plays In Game</h1>
+      <GameDetailsHeader gameId={myGameId} league={myLeague} />
 
-      <PlaysAccordion plays={NBAdata.getPlaysInGame} />
+      {NBAdata.getPlaysInGame.length > 0 ? (
+        <>
+        <h1>Plays In Game</h1>
+        <NBAPlaysAccordion plays={NBAdata.getPlaysInGame} />
+        </>
+      ):(<></>)
+      }
+
 
       </div>
     )
@@ -256,49 +222,16 @@ function GameDetails(props) {
         </Modal.Content>
       </Modal>
 
+      <GameDetailsHeader gameId={myGameId} league={myLeague} />
 
-      <h1>Plays In Game</h1>
-      <Fragment>
-        {
-          NHLdata.getPlaysInGame.map(play => (
-            <Grid>
-              <Grid.Row>
-              <Grid.Column width={1} className="timeColumn">
-                {play.specificData.time}
-              </Grid.Column>
-              <Grid.Column width={1} className="timeColumn">
-                {play.scoreValue > 0 ? (
-                  <p className="scoreVal">+{play.scoreValue}</p>
-                  ):(
-                  <p></p>
-                  )
-                }
-              </Grid.Column>
-              <Grid.Column width={2}>
-                {play.specificData.possession !== "" ? (
-                  (parseInt(play.specificData.possession) === play.game.homeId ?
-                    (<Image centered verticalAlign='middle' src={play.game.homeLogo} className="playImage"/>):
-                    (<Image centered verticalAlign='middle' src={play.game.awayLogo} className="playImage"/>)
-                  )
-                ):(<div></div>)}
-              </Grid.Column>
-              <Grid.Column width={6}>
-                <p>{play.description}</p>
-              </Grid.Column>
-              <Grid.Column width={2}>
-                <p>{play.specificData.awayScore} - {play.specificData.homeScore}</p>
-              </Grid.Column>
-              <Grid.Column width={2}>
-                {user ? <Button onClick={() => {
-                  setModalOpen(true);
-                  setCurrentPlay(play);
-                }}>React</Button>: <Button as={Link} to="/login">React</Button>}
-              </Grid.Column>
-              </Grid.Row>
-            </Grid>
-          ))
-        }
-      </Fragment>
+      {NHLdata.getPlaysInGame.length > 0 ? (
+        <>
+        <h1>Plays In Game</h1>
+        <NHLPlaysAccordion plays={NHLdata.getPlaysInGame} />
+        </>
+      ):(<></>)
+      }
+
       </div>
     )
 
@@ -318,49 +251,10 @@ function GameDetails(props) {
         </Modal.Content>
       </Modal>
 
-
       <h1>Plays In Game</h1>
-      <Fragment>
-        {
-          PremierLeaguedata.getPlaysInGame.map(play => (
-            <Grid>
-              <Grid.Row>
-              <Grid.Column width={1} className="timeColumn">
-                {play.specificData.time}
-              </Grid.Column>
-              <Grid.Column width={1} className="timeColumn">
-                {play.scoreValue > 0 ? (
-                  <p className="scoreVal">+{play.scoreValue}</p>
-                  ):(
-                  <p></p>
-                  )
-                }
-              </Grid.Column>
-              <Grid.Column width={2}>
-                {play.specificData.possession !== "" ? (
-                  (parseInt(play.specificData.possession) === play.game.homeId ?
-                    (<Image centered verticalAlign='middle' src={play.game.homeLogo} className="playImage"/>):
-                    (<Image centered verticalAlign='middle' src={play.game.awayLogo} className="playImage"/>)
-                  )
-                ):(<div></div>)}
-              </Grid.Column>
-              <Grid.Column width={6}>
-                <p>{play.description}</p>
-              </Grid.Column>
-              <Grid.Column width={2}>
-                <p>{play.specificData.awayScore} - {play.specificData.homeScore}</p>
-              </Grid.Column>
-              <Grid.Column width={2}>
-                {user ? <Button onClick={() => {
-                  setModalOpen(true);
-                  setCurrentPlay(play);
-                }}>React</Button>: <Button as={Link} to="/login">React</Button>}
-              </Grid.Column>
-              </Grid.Row>
-            </Grid>
-          ))
-        }
-      </Fragment>
+
+        <h3>Plays not yet available for Premier League!</h3>
+
       </div>
     )
 

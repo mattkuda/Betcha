@@ -7,7 +7,7 @@ import NCAAFGame from "../components/GameTypes/NCAAFGame";
 import NCAABMensGame from "../components/GameTypes/NCAABMensGame";
 import NBAGame from "../components/GameTypes/NBAGame";
 import Game from "../components/GameTypes/Game";
-import { Grid } from "semantic-ui-react";
+import { Grid, Loader } from "semantic-ui-react";
 import { FETCH_NFL_PREGAMES, FETCH_NFL_LIVEGAMES, FETCH_NFL_POSTGAMES,
          FETCH_NCAAF_PREGAMES, FETCH_NCAAF_LIVEGAMES, FETCH_NCAAF_POSTGAMES,
          FETCH_NCAABMENS_PREGAMES, FETCH_NCAABMENS_LIVEGAMES, FETCH_NCAABMENS_POSTGAMES,
@@ -157,73 +157,27 @@ function LeagueScoreboard(props) {
   const { loading: LeagueLoading, error: LeagueError, data: LeagueData } = useQuery(FETCH_ACTIVE_LEAGUES_QUERY);
 
 
-  if (NFLpregameLoading) return 'Loading pregames...';
-  if (NFLpregameError) return `Error! ${NFLpregameError.message}`;
+  if (NFLpregameLoading || NFLlivegameLoading || NFLpostgameLoading ||
+      NCAAFpregameLoading || NCAAFlivegameLoading || NCAAFpostgameLoading ||
+      NCAABMENSpregameLoading || NCAABMENSlivegameLoading || NCAABMENSpostgameLoading ||
+      NBApregameLoading || NBAlivegameLoading || NBApostgameLoading ||
+      NHLpregameLoading || NHLlivegameLoading || NHLpostgameLoading ||
+      PremierLeaguepregameLoading || PremierLeaguelivegameLoading || PremierLeaguepostgameLoading ||
+      ChampionsLeaguepregameloading || ChampionsLeaguelivegameloading || ChampionsLeaguepostgameloading ||
+      LeagueLoading) return (
+    <>
+    <Loader active inline='centered' size='large'>Loading</Loader>
+    </>
+  )
 
-  if (NFLlivegameLoading) return 'Loading livegames...';
-  if (NFLlivegameError) return `Error! ${NFLlivegameError.message}`;
-
-  if (NFLpostgameLoading) return 'Loading postgames...';
-  if (NFLpostgameError) return `Error! ${NFLpostgameError.message}`;
-
-  if (NCAAFpregameLoading) return 'Loading pregames...';
-  if (NCAAFpregameError) return `Error! ${NCAAFpregameError.message}`;
-
-  if (NCAAFlivegameLoading) return 'Loading livegames...';
-  if (NCAAFlivegameError) return `Error! ${NCAAFlivegameError.message}`;
-
-  if (NCAAFpostgameLoading) return 'Loading postgames...';
-  if (NCAAFpostgameError) return `Error! ${NCAAFpostgameError.message}`;
-
-  if (NCAABMENSpregameLoading) return 'Loading pregames...';
-  if (NCAABMENSpregameError) return `Error! ${NCAABMENSpregameError.message}`;
-
-  if (NCAABMENSlivegameLoading) return 'Loading livegames...';
-  if (NCAABMENSlivegameError) return `Error! ${NCAABMENSlivegameError.message}`;
-
-  if (NCAABMENSpostgameLoading) return 'Loading postgames...';
-  if (NCAABMENSpostgameError) return `Error! ${NCAABMENSpostgameError.message}`;
-
-  if (NBApregameLoading) return 'Loading pregames...';
-  if (NBApregameError) return `Error! ${NBApregameError.message}`;
-
-  if (NBAlivegameLoading) return 'Loading livegames...';
-  if (NBAlivegameError) return `Error! ${NBAlivegameError.message}`;
-
-  if (NBApostgameLoading) return 'Loading postgames...';
-  if (NBApostgameError) return `Error! ${NBApostgameError.message}`;
-
-  if (NHLpregameLoading) return 'Loading pregames...';
-  if (NHLpregameError) return `Error! ${NHLpregameError.message}`;
-
-  if (NHLlivegameLoading) return 'Loading livegames...';
-  if (NHLlivegameError) return `Error! ${NHLlivegameError.message}`;
-
-  if (NHLpostgameLoading) return 'Loading postgames...';
-  if (NHLpostgameError) return `Error! ${NHLpostgameError.message}`;
-
-  if (PremierLeaguepregameLoading) return 'Loading pregames...';
-  if (PremierLeaguepregameError) return `Error! ${PremierLeaguepregameError.message}`;
-
-  if (PremierLeaguelivegameLoading) return 'Loading livegames...';
-  if (PremierLeaguelivegameError) return `Error! ${PremierLeaguelivegameError.message}`;
-
-  if (PremierLeaguepostgameLoading) return 'Loading postgames...';
-  if (PremierLeaguepostgameError) return `Error! ${PremierLeaguepostgameError.message}`;
-
-  if (ChampionsLeaguepregameloading) return 'Loading pregames...';
-  if (ChampionsLeaguepregameError) return `Error! ${ChampionsLeaguepregameError.message}`;
-
-  if (ChampionsLeaguelivegameloading) return 'Loading livegames...';
-  if (ChampionsLeaguelivegameError) return `Error! ${ChampionsLeaguelivegameError.message}`;
-
-  if (ChampionsLeaguepostgameloading) return 'Loading postgames...';
-  if (ChampionsLeaguepostgameError) return `Error! ${ChampionsLeaguepostgameError.message}`;
-
-
-
-  if (LeagueLoading) return 'Loading leagues...';
-  if (LeagueError) return `Error! ${LeagueError.message}`;
+  if (NFLpregameError || NFLlivegameError || NFLpostgameError ||
+      NCAAFpregameError || NCAAFlivegameError || NCAAFpostgameError ||
+      NCAABMENSpregameError || NCAABMENSlivegameError || NCAABMENSpostgameError ||
+      NBApregameError || NBAlivegameError || NBApostgameError ||
+      NHLpregameError || NHLlivegameError || NHLpostgameError ||
+      PremierLeaguepregameError || PremierLeaguelivegameError || PremierLeaguepostgameError ||
+      ChampionsLeaguepregameError || ChampionsLeaguelivegameError || ChampionsLeaguepostgameError ||
+      LeagueError) return "Error occurred!";
 
 
   //NFL

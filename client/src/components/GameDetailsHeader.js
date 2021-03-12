@@ -45,7 +45,8 @@ function GameDetailsHeader(props) {
             <Grid columns={3} className="header-main-content-grid">
               <Grid.Column verticalAlign='middle'>
                 <Image centered src={data.getGameByID.awayLogo} className='header-logo'/>
-                  {data.getGameByID.specificData.awayRank !== -1 ? (
+                  {(myLeague === "mens-college-basketball" || myLeague === "college-football") &&
+                     (data.getGameByID.specificData.awayRank !== -1) ? (
                     <Label circular
                       color="grey"
                       floating
@@ -68,14 +69,14 @@ function GameDetailsHeader(props) {
             <Grid columns={3} textAlign="center" className="header-betting-odds-grid">
               <Grid.Column verticalAlign="top">
                 {data.getGameByID.awayId === data.getGameByID.favoredTeamId ? (
-                  <div className="ml-text">ML: -{data.getGameByID.awayML}</div>
+                  <div className="ml-text">ML: {data.getGameByID.awayML}</div>
                 ):(
                   <div className="ml-text">ML: +{data.getGameByID.awayML}</div>
                 )}
               </Grid.Column>
               <Grid.Column verticalAlign='top'>
                 {data.getGameByID.awayId === data.getGameByID.favoredTeamId ? (
-                  <div className="ml-text">Spread: {data.getGameByID.spread} ({data.getGameByID.awaySpreadOdds})</div>
+                  <div className="ml-text">Spread: -{data.getGameByID.spread} ({data.getGameByID.awaySpreadOdds})</div>
                 ):(
                   <div className="ml-text">Spread: +{data.getGameByID.spread} ({data.getGameByID.awaySpreadOdds})</div>
                 )}
@@ -107,7 +108,8 @@ function GameDetailsHeader(props) {
               </Grid.Column>
               <Grid.Column verticalAlign='middle'>
                 <Image centered src={data.getGameByID.homeLogo} className='header-logo'/>
-                  {data.getGameByID.specificData.homeRank !== -1 ? (
+                  {(myLeague === "mens-college-basketball" || myLeague === "college-football") &&
+                    (data.getGameByID.specificData.homeRank !== -1) ? (
                     <Label circular
                       color="grey"
                       floating

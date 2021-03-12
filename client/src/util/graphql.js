@@ -1018,7 +1018,7 @@ export const FETCH_PLAYS_IN_NCAABMENS_GAME = gql`
         homeScore
         awayScore
         time
-        period
+        half
         possession
       }
     }

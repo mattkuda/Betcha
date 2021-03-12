@@ -9,7 +9,7 @@ function ScoreboardHome() {
       <TopEvents />
     </div>
   )
-  
+
 }
 
 export default ScoreboardHome;

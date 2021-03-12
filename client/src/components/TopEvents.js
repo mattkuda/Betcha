@@ -3,31 +3,56 @@ import { useQuery } from "@apollo/react-hooks";
 import gql from "graphql-tag";
 import { Link } from "react-router-dom";
 import Game from "../components/GameTypes/Game";
-import { Grid } from "semantic-ui-react";
-import { FETCH_TOP_PREGAME_EVENTS } from "../util/graphql";
+import { Grid, Loader } from "semantic-ui-react";
+import { FETCH_TOP_PREGAME_EVENTS, FETCH_TOP_LIVEGAME_EVENTS } from "../util/graphql";
 
 function TopEvents() {
 
-  const { loading, error, data } = useQuery(FETCH_TOP_PREGAME_EVENTS, {
+  const { loading: liveGameLoading, error: liveGameError, data: liveGameData } = useQuery(FETCH_TOP_LIVEGAME_EVENTS, {
     pollInterval: 30000
   });
 
-  if (loading) return "Loading top events...";
-  if (error) return `Error! ${error.message}`;
+  const { loading: preGameLoading, error: preGameError, data: preGameData } = useQuery(FETCH_TOP_PREGAME_EVENTS, {
+    pollInterval: 30000
+  });
 
-  if (data) {
-    console.log(data.getTopEvents);
-  }
+  if (liveGameLoading || preGameLoading) return (
+    <>
+    <Loader active inline='centered' size='large'>Loading</Loader>
+    </>
+  )
+  if (liveGameError || preGameError) return `Error occured!`;
 
   return (
     <div>
+
+      <h1>Top Live Games</h1>
+      <Grid columns="two">
+        <Grid.Row>
+          <Fragment>
+          {
+            liveGameData.getTopLivegameEvents.filter(event => event.game).map((event) => (
+                <Grid.Column>
+                  <Link
+                    to={`/scoreboard/${event.game.league}/${event.game.gameId}`}
+                  >
+                    <span className="card" style={{ display: "block" }}>
+                      <Game key={event.game.gameId} {...event.game} />
+                    </span>
+                  </Link>
+                </Grid.Column>
+              ))
+            }
+          </Fragment>
+        </Grid.Row>
+      </Grid>
 
       <h1>Top Upcoming Games</h1>
       <Grid columns="two">
         <Grid.Row>
           <Fragment>
           {
-            data.getTopPregameEvents.filter(event => event.game).map((event) => (
+            preGameData.getTopPregameEvents.filter(event => event.game).map((event) => (
                 <Grid.Column>
                   <Link
                     to={`/scoreboard/${event.game.league}/${event.game.gameId}`}

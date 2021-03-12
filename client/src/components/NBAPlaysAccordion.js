@@ -3,7 +3,7 @@ import { useQuery } from "@apollo/react-hooks";
 import { Accordion, Icon, Grid, Image, Button, Link } from 'semantic-ui-react';
 
 
-function PlaysAccordion(props) {
+function NBAPlaysAccordion(props) {
 
   const [activeIndex, setActiveIndex] = useState(0);
   const handleClick = (e, { index }) => activeIndex !== index ? (setActiveIndex(index)) : setActiveIndex(-1);
@@ -12,11 +12,58 @@ function PlaysAccordion(props) {
   const currentQuarter = myPlays[0].specificData.quarter;
 
   useEffect(() => {
-    setActiveIndex(currentQuarter-1);
+    setActiveIndex( currentQuarter < 5 ? currentQuarter-1 : 4);
   }, []);
 
   return (
       <Accordion styled fluid>
+        { currentQuarter >= 5 ? (
+          <>
+          <Accordion.Title
+            active={activeIndex === 4}
+            index={4}
+            onClick={handleClick}
+          >
+            <Icon name='dropdown' />
+            OT
+          </Accordion.Title>
+          <Accordion.Content active={activeIndex === 4}>
+            {myPlays.filter((play) => play.specificData.quarter >= 5).map(play => (
+              <Grid>
+                <Grid.Row>
+                <Grid.Column width={1} className="timeColumn">
+                  {play.specificData.time}
+                </Grid.Column>
+                <Grid.Column width={1} className="timeColumn">
+                  {play.scoreValue > 0 ? (
+                    <p className="scoreVal">+{play.scoreValue}</p>
+                    ):(
+                    <p></p>
+                    )
+                  }
+                </Grid.Column>
+                <Grid.Column width={2}>
+                  {play.specificData.possession !== "" ? (
+                    (parseInt(play.specificData.possession) === play.game.homeId ?
+                      (<Image centered verticalAlign='middle' src={play.game.homeLogo} className="playImage"/>):
+                      (<Image centered verticalAlign='middle' src={play.game.awayLogo} className="playImage"/>)
+                    )
+                  ):(<div></div>)}
+                </Grid.Column>
+                <Grid.Column width={6}>
+                  <p>{play.description}</p>
+                </Grid.Column>
+                <Grid.Column width={2}>
+                  <p>{play.specificData.awayScore} - {play.specificData.homeScore}</p>
+                </Grid.Column>
+                </Grid.Row>
+              </Grid>
+            ))
+          }
+          </Accordion.Content>
+          </>
+          ):(<></>)
+        }
         { currentQuarter >= 4 ? (
           <>
           <Accordion.Title
@@ -209,4 +256,4 @@ function PlaysAccordion(props) {
     )
 }
 
-export default PlaysAccordion;
+export default NBAPlaysAccordion;
