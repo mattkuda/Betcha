@@ -128,6 +128,31 @@ module.exports = {
       }
     },
 
+    async readNotifications(_, {}, context) {
+      try {
+        const user = checkAuth(context);
+
+        const notifications = await Notification.find({
+          receiver: user.id,
+          readAt: "",
+        }).sort({
+          createdAt: -1,
+        });
+
+        var timestamp = new Date();
+        for(const notif in notifications){
+          if(notif.readAt == ""){
+            notif.readAt = timestamp;
+            await notif.save();
+          }
+        }
+        return notifications;
+      } catch (err) {
+        console.log(err);
+        throw new Error(err);
+      }
+    },
+
     //DO NOT DELETE! IF WE EVER NEED IT, IT'S HERE. IDK. KINDA FUNNY TO LEAVE NOTIFICATIONS.
     // async deleteNotification(_, { objectType, objectId, receiver }, context) {
     //   const user = checkAuth(context);

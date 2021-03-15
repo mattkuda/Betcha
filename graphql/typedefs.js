@@ -458,6 +458,8 @@ module.exports = gql`
     createReaction(body: String!, playId: String!): Reaction!
     createPostReaction(body: String!, playId: String!): Post!
     followUser(followeeId: ID!): User!
+    readNotifications: [Notification]
+
   }
 
   type Subscription {
