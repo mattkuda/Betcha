@@ -413,7 +413,7 @@ function PostModal(props) {
               <div className="betTextBox">
                 <Button
                   type="button"
-                  color="purple"
+                  color="#a8fffb"
                   onClick={() => handleAddGameClick()}
                   disabled={values.gameArray.length > 9}
                 >

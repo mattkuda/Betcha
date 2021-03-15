@@ -32,16 +32,15 @@ query($myGameId: String!) {
         homeAbbreviation
         awayAbbreviation
       }
+      user {
+        id
+        username
+        name
+        profilePicture
+      }
+      betOdds
     }
-    user {
-      id
-      username
-      name
-      profilePicture
-    }
-    betOdds
   }
-}
 `;
 
 export const FETCH_TOP_PREGAME_EVENTS = gql`
@@ -106,7 +105,7 @@ export const FETCH_TOP_LIVEGAME_EVENTS = gql`
 `;
 
 export const FETCH_POSTS_QUERY = gql`
-query($first: Int!, $offset: Int!) {
+  query($first: Int!, $offset: Int!) {
     getPosts(first: $first, offset: $offset) {
       id
       postType
@@ -138,6 +137,7 @@ query($first: Int!, $offset: Int!) {
       }
       playId {
         game {
+          sport
           homeFullName
           awayFullName
           stateDetails
@@ -157,6 +157,14 @@ query($first: Int!, $offset: Int!) {
           overUnder
         }
         description
+        specificData {
+          homeScore
+          awayScore
+          time
+          half
+          quarter
+          possession
+        }
       }
       gameArray {
         gameId {
@@ -548,7 +556,6 @@ export const FETCH_NCAABMENS_POSTGAMES = gql`
   }
 `;
 
-
 export const FETCH_HEADER_INFO_FOR_GAME = gql`
   query($myGameId: String!) {
     getGameByID(gameId: $myGameId) {
@@ -885,7 +892,6 @@ export const FETCH_PREMIER_LEAGUE_POSTGAMES = gql`
   }
 `;
 
-
 //MLS GAME QUERIES
 
 export const FETCH_CHAMPIONS_LEAGUE_PREGAMES = gql`
@@ -978,7 +984,6 @@ export const FETCH_CHAMPIONS_LEAGUE_POSTGAMES = gql`
     }
   }
 `;
-
 
 //PLAY QUERIES
 

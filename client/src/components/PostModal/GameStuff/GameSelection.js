@@ -1,6 +1,7 @@
 import React, { useContext, useState } from "react";
 import { useQuery } from "@apollo/react-hooks";
-import { Grid, Transition, Modal, Button } from "semantic-ui-react";
+import { Grid, Transition, Loader } from "semantic-ui-react";
+import "./GameSelection.css";
 
 import { FETCH_NCCABMENS_GAMEPRES_QUERY } from "../../../util/graphql";
 import { FETCH_NCAAF_PREGAMES } from "../../../util/graphql";
@@ -14,7 +15,7 @@ function GameSelection(props) {
   //   FETCH_GameS_QUERY
   // );
 
-  var loading = false;
+  // var loading = false;
 
   if(props.league == "NFL"){
     // const { loading2, data: { getNCAABMensPregames: games } = {} } = useQuery(
@@ -32,18 +33,27 @@ function GameSelection(props) {
     // );
   }
 
-  const { loading2, data: { getAllPregames: games } = {} } = useQuery(
+  const { loading: gamesLoading, data: { getAllPregames: games } = {} } = useQuery(
     FETCH_ALL_PREGAMES
     );
 
+  if (gamesLoading) {
+    return (
+      <div>
+      <br/>
+        <Loader active className='workaround' size='large' inline='centered'  size='large'>Loading Games...</Loader>
+        <p style={{textAlign: "center"}}>Loading games...</p>
+      </div>
+    )
+  }
 
 
   return (
     <div style={{padding: "0px"}}>
       <Grid columns="two" style={{width: "100%",padding: "0px", margin: "0px"}}>
         <Grid.Row>
-          {loading2 ? (
-            <h1>Loading Games...</h1>
+          {gamesLoading ? (
+            {/* <Loader>Loading Games...</Loader> */}
           ) : (
             //Transition group adds animation for when new post is added/deleted
             <Transition.Group>

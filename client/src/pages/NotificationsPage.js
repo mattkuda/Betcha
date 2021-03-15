@@ -1,6 +1,6 @@
 import React, { useContext, useState, useRef } from "react";
 import gql from "graphql-tag";
-import { useQuery, useMutation } from "@apollo/react-hooks";
+import { useQuery, useMutation, useEffect } from "@apollo/react-hooks";
 import {
   Grid,
   Image,
@@ -20,7 +20,20 @@ import { Link } from "react-router-dom";
 
 function NotificationsPage(props) {
   const { user } = useContext(AuthContext);
-  console.log("the use on the notif page is: " + user);
+
+  const [followUser] = useMutation(READ_NOTIFICATIONS_MUTATION, {
+    variables: { userId: user.id },
+  });
+
+  function testFunc(temp){
+    console.log(temp)
+  }
+
+  React.useEffect(() => {
+    testFunc("Uo");
+  }, []);
+
+  
 
   const { data: { getUserNotifications: notifications } = {} } = useQuery(
     FETCH_USER_NOTIFICATIONS_QUERY,
@@ -86,5 +99,23 @@ const FETCH_USER_NOTIFICATIONS_QUERY = gql`
     }
   }
 `;
+
+const READ_NOTIFICATIONS_MUTATION = gql`
+  mutation readNotifications{
+    readNotifications {
+      id
+      sender {
+        id
+        name
+      }
+      objectType
+      createdAt
+      objectId
+    }
+  }
+  
+`;
+
+
 
 export default NotificationsPage;

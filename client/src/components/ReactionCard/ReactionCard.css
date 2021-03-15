@@ -33,6 +33,13 @@
   position: relative ;
 }
 
+.pc-reactionScore{
+  color: #969696;
+  font-size: 12px;
+  padding-top: 4px; 
+  position: relative ;
+}
+
 .pc-buttons{
   font-size: 18px;
   padding-top: 30px; 
@@ -49,6 +56,8 @@
   text-align: center;
   top: -75px;
   height: 100%;
+  background-size: cover; 
+  background-position: 50%
 }
 
 .win{

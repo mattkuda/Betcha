@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
 import { useQuery } from "@apollo/react-hooks";
-import { Grid, Transition, Modal, Button } from "semantic-ui-react";
-
+import { Grid, Transition, Modal, Button , Loader} from "semantic-ui-react";
+import './LeagueSelection.css';
 import { AuthContext } from "../../../context/auth";
 import PostCard from "../../PostCard/PostCard";
 import PostModal from "../PostModal";
@@ -38,13 +38,22 @@ function LeagueSelection(props) {
   //     image: "https://upload.wikimedia.org/wikipedia/commons/d/dd/NCAA_logo.svg",
   //   },
   // ];
+  if (loading) {
+    return (
+      <div>
+      <br/>
+        <Loader active className='workaround' size='large' inline='centered' size='large'>Loading Games...</Loader>
+        <p style={{textAlign: "center"}}>Loading leagues...</p>
+      </div>
+    )
+  }
 
   return (
     <div style={{padding: "0px"}}>
       <Grid columns="two" style={{width: "100%",padding: "0px", margin: "0px"}}>
         <Grid.Row>
           {loading2 ? (
-            <h1>Loading leagues...</h1>
+            <Loader>Loading leagues...</Loader>
           ) : (
             //Transition group adds animation for when new post is added/deleted
             <Transition.Group>

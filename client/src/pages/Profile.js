@@ -84,23 +84,26 @@ function Profile(props) {
             />
           </Modal.Content>
         </Modal>
-        <Grid >
+        <Card fluid>
+        <Grid style={{padding: "15px"}}>
+        
           <Grid.Row>
-            <Grid.Column width={2}>
-              <Image src={profilePicture} size="small" float="right" />
+          
+            <Grid.Column width={3} style={{paddingRight: "0px"}}>
+              <Image src={profilePicture} size="small" float="right" style={{disply: "inline-block", width: "95%", border: "solid #00b5ad 3px", margin: "auto", borderRadius: "50%", verticalAlign: "middle"}}/>
             </Grid.Column>
-            <Grid.Column width={14}>
-              <Card fluid>
+            <Grid.Column width={13}>
+              
                 <Card.Content>
-                  <Card.Header>
+                  <Card.Header style={{fontSize: "24px", fontWeight: "bold"}}>
                     {name} @{username}
                     {user && user.username === profileUsername && (
-                      <Button onClick={(e) => setModalOpen(true)}>
+                      <Button onClick={(e) => setModalOpen(true)} style={{border: "solid #a8fffb 3px", marginLeft: "30px", backgroundColor: "#a8fffb"}}>
                         Edit profile
                       </Button>
                     )}
                   </Card.Header>
-                  <Card.Meta>
+                  <Card.Meta style={{}}>
                     <FollowButton
                       user={user}
                       followeeUser={{ id, followers }}
@@ -132,9 +135,13 @@ function Profile(props) {
                     Following: {followingCount} Followers: {followersCount}
                   </Card.Meta>
                 </Card.Content>
-              </Card>
+              
             </Grid.Column>
+            
           </Grid.Row>
+      </Grid>
+      </Card>
+      <Grid>
           <Grid.Row>
             {posts &&
               posts.map((item, i) =>
@@ -247,6 +254,7 @@ export const FETCH_USER_POSTS_QUERY = gql`
       post {
         id
         body
+        username
         betOdds
         gameArray {
           gameId {
@@ -269,6 +277,7 @@ export const FETCH_USER_POSTS_QUERY = gql`
       }
       playId {
         game {
+          sport
           homeFullName
           awayFullName
           stateDetails
@@ -288,6 +297,14 @@ export const FETCH_USER_POSTS_QUERY = gql`
           overUnder
         }
         description
+        specificData {
+          homeScore
+          awayScore
+          time
+          half
+          quarter
+          possession
+        }
       }
       gameArray {
         gameId {
@@ -322,6 +339,7 @@ export const FETCH_USER_POSTS_QUERY = gql`
         id
         name
         profilePicture
+        username
       }
       commentCount
       comments {

@@ -13,24 +13,48 @@ import DeleteButton from "../Buttons/DeleteButton";
 import { betDescFormat } from "../../util/Extensions/betDescFormat";
 import { betTimeFormat } from "../../util/Extensions/betTimeFormat";
 import { liveGameDescFormat } from "../../util/Extensions/liveGameDescFormat";
+import { reactionGameDescFormat } from "../../util/Extensions/liveGameDescFormat";
 import { postGameDescFormat } from "../../util/Extensions/postGameDescFormal";
 import { determineBetResult } from "../../util/Extensions/betCalculations";
 
 function ReactionCard({
-  reaction: { id, body, user, playId, createdAt, post, commentCount, likeCount, likes, } = {},
+  reaction: {
+    id,
+    body,
+    user,
+    playId,
+    createdAt,
+    post,
+    commentCount,
+    likeCount,
+    likes,
+  } = {},
 }) {
   const { userME } = useContext(AuthContext);
 
-  console.log("The Post is: " + post)
-  console.log("The body is: " + body)
-  console.log("The playId.description is: " + playId.description)
+  function findIcon(input){
+    switch (input) {
+      case "basketball": 
+        return "basketball ball"; 
+      case "football": 
+        return "football ball";
+      case "hockey": 
+        return "hockey puck";
+      case "soccer": 
+        return "soccer";
+      default: return "talk"
+    }
+  }
+
+  console.log("The Post is: " + post);
+  console.log("The body is: " + body);
+  console.log("The playId.description is: " + playId.description);
   const betData =
     post != null
       ? post.gameArray.find((o) => o.gameId.gameId === playId.game.gameId)
       : null;
 
-
-    const gameData = playId.game;
+  const gameData = playId.game;
 
   console.log("gamedata alert" + JSON.stringify(gameData));
   console.log("user alert" + JSON.stringify(user));
@@ -39,7 +63,6 @@ function ReactionCard({
     <>
       <Card fluid floated="right" style={{ width: "100%" }}>
         <Card.Content>
-          <h1>THIS IS A REACTIOn</h1>
           <div
             style={{ display: "inline-block", width: "auto", height: "100%" }}
           >
@@ -82,9 +105,10 @@ function ReactionCard({
                 </div>
               </div>
             )}
-
-            <div className="pc-betBody">The reaction: {body}</div>
-            <div className="pc-betBody">The play: {playId.description}</div>
+            <div className="pc-betBody">
+              <i>{playId.description}</i>
+            </div>
+            <div className="pc-betBody">{body}</div>
           </div>
         </Card.Content>
       </Card>
@@ -95,7 +119,6 @@ function ReactionCard({
     <>
       <Card fluid floated="right" style={{ width: "100%" }}>
         <Card.Content>
-          <h1>THIS IS A REACTIOn</h1>
           <div
             style={{ display: "inline-block", width: "auto", height: "100%" }}
           >
@@ -116,20 +139,22 @@ function ReactionCard({
             >
               {moment(createdAt).fromNow(true)} ago
             </div>
-            <div className="pc-bet">Game not posted about</div>}
-            <div className="pc-betBody">The reaction: {body}</div>
-            <div className="pc-betBody">The play: {playId.description}</div>
+            <div className="pc-betBody">
+              <i>{playId.description}</i>
+            </div>
+            <div className="pc-betBody">{body}</div>
           </div>
         </Card.Content>
       </Card>
     </>
   );
 
-  let PostGamePostedAboutMarkup = (
-    <>
+  let PostGameMarkup = (
+    //If the user ahs posted about the game
+    post ? (
+      <>
       <Card fluid floated="right" style={{ width: "100%" }}>
         <Card.Content>
-          <h1>THIS IS A REACTIOn</h1>
           <div
             style={{ display: "inline-block", width: "auto", height: "100%" }}
           >
@@ -182,8 +207,23 @@ function ReactionCard({
               </div>
             )}
 
-            <div className="pc-betBody">The reaction: {body}</div>
-            <div className="pc-betBody">The play: {playId.description}</div>
+            <div className="pc-betBody">
+              <i>{playId.description}</i>
+            </div>
+            <div className="pc-betBody">{body}</div>
+            <div className="pc-betBody">
+              {user.name} has the bet {betData}
+              {/* {betDescFormat(
+                betData.betType,
+                betData.betAmount,
+                playId.game
+              )} */}
+              
+              {" "}
+              {" ("}
+              {post.betOdds}
+              {")"}
+            </div>
             <div className="pc-buttons">
               <Button onClick={(e) => console.log(userME)}>userME</Button>
               <LikeButton
@@ -217,23 +257,20 @@ function ReactionCard({
         </Card.Content>
       </Card>
     </>
-  );
-
-  let PostGameNormalMarkup = (
-    <>
+    ) : 
+    //If the user hasn't posted about the game
+    (
+      <>
       <Card fluid floated="right" style={{ width: "100%" }}>
         <Card.Content>
-          <h1>THIS IS A REACTIOn</h1>
           <div
             style={{ display: "inline-block", width: "auto", height: "100%" }}
           >
-            <div>
               <img
                 className="pc-img"
                 alt="profile-pic"
                 src={`${user.profilePicture}`}
               ></img>
-            </div>
           </div>
           <div className="pc-header">
             <Link to={`/user/${user.username}`}>
@@ -244,11 +281,18 @@ function ReactionCard({
             >
               {moment(createdAt).fromNow(true)} ago
             </div>
+            <div className="pc-betBody">{body}</div>
+            <div style={{border: "solid #e3e3e3 2px", padding: "10px", marginTop: "10px"}}>
+              <div className="pc-betBody">
+                <Icon name={findIcon(gameData.sport)}/>
+                <i>{playId.description}</i>
+              </div>
+              <div className="pc-reactionScore" >
+                <i>{reactionGameDescFormat(playId.game.awayAbbreviation, playId.game.homeAbbreviation, playId.specificData )}</i>
+              </div>
+            </div>
+            
 
-            <div className="pc-bet">Game not posted about</div>
-
-            <div className="pc-betBody">The reaction: {body}</div>
-            <div className="pc-betBody">The play: {playId.description}</div>
             <div className="pc-buttons">
               <Button onClick={(e) => console.log(userME)}>userME</Button>
               <LikeButton
@@ -282,21 +326,22 @@ function ReactionCard({
         </Card.Content>
       </Card>
     </>
+    )
+    
   );
 
-  if (gameData.stateDetails === "STATUS_IN_PROGRESS") {
-    if (post != null) return LiveGamePostedAboutMarkup;
-    else return LiveGameNormalMarkup;
-  } else if (gameData.stateDetails === "STATUS_FINAL") {
-    if (post != null){
-      console.log("12312312")
-      return PostGamePostedAboutMarkup;
-    } 
-    else{
-      console.log("666666")
-      return PostGameNormalMarkup;
-    } 
-  }
+
+    if (post != null) {
+      console.log("111111");
+      return PostGameMarkup;
+    } else {
+      console.log("222222");
+      return PostGameMarkup;
+    }
+  
+   
+      
+    
 }
 
 export default ReactionCard;
