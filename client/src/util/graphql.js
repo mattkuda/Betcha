@@ -21,16 +21,17 @@ export const FETCH_USERS_FOR_USER_SEARCH_QUERY = gql`
 `;
 
 export const FETCH_USERS_WHO_POSTED_ABOUT_GAME = gql`
-query($myGameId: String!) {
-  getPostsAboutGame(gameId: $myGameId) {
-    id
-    gameArray {
-      betAmount
-      betType
-      gameId {
-        gameId
-        homeAbbreviation
-        awayAbbreviation
+  query($myGameId: String!) {
+    getPostsAboutGame(gameId: $myGameId) {
+      id
+      gameArray {
+        betAmount
+        betType
+        gameId {
+          gameId
+          homeAbbreviation
+          awayAbbreviation
+        }
       }
       user {
         id
