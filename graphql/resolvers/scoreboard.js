@@ -38,7 +38,7 @@ module.exports = {
     },
     async getPostgamesByLeague(_, { league }) {
       try {
-        const postgames = await Postgame.find({league: league});
+        const postgames = await Postgame.find({league: league}).sort({createdAt: -1});
         return postgames;
       } catch (err) {
         throw new Error(err);

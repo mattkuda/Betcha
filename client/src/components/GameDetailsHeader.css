@@ -8,12 +8,23 @@
 .header-content-left {
   float: left;
   border-bottom-left-radius: 10px;
+  display: inline-flex;
+  height: 100%;
+  width: 50%;
 }
 
 .header-content-right {
   float: right;
   border-bottom-right-radius: 10px;
+  display: inline-flex;
+  height: 100%;
+  width: 50%;
+}
 
+.header-content-left-content {
+}
+
+.header-content-right-content {
 }
 
 .header-main-content-grid {

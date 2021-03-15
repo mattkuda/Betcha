@@ -2,6 +2,7 @@ import React, { useContext, useState, useRef } from "react";
 import gql from "graphql-tag";
 import { useForm } from '../util/hooks';
 import { useQuery, useMutation } from "@apollo/react-hooks";
+import { Link } from "react-router-dom";
 import {
   Grid,
   Image,
@@ -37,7 +38,7 @@ function SinglePost(props) {
   });
 
   ///YOU ARE BUILDING NOTIFS FOR COMMENTS
-  
+
 
   const [createNotification] = useMutation(CREATE_NOTIFICATION_MUTATION, {
     variables: { objectType: "comment", objectId: postId, receiver: values.receiverId },
@@ -64,7 +65,7 @@ function SinglePost(props) {
 
   const handleButtonClick = async () => {
 
-    
+
 
     await submitComment();
 
@@ -81,7 +82,7 @@ function SinglePost(props) {
     props.history.push("/");
   }
 
- 
+
   //Depends on whether we have data from query yet
   let postMarkup;
 
@@ -105,16 +106,18 @@ function SinglePost(props) {
     values.receiverId = getPost.user.id;
 
     console.log("the recID is: ");
-  
+
     postMarkup = (
       <Grid>
         <Grid.Row>
           <Grid.Column width={2}>
-            <Image
-              src={`${user.profilePicture}`}
-              size="small"
-              float="right"
-            />
+            <Link to={`/user/${user.username}`}>
+              <Image
+                src={`${user.profilePicture}`}
+                size="small"
+                float="right"
+              />
+            </Link>
           </Grid.Column>
           <Grid.Column width={10}>
             <Card fluid>
@@ -125,7 +128,7 @@ function SinglePost(props) {
               <div className="pc-bet">Failed to load game data :-(</div>
             ) : (
               gameArray && gameArray.map((game) => (
-                   
+
               <div>
               <div className="pc-bet">
                 {betDescFormat(game.betType, game.betAmount, game.gameId)} {" ("}{betOdds}{")"}

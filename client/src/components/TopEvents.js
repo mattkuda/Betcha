@@ -23,6 +23,8 @@ function TopEvents() {
   )
   if (liveGameError || preGameError) return `Error occured!`;
 
+  const currentDate = new Date();
+
   return (
     <div>
 
@@ -52,7 +54,9 @@ function TopEvents() {
         <Grid.Row>
           <Fragment>
           {
-            preGameData.getTopPregameEvents.filter(event => event.game).map((event) => (
+            preGameData.getTopPregameEvents.filter(event => event.game)
+            .filter(game => new Date(game.startTime) >= currentDate.setHours(currentDate.getHours()-1))
+            .map((event) => (
                 <Grid.Column>
                   <Link
                     to={`/scoreboard/${event.game.league}/${event.game.gameId}`}

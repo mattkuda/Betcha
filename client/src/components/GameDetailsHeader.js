@@ -19,7 +19,6 @@ function GameDetailsHeader(props) {
   });
 
 
-
   if (loading) return 'Loading...';
   if (error) return `Error! ${error.message}`;
 
@@ -35,7 +34,7 @@ function GameDetailsHeader(props) {
         width: '50%',
         backgroundImage: `linear-gradient(to bottom, rgba(${awayColorRgb.r},${awayColorRgb.g},${awayColorRgb.b},0), rgba(${awayColorRgb.r},${awayColorRgb.g},${awayColorRgb.b},.3))`
       }} className="header-content-left">
-        <Grid rows={2}>
+        <Grid rows={2} className="header-content-left-content">
           <Grid.Row>
             <Grid columns={3} className="header-main-content-grid">
               <Grid.Column verticalAlign='middle'>
@@ -91,7 +90,7 @@ function GameDetailsHeader(props) {
         width: '50%',
         backgroundImage: `linear-gradient(to bottom, rgba(${homeColorRgb.r},${homeColorRgb.g},${homeColorRgb.b},0), rgba(${homeColorRgb.r},${homeColorRgb.g},${homeColorRgb.b},.3))`
       }} className="header-content-right">
-        <Grid rows={2}>
+        <Grid rows={2} className="header-content-right-content">
           <Grid.Row>
             <Grid columns={3} className="header-main-content-grid">
               <Grid.Column verticalAlign='middle'>

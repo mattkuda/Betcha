@@ -43,7 +43,7 @@ function MyBets() {
 
     return (
       <div>
-        <h1>Upcoming Bets</h1>
+        <h1>My Bets</h1>
         <Grid columns="two">
           <Grid.Row>
             <Fragment>

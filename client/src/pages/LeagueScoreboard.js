@@ -319,11 +319,13 @@ function LeagueScoreboard(props) {
   //NFL
   if (myLeague === "mens-college-basketball") {
 
+    const currentDate = new Date();
+
     return (
       <div>
 
         <h1>Live Games</h1>
-        <Grid columns="two">
+        <Grid stackable columns="two">
           <Grid.Row>
             <Fragment>
               {
@@ -342,12 +344,14 @@ function LeagueScoreboard(props) {
         </Grid>
 
       <h1>Upcoming Games</h1>
-      <Grid columns="two">
+      <Grid stackable columns="two">
         <Grid.Row>
           <Fragment>
             {
               NCAABMENSpregameData.getPregamesByLeague.filter(game => game.awayAbbreviation !== "TBD" &&
-              game.homeAbbreviation !== "TBD").map(game => (
+              game.homeAbbreviation !== "TBD")
+              .filter(game => new Date(game.startTime) >= currentDate.setHours(currentDate.getHours()-1))
+              .map(game => (
                 <Grid.Column>
                   <Link to={`/scoreboard/${myLeague}/${game.gameId}`}>
                     <span className="card" style={{"display": "block"}}>
@@ -363,7 +367,7 @@ function LeagueScoreboard(props) {
 
 
       <h1>Completed Games</h1>
-      <Grid columns="two">
+      <Grid stackable columns="two">
         <Grid.Row>
           <Fragment>
             {
@@ -387,6 +391,9 @@ function LeagueScoreboard(props) {
 
   //NBA
   if (myLeague === "nba") {
+
+    const currentDate = new Date();
+
     return (
       <div>
 
@@ -415,7 +422,9 @@ function LeagueScoreboard(props) {
           <Fragment>
             {
               NBApregameData.getPregamesByLeague.filter((game) => game.awayAbbreviation !== "TBD" &&
-              game.homeAbbreviation !== "TBD").map(game => (
+              game.homeAbbreviation !== "TBD")
+              .filter(game => new Date(game.startTime) >= currentDate.setHours(currentDate.getHours()-1))
+              .map(game => (
                 <Grid.Column>
                   <Link to={`/scoreboard/${myLeague}/${game.gameId}`}>
                     <span className="card" style={{"display": "block"}}>
@@ -454,6 +463,9 @@ function LeagueScoreboard(props) {
 
   //NHL
   if (myLeague === "nhl") {
+
+    const currentDate = new Date();
+
     return (
       <div>
 
@@ -482,7 +494,9 @@ function LeagueScoreboard(props) {
           <Fragment>
             {
               NHLpregameData.getPregamesByLeague.filter((game) => game.awayAbbreviation !== "TBD" &&
-              game.homeAbbreviation !== "TBD").map(game => (
+              game.homeAbbreviation !== "TBD")
+              .filter(game => new Date(game.startTime) >= currentDate.setHours(currentDate.getHours()-1))
+              .map(game => (
                 <Grid.Column>
                   <Link to={`/scoreboard/${myLeague}/${game.gameId}`}>
                     <span className="card" style={{"display": "block"}}>
@@ -522,6 +536,9 @@ function LeagueScoreboard(props) {
 
   //PREMIER LEAGUE
   if (myLeague === "eng.1") {
+
+    const currentDate = new Date();
+
     return (
       <div>
 
@@ -550,7 +567,9 @@ function LeagueScoreboard(props) {
           <Fragment>
             {
               PremierLeaguepregameData.getPregamesByLeague.filter((game) => game.awayAbbreviation !== "TBD" &&
-              game.homeAbbreviation !== "TBD").map(game => (
+              game.homeAbbreviation !== "TBD")
+              .filter(game => new Date(game.startTime) >= currentDate.setHours(currentDate.getHours()-1))
+              .map(game => (
                 <Grid.Column>
                   <Link to={`/scoreboard/${myLeague}/${game.gameId}`}>
                     <span className="card" style={{"display": "block"}}>
@@ -590,6 +609,9 @@ function LeagueScoreboard(props) {
 
   //UEFA CHAMPIONS LEAGUE
   if (myLeague === "uefa.champions") {
+
+    const currentDate = new Date();
+
     return (
       <div>
 
@@ -618,7 +640,9 @@ function LeagueScoreboard(props) {
           <Fragment>
             {
               ChampionsLeaguepregameData.getPregamesByLeague.filter((game) => game.awayAbbreviation !== "TBD" &&
-              game.homeAbbreviation !== "TBD").map(game => (
+              game.homeAbbreviation !== "TBD")
+              .filter(game => new Date(game.startTime) >= currentDate.setHours(currentDate.getHours()-1))
+              .map(game => (
                 <Grid.Column>
                   <Link to={`/scoreboard/${myLeague}/${game.gameId}`}>
                     <span className="card" style={{"display": "block"}}>

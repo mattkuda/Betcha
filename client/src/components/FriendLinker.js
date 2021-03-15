@@ -38,7 +38,7 @@ function FriendLinker(props) {
   const myOdds = [];
 
   if (loading) return "Loading...";
-  if (error) return "Error occurred!";
+  if (error) return error;
 
   return (
     <div>
@@ -52,7 +52,7 @@ function FriendLinker(props) {
                         <>
                         {storeOdds(post, myOdds)}
                         <List.Item>
-                          <Link to={`/user/${post.user.username}`}>
+                          <Link to={`/posts/${post.id}`}>
                             <Image avatar src={post.user.profilePicture} size='tiny' />
                           </Link>
                           <List.Content>
