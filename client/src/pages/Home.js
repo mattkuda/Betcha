@@ -27,6 +27,7 @@ function Home() {
 
   return (
     <>
+
       <Modal
         open={modalOpen}
         onClose={() => setModalOpen(false)}
@@ -35,9 +36,9 @@ function Home() {
         style={{ height: "90%" }}
       >
         <Modal.Content long image scrolling style={{padding: "1px", width: "100%", height: "210%"}}>
-      
+
           <PostModal handleClose={(e) => setModalOpen(false)} style={{height: "100%"}}/>
-         
+
         </Modal.Content>
       </Modal>
 
@@ -70,10 +71,10 @@ function Home() {
                         <Waypoint
                           onEnter={() =>
                             fetchMore({
-                              variables: { 
-                                first: 20, 
-                                offset: posts.length - 1 
-                              }, 
+                              variables: {
+                                first: 20,
+                                offset: posts.length - 1
+                              },
                               updateQuery: (pv, {fetchMoreResult}) => {
                                 if(!fetchMoreResult){
                                   return pv;
@@ -82,11 +83,11 @@ function Home() {
                                 console.log("The pv are: " + JSON.stringify(pv))
                                 //console.log("The fetchMoreResult are: " + JSON.stringify(fetchMoreResult))
                                 return {
-                                  
+
                                     __typename:"Post",
                                     getPosts:[...pv.getPosts, ...fetchMoreResult.getPosts],
                                     hasNextPage: true
-                                  
+
                                 }
                               }
                             })
@@ -101,10 +102,10 @@ function Home() {
                         <Waypoint
                           onEnter={() =>
                             fetchMore({
-                              variables: { 
-                                first: 20, 
-                                offset: posts.length - 1 
-                              }, 
+                              variables: {
+                                first: 20,
+                                offset: posts.length - 1
+                              },
                               updateQuery: (pv, {fetchMoreResult}) => {
                                 if(!fetchMoreResult){
                                   return pv;
@@ -113,11 +114,11 @@ function Home() {
                                 console.log("The pv are: " + JSON.stringify(pv))
                                 //console.log("The fetchMoreResult are: " + JSON.stringify(fetchMoreResult))
                                 return {
-                                  
+
                                     __typename:"Post",
                                     getPosts:[...pv.getPosts, ...fetchMoreResult.getPosts],
                                     hasNextPage: true
-                                  
+
                                 }
                               }
                             })
@@ -134,7 +135,7 @@ function Home() {
           {(loading2 || loading) ? (
               <h1>Loading feed...</h1>
             ) : (
-              
+
               //Transition group adds animation for when new post is added/deleted
               <Transition.Group>
               <h1>REACTIONS</h1>
@@ -149,7 +150,7 @@ function Home() {
               </Transition.Group>
             )} */}
           {/* <Grid.Row>
-            
+
             {loading ? (
               <h1>Loading posts...</h1>
             ) : (
@@ -166,9 +167,9 @@ function Home() {
               </Transition.Group>
             )}
           </Grid.Row> */}
-          
+
         </Grid.Column>
-        <Grid.Column width={4}>
+        <Grid.Column width={4} className="mobile hidden tablet hidden">
           <Grid.Row className="page-title">
             <h1>Game Center</h1>
           </Grid.Row>

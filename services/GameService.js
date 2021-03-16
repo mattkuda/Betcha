@@ -21,6 +21,7 @@ const ONE_DAY_IN_MS = 86400000;   //24 hrs
 const TODAYS_GAMES_ODDS_UPDATE_INTERVAL = 1800000  //30 mins
 const TOP_EVENT_INTERVAL = 3600000  //60 mins
 const GENERAL_UPDATE_INTERVAL = 5400000  //2 hrs
+const NCAAB_TOURNEY_START_DATE = "2021-03-14"
 
 
 class GameService {
@@ -164,7 +165,14 @@ class GameService {
 
       //if this is a college sport, make sure we're querying all D1 games
       if (league.indexOf("college") !== -1) {
-        allCollegeTeams="&groups=50"
+        const currentDate = new Date();
+        if (league === "mens-college-basketball" &&
+         currentDate > new Date(NCAAB_TOURNEY_START_DATE)) {
+           allCollegeTeams = "&groups=100";
+        }
+        else {
+          allCollegeTeams="&groups=50";
+        }
       }
 
       if (this.ctr === 1) {
@@ -224,6 +232,7 @@ class GameService {
     var day = new Date();
     var next;
     var day_ctr = 1;
+
     while (day_ctr < TOTAL_PREGAME_DAYS) {
       let url = "http://site.api.espn.com/apis/v2/scoreboard/header?sport="+
       sport+"&league="+league+college+"&dates="+this.convertDate(day)+"&enable=odds";

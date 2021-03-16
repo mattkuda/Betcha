@@ -1,6 +1,7 @@
 import React, { Component, useState, useEffect } from "react";
 import { Search } from "semantic-ui-react";
 import _ from 'lodash';
+import "./SearchBoxSemantic.css";
 
 const initialState = { isLoading: false, results: [], value: '' }
 
@@ -10,7 +11,7 @@ export default class SearchBoxSemantic extends Component {
 
   handleResultSelect = (e, { result }) => {
     this.setState({ value: result.title });
-    
+
   }
 
   handleSearchChange = (e, { value }) => {
@@ -33,16 +34,33 @@ export default class SearchBoxSemantic extends Component {
     const { isLoading, value, results } = this.state
 
     return (
-      <Search
-        size='mini'
-        loading={isLoading}
-        onResultSelect={this.handleResultSelect}
-        onSearchChange={_.debounce(this.handleSearchChange, 500, {
-          leading: true,
-        })}
-        results={results}
-        value={value}
-      />
+      <>
+
+      <div className="mobile hidden">
+        <Search className="mobile hidden"
+          size='mini'
+          loading={isLoading}
+          onResultSelect={this.handleResultSelect}
+          onSearchChange={_.debounce(this.handleSearchChange, 500, {
+            leading: true,
+          })}
+          results={results}
+          value={value}
+        />
+      </div>
+
+      <div className="mobile only">
+        <Search className="mobile-search"
+          loading={isLoading}
+          onResultSelect={this.handleResultSelect}
+          onSearchChange={_.debounce(this.handleSearchChange, 500, {
+            leading: true,
+          })}
+          results={results}
+          value={value}
+        />
+      </div>
+      </>
     )
   }
 }

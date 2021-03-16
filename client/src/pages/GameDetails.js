@@ -171,7 +171,7 @@ function GameDetails(props) {
 
       {NCAABMENSdata.getPlaysInGame.length > 0 ? (
         <>
-        <h1>Plays In Game</h1>
+        <h1>Play-By-Play</h1>
         <NCAABPlaysAccordion plays={NCAABMENSdata.getPlaysInGame} />
         </>
         ):(<></>)
@@ -199,7 +199,7 @@ function GameDetails(props) {
 
       {NBAdata.getPlaysInGame.length > 0 ? (
         <>
-        <h1>Plays In Game</h1>
+        <h1>Play-By-Play</h1>
         <NBAPlaysAccordion plays={NBAdata.getPlaysInGame} />
         </>
       ):(<></>)
@@ -227,7 +227,7 @@ function GameDetails(props) {
 
       {NHLdata.getPlaysInGame.length > 0 ? (
         <>
-        <h1>Plays In Game</h1>
+        <h1>Play-By-Play</h1>
         <NHLPlaysAccordion plays={NHLdata.getPlaysInGame} />
         </>
       ):(<></>)
@@ -254,7 +254,7 @@ function GameDetails(props) {
 
       <FriendLinker gameId={myGameId}/>
 
-      <h1>Plays In Game</h1>
+      <h1>Play-By-Play</h1>
 
         <h3>Plays not yet available for Premier League!</h3>
 
@@ -279,7 +279,7 @@ function GameDetails(props) {
 
       <FriendLinker gameId={myGameId}/>
 
-      <h1>Plays In Game</h1>
+      <h1>Play-By-Play</h1>
 
         <h3>Plays not yet available for MLS!</h3>
 
@@ -304,7 +304,7 @@ function GameDetails(props) {
 
       <FriendLinker gameId={myGameId}/>
 
-      <h1>Plays In Game</h1>
+      <h1>Play-By-Play</h1>
 
         <h3>Plays not yet available for UEFA Champions League!</h3>
 
