@@ -25,6 +25,7 @@ module.exports = {
         const posts = await Post.find({ user: { $in: followingIds } }).sort({
           createdAt: -1,
         }).skip(offset).limit(first);
+        console.log("THE AMT OF FEED POSTS" + posts.length)
 
         return posts;
       } catch (err) {

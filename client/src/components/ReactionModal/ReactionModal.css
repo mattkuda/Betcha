@@ -1,0 +1,46 @@
+.hardLeft{
+  float: left !important;
+  text-align: left !important; 
+  vertical-align: center !important;
+  left: 0px;
+}
+
+.betHeader{
+  text-align: center;
+  font-size: 30px;
+}
+
+.betHeader{
+  text-align: center;
+  font-size: 30px;
+}
+
+
+.betTime{
+  text-align: center;
+  font-size: 16px;
+  color: #545454
+}
+
+.betSpreadLine{
+  text-align: center;
+  width: 100%;
+  font-size: 30px;
+  display: inline-block;
+  margin-top: 40px;
+}
+
+.otherGames{
+  text-align: center;
+  font-size: 16px;
+  color: #545454;
+  font-style: italic;
+}
+
+.betTextBox{
+  text-align: center;
+  width: 100%;
+  display: inline-block;
+  margin-top: 30px;
+}
+

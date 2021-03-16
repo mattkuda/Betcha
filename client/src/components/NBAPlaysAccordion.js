@@ -30,7 +30,6 @@ function NBAPlaysAccordion(props) {
     <>
 
     <Modal open={modalOpen} onClose={() => setModalOpen(false)} closeIcon dimmer='blurring' style={{height: '90%'}}>
-      <Modal.Header>Play Reaction</Modal.Header>
       <Modal.Content image scrolling>
         <ReactionModal handleClose={(e) => setModalOpen(false)} play={currentPlay} />
       </Modal.Content>

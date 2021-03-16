@@ -300,17 +300,21 @@ function PostCard({
     </>
   );
 
-  if (gameArray[0].gameId.stateDetails === "STATUS_SCHEDULED") {
+  if (gameArray[0].gameId.stateDetails === "STATUS_SCHEDULED" ||
+  gameArray[0].gameId.stateDetails === "STATUS_UNCONTESTED") {
+    console.log("the status is: " + gameArray[0].gameId.stateDetails);
     return PreGameMarkup;
   } else if (gameArray[0].gameId.stateDetails === "STATUS_IN_PROGRESS" ||
              gameArray[0].gameId.stateDetails === "STATUS_FIRST_HALF" ||
              gameArray[0].gameId.stateDetails === "STATUS_SECOND_HALF" ||
              gameArray[0].gameId.stateDetails === "STATUS_HALFTIME" ||
              gameArray[0].gameId.stateDetails === "STATUS_END_OF_PERIOD") {
+    console.log("the status is: " + gameArray[0].gameId.stateDetails);
     return LiveGameMarkup;
   } else if (gameArray[0].gameId.stateDetails === "STATUS_FINAL") {
+    console.log("the status is: " + gameArray[0].gameId.stateDetails);
     return PostGameMarkup;
-  } else;
+  } else console.log("the status is: " + gameArray[0].gameId.stateDetails);
 }
 
 export default PostCard;

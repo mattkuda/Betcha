@@ -10,6 +10,7 @@ import PostModal from "../components/PostModal/PostModal";
 import GameSidebar from "../components/GameSidebar";
 import { FETCH_POSTS_QUERY } from "../util/graphql";
 import { FETCH_REACTIONS_QUERY } from "../util/graphql";
+import './Home.css';
 
 function Home() {
   const { user } = useContext(AuthContext);
@@ -168,7 +169,7 @@ function Home() {
           </Grid.Row> */}
           
         </Grid.Column>
-        <Grid.Column width={4}>
+        <Grid.Column width={4} mobile hidden className="game-right-grango">
           <Grid.Row className="page-title">
             <h1>Game Center</h1>
           </Grid.Row>

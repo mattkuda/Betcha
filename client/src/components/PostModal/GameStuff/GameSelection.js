@@ -16,7 +16,10 @@ function GameSelection(props) {
   // );
 
   // var loading = false;
-
+ var timeNow = new Date();
+ timeNow.setHours(timeNow.getHours()-1);
+ timeNow =timeNow.toISOString();
+ console.log("the timeNow is: " +timeNow);
   if(props.league == "NFL"){
     // const { loading2, data: { getNCAABMensPregames: games } = {} } = useQuery(
     //   FETCH_NCCABMENS_GAMEPRES_QUERY
@@ -47,6 +50,8 @@ function GameSelection(props) {
     )
   }
 
+  console.log("THE GAMES: " + JSON.stringify(games));
+
 
   return (
     <div style={{padding: "0px"}}>
@@ -58,7 +63,8 @@ function GameSelection(props) {
             //Transition group adds animation for when new post is added/deleted
             <Transition.Group>
               {games &&
-                games.filter(o => o.league === props.league && o.spread !== -1 && o.overUnder > 0).map((game) => (
+                games.filter(o => o.league === props.league && o.spread !== -1 && o.overUnder > 0 && o.startTime >= timeNow).map((game) => (
+                  
                   <Grid.Column
                     key={game.id}
                     style={{ marginBottom: 20, marginTop: 20 }}

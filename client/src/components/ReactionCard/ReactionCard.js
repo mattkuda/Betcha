@@ -48,7 +48,7 @@ function ReactionCard({
 
   console.log("The Post is: " + post);
   console.log("The body is: " + body);
-  console.log("The playId.description is: " + playId.description);
+  console.log("The playId.game is: " + JSON.stringify(playId));
   const betData =
     post != null
       ? post.gameArray.find((o) => o.gameId.gameId === playId.game.gameId)
@@ -58,96 +58,6 @@ function ReactionCard({
 
   console.log("gamedata alert" + JSON.stringify(gameData));
   console.log("user alert" + JSON.stringify(user));
-
-  let LiveGamePostedAboutMarkup = (
-    <>
-      <Card fluid floated="right" style={{ width: "100%" }}>
-        <Card.Content>
-          <div
-            style={{ display: "inline-block", width: "auto", height: "100%" }}
-          >
-            <div>
-              <img
-                className="pc-img"
-                alt="profile-pic"
-                src={`${user.profilePicture}`}
-              ></img>
-            </div>
-          </div>
-          <div className="pc-header">
-            <Link to={`/user/${user.username}`}>
-              {user.name} @{user.username}
-            </Link>
-            <div
-              style={{ display: "inline-block", color: "gray", float: "right" }}
-            >
-              {moment(createdAt).fromNow(true)} ago
-            </div>
-
-            {gameData && gameData.gameId == null ? (
-              <div className="pc-bet">Failed to load game data</div>
-            ) : (
-              <div className="pc-bet">
-                {betDescFormat(
-                  gameData.betType,
-                  gameData.betAmount,
-                  gameData.gameId
-                )}{" "}
-                ·{" "}
-                <div
-                  style={{
-                    display: "inline-block",
-                    fontWeight: "normal",
-                    fontStyle: "italic",
-                  }}
-                >
-                  LIVE: {liveGameDescFormat(gameData.gameId)}
-                </div>
-              </div>
-            )}
-            <div className="pc-betBody">
-              <i>{playId.description}</i>
-            </div>
-            <div className="pc-betBody">{body}</div>
-          </div>
-        </Card.Content>
-      </Card>
-    </>
-  );
-
-  let LiveGameNormalMarkup = (
-    <>
-      <Card fluid floated="right" style={{ width: "100%" }}>
-        <Card.Content>
-          <div
-            style={{ display: "inline-block", width: "auto", height: "100%" }}
-          >
-            <div>
-              <img
-                className="pc-img"
-                alt="profile-pic"
-                src={`${user.profilePicture}`}
-              ></img>
-            </div>
-          </div>
-          <div className="pc-header">
-            <Link to={`/user/${user.username}`}>
-              {user.name} @{user.username}
-            </Link>
-            <div
-              style={{ display: "inline-block", color: "gray", float: "right" }}
-            >
-              {moment(createdAt).fromNow(true)} ago
-            </div>
-            <div className="pc-betBody">
-              <i>{playId.description}</i>
-            </div>
-            <div className="pc-betBody">{body}</div>
-          </div>
-        </Card.Content>
-      </Card>
-    </>
-  );
 
   let PostGameMarkup = (
     //If the user ahs posted about the game
