@@ -72,7 +72,9 @@ class NCAABMensGame extends Component {
                     <p>{this.props.broadcasts}</p>
                   </Grid.Column>
                   <Grid.Column>
-                    <p>{this.props.homeAbbreviation} ({this.props.homeRecord})</p>
+                    <Popup content={this.props.homeFullName} position='bottom center' size='tiny' trigger={
+                        <p>{this.props.homeAbbreviation} ({this.props.homeRecord})</p>
+                    }/>
                   </Grid.Column>
                 </Grid>
               </Grid.Row>
@@ -231,13 +233,17 @@ class NCAABMensGame extends Component {
               <Grid.Row>
                 <Grid columns={3}>
                   <Grid.Column>
-                  <p>{this.props.awayAbbreviation}</p>
+                    <Popup content={this.props.awayFullName} position='bottom center' size='tiny' trigger={
+                      <p>{this.props.awayAbbreviation} ({this.props.awayRecord})</p>
+                    }/>
                   </Grid.Column>
                   <Grid.Column>
                     <p>Final</p>
                   </Grid.Column>
                   <Grid.Column>
-                    <p>{this.props.homeAbbreviation}</p>
+                    <Popup content={this.props.homeFullName} position='bottom center' size='tiny' trigger={
+                      <p>{this.props.homeAbbreviation} ({this.props.homeRecord})</p>
+                    }/>
                   </Grid.Column>
                 </Grid>
               </Grid.Row>

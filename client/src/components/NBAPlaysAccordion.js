@@ -296,7 +296,7 @@ function NBAPlaysAccordion(props) {
                 <p>{play.specificData.awayScore} - {play.specificData.homeScore}</p>
               </Grid.Column>
               <Grid.Column width={3}>
-                {user ? (<Icon name='comment' onClick={() => {
+                {user ? (<Icon style={{cursor: 'pointer'}} name='comment' onClick={() => {
                   setModalOpen(true);
                   setCurrentPlay(play);
                 }}></Icon>) : (

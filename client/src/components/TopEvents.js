@@ -29,7 +29,7 @@ function TopEvents() {
     <div>
 
       <h1>Top Live Games</h1>
-      <Grid columns="two">
+      <Grid stackable columns="two">
         <Grid.Row>
           <Fragment>
           {
@@ -50,7 +50,7 @@ function TopEvents() {
       </Grid>
 
       <h1>Top Upcoming Games</h1>
-      <Grid columns="two">
+      <Grid stackable columns="two">
         <Grid.Row>
           <Fragment>
           {

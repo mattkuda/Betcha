@@ -31,7 +31,7 @@ function GameSidebar() {
 
   return (
 
-    <div>
+    <div className="mobile hidden">
       <Tab panes={panes} />
     </div>
 

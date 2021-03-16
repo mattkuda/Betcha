@@ -8,7 +8,7 @@ import NCAAFGame from "../components/GameTypes/NCAAFGame";
 import NCAABMensGame from "../components/GameTypes/NCAABMensGame";
 import NBAGame from "../components/GameTypes/NBAGame";
 import Game from "../components/GameTypes/Game";
-import { Grid, Loader, Menu } from "semantic-ui-react";
+import { Grid, Loader, Menu, Header, Icon, Segment, Divider } from "semantic-ui-react";
 import { FETCH_NFL_PREGAMES, FETCH_NFL_LIVEGAMES, FETCH_NFL_POSTGAMES,
          FETCH_NCAAF_PREGAMES, FETCH_NCAAF_LIVEGAMES, FETCH_NCAAF_POSTGAMES,
          FETCH_NCAABMENS_PREGAMES, FETCH_NCAABMENS_LIVEGAMES, FETCH_NCAABMENS_POSTGAMES,
@@ -322,70 +322,114 @@ function LeagueScoreboard(props) {
     const currentDate = new Date();
 
     return (
-      <div>
+      <>
 
-        <h1>Live Games</h1>
-        <Grid stackable columns="two">
-          <Grid.Row>
-            <Fragment>
-              {
-                NCAABMENSlivegameData.getLivegamesByLeague.map(game => (
-                  <Grid.Column>
-                    <Link to={`/scoreboard/${myLeague}/${game.gameId}`}>
-                      <span className="card" style={{"display": "block"}}>
-                        <NCAABMensGame key={game.gameId} {...game} />
-                      </span>
-                    </Link>
-                  </Grid.Column>
-                ))
-              }
-            </Fragment>
-          </Grid.Row>
-        </Grid>
+      <Divider />
 
-      <h1>Upcoming Games</h1>
-      <Grid stackable columns="two">
-        <Grid.Row>
-          <Fragment>
-            {
-              NCAABMENSpregameData.getPregamesByLeague.filter(game => game.awayAbbreviation !== "TBD" &&
-              game.homeAbbreviation !== "TBD")
-              .filter(game => new Date(game.startTime) >= currentDate.setHours(currentDate.getHours()-1))
-              .map(game => (
-                <Grid.Column>
-                  <Link to={`/scoreboard/${myLeague}/${game.gameId}`}>
-                    <span className="card" style={{"display": "block"}}>
-                      <NCAABMensGame key={game.gameId} {...game} />
-                    </span>
-                  </Link>
-                </Grid.Column>
-              ))
-            }
-          </Fragment>
-        </Grid.Row>
-      </Grid>
+      <div style = {{
+          marginTop: '40px',
+        }}>
+
+        {NCAABMENSlivegameData.getLivegamesByLeague.length > 0 ? (
+          <>
+          <Header as='h3'>
+            <Header.Content>Live Games</Header.Content>
+          </Header>
+
+          <Segment raised>
+
+          <Grid stackable columns="two">
+            <Grid.Row>
+              <Fragment>
+                {
+                  NCAABMENSlivegameData.getLivegamesByLeague.map(game => (
+                    <Grid.Column>
+                      <Link to={`/scoreboard/${myLeague}/${game.gameId}`}>
+                        <span className="card" style={{"display": "block"}}>
+                          <NCAABMensGame key={game.gameId} {...game} />
+                        </span>
+                      </Link>
+                    </Grid.Column>
+                  ))
+                }
+              </Fragment>
+            </Grid.Row>
+          </Grid>
+
+          </Segment>
+          </>
+      ) : (<></>)}
 
 
-      <h1>Completed Games</h1>
-      <Grid stackable columns="two">
-        <Grid.Row>
-          <Fragment>
-            {
-              NCAABMENSpostgameData.getPostgamesByLeague.map(game => (
-                <Grid.Column>
-                  <Link to={`/scoreboard/${myLeague}/${game.gameId}`}>
-                    <span className="card" style={{"display": "block"}}>
-                      <NCAABMensGame key={game.gameId} {...game} />
-                    </span>
-                  </Link>
-                </Grid.Column>
-              ))
-            }
-          </Fragment>
-        </Grid.Row>
-      </Grid>
+        {NCAABMENSpregameData.getPregamesByLeague.length > 0 ? (
+          <>
+          <Header as='h3'>
+            <Header.Content>Upcoming Games</Header.Content>
+          </Header>
+
+          <Segment raised>
+
+          <Grid stackable columns="two">
+            <Grid.Row>
+              <Fragment>
+                {
+                  NCAABMENSpregameData.getPregamesByLeague.filter(game => game.awayAbbreviation !== "TBD" &&
+                  game.homeAbbreviation !== "TBD")
+                  .filter(game => new Date(game.startTime) >= currentDate.setHours(currentDate.getHours()-1))
+                  .map(game => (
+                    <Grid.Column>
+                      <Link to={`/scoreboard/${myLeague}/${game.gameId}`}>
+                        <span className="card" style={{
+                            "display": "block"
+                          }}>
+                          <NCAABMensGame key={game.gameId} {...game} />
+                        </span>
+                      </Link>
+                    </Grid.Column>
+                  ))
+                }
+              </Fragment>
+            </Grid.Row>
+          </Grid>
+
+          </Segment>
+          </>
+        ) : (<></>)}
+
+
+        {NCAABMENSpostgameData.getPostgamesByLeague.length > 0 ? (
+          <>
+          <Header as='h3'>
+            <Header.Content>Completed Games</Header.Content>
+          </Header>
+
+          <Segment raised>
+
+          <Grid stackable columns="two">
+            <Grid.Row>
+              <Fragment>
+                {
+                  NCAABMENSpostgameData.getPostgamesByLeague.map(game => (
+                    <Grid.Column>
+                      <Link to={`/scoreboard/${myLeague}/${game.gameId}`}>
+                        <span className="card" style={{"display": "block"}}>
+                          <NCAABMensGame key={game.gameId} {...game} />
+                        </span>
+                      </Link>
+                    </Grid.Column>
+                  ))
+                }
+              </Fragment>
+            </Grid.Row>
+          </Grid>
+
+          </Segment>
+          </>
+        ) : (<></>)}
 
       </div>
+
+      </>
     )
   }
 
@@ -398,7 +442,7 @@ function LeagueScoreboard(props) {
       <div>
 
         <h1>Live Games</h1>
-        <Grid columns="two">
+        <Grid stackable columns="two">
           <Grid.Row>
             <Fragment>
               {
@@ -417,7 +461,7 @@ function LeagueScoreboard(props) {
         </Grid>
 
       <h1>Upcoming Games</h1>
-      <Grid columns="two">
+      <Grid stackable columns="two">
         <Grid.Row>
           <Fragment>
             {
@@ -439,7 +483,7 @@ function LeagueScoreboard(props) {
       </Grid>
 
       <h1>Completed Games</h1>
-      <Grid columns="two">
+      <Grid stackable columns="two">
         <Grid.Row>
           <Fragment>
             {
@@ -470,7 +514,7 @@ function LeagueScoreboard(props) {
       <div>
 
         <h1>Live Games</h1>
-        <Grid columns="two">
+        <Grid stackable columns="two">
           <Grid.Row>
             <Fragment>
               {
@@ -489,7 +533,7 @@ function LeagueScoreboard(props) {
         </Grid>
 
       <h1>Upcoming Games</h1>
-      <Grid columns="two">
+      <Grid stackable columns="two">
         <Grid.Row>
           <Fragment>
             {
@@ -511,7 +555,7 @@ function LeagueScoreboard(props) {
       </Grid>
 
       <h1>Completed Games</h1>
-      <Grid columns="two">
+      <Grid stackable columns="two">
         <Grid.Row>
           <Fragment>
             {
@@ -543,7 +587,7 @@ function LeagueScoreboard(props) {
       <div>
 
         <h1>Live Games</h1>
-        <Grid columns="two">
+        <Grid stackable columns="two">
           <Grid.Row>
             <Fragment>
               {
@@ -562,7 +606,7 @@ function LeagueScoreboard(props) {
         </Grid>
 
       <h1>Upcoming Games</h1>
-      <Grid columns="two">
+      <Grid stackable columns="two">
         <Grid.Row>
           <Fragment>
             {
@@ -584,7 +628,7 @@ function LeagueScoreboard(props) {
       </Grid>
 
       <h1>Completed Games</h1>
-      <Grid columns="two">
+      <Grid stackable columns="two">
         <Grid.Row>
           <Fragment>
             {
@@ -616,7 +660,7 @@ function LeagueScoreboard(props) {
       <div>
 
         <h1>Live Games</h1>
-        <Grid columns="two">
+        <Grid stackable columns="two">
           <Grid.Row>
             <Fragment>
               {
@@ -635,7 +679,7 @@ function LeagueScoreboard(props) {
         </Grid>
 
       <h1>Upcoming Games</h1>
-      <Grid columns="two">
+      <Grid stackable columns="two">
         <Grid.Row>
           <Fragment>
             {
@@ -657,7 +701,7 @@ function LeagueScoreboard(props) {
       </Grid>
 
       <h1>Completed Games</h1>
-      <Grid columns="two">
+      <Grid stackable columns="two">
         <Grid.Row>
           <Fragment>
             {
