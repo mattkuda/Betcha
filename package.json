@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "serve": "node index",
-    "start": "nodemon index",
+    "start": "concurrently --kill-others-on-fail \"npm run server\" \"npm run client\"",
     "client": "cd client && npm run start",
     "server": "node index.js g",
     "dev": "concurrently --kill-others-on-fail \"npm run server\" \"npm run client\"",
