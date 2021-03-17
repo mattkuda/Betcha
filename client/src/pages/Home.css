@@ -1,0 +1,12 @@
+/* condition for screen size minimum of 500px */
+@media (max-width:500px) {
+
+  /* your conditional / responsive CSS inside this condition */
+
+  .game-right-grango {
+    display: none;
+  }
+
+  
+
+}

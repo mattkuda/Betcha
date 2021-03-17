@@ -9,7 +9,7 @@ module.exports = {
   Query: {
     async getAllPregames() {
       try {
-        let pregames = await Pregame.find();
+        let pregames = await Pregame.find().sort({startTime: 1});
         return pregames;
       } catch (err) {
         throw new Error(err);

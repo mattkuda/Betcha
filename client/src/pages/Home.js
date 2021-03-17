@@ -10,6 +10,9 @@ import PostModal from "../components/PostModal/PostModal";
 import GameSidebar from "../components/GameSidebar";
 import { FETCH_POSTS_QUERY } from "../util/graphql";
 import { FETCH_REACTIONS_QUERY } from "../util/graphql";
+import '../App.css'
+
+import './Home.css';
 
 function Home() {
   const { user } = useContext(AuthContext);

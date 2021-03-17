@@ -39,6 +39,8 @@ function Profile(props) {
     {variables: {first: 20, offset: 0, profileUsername }}
   );
 
+  console.log("the posts are: " + JSON.stringify(posts));
+
   const [modalOpen, setModalOpen] = useState(false);
 
   //Depends on whether we have data from query yet
@@ -130,14 +132,11 @@ function Profile(props) {
                       </a>
                     </Card.Meta>
                   )}
-
                   <Card.Meta>
                     Following: {followingCount} Followers: {followersCount}
                   </Card.Meta>
                 </Card.Content>
-              
             </Grid.Column>
-            
           </Grid.Row>
       </Grid>
       </Card>

@@ -1,11 +1,7 @@
 import React, { useContext, useState } from "react";
 import { useQuery } from "@apollo/react-hooks";
-import { Grid, Transition, Modal, Button , Loader} from "semantic-ui-react";
+import { Grid, Transition, Loader} from "semantic-ui-react";
 import './LeagueSelection.css';
-import { AuthContext } from "../../../context/auth";
-import PostCard from "../../PostCard/PostCard";
-import PostModal from "../PostModal";
-import { FETCH_POSTS_QUERY } from "../../../util/graphql";
 import { FETCH_ACTIVE_LEAGUES_QUERY } from "../../../util/graphql";
 import LeagueCard from "./LeagueCard";
 
