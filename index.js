@@ -13,6 +13,7 @@ let myGameService = updateGames.GameService;
 const PORT = process.env.PORT || 5000;
 
 const server = new ApolloServer({
+  playground: true,
   typeDefs,
   resolvers,
   context: ({ req }) => ({ req, pubsub }),
