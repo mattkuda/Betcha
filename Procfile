@@ -1,2 +1,2 @@
-web: npm start
-web: node index.js g
+web:npm start
+web:node index.js g
