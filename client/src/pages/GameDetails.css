@@ -1,13 +1,13 @@
 .playImage {
   display: flex;
-  width: 30px;
-  height: 30px;
+  width: 2vw;
+  height: auto;
 }
 
 .play-image-mobile {
   display: flex;
-  width: 15px;
-  height: 15px;
+  width: 10vw;
+  height: auto;
 }
 
 .scoreVal {

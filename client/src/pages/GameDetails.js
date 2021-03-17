@@ -197,7 +197,9 @@ function GameDetails(props) {
 
       {NBAdata.getPlaysInGame.length > 0 ? (
         <>
-        <h1>Play-By-Play</h1>
+        <Header as='h2'>
+          <Header.Content>Play-By-Play</Header.Content>
+        </Header>
         <NBAPlaysAccordion plays={NBAdata.getPlaysInGame} />
         </>
       ):(<></>)

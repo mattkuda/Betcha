@@ -324,8 +324,6 @@ function LeagueScoreboard(props) {
     return (
       <>
 
-      <Divider />
-
       <div style = {{
           marginTop: '40px',
         }}>
