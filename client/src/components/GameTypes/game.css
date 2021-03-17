@@ -12,3 +12,9 @@
 .scoreboard:hover {
   box-shadow: 0 0 11px rgba(33,33,33,.2);
 }
+
+
+.rank-row {
+  margin-top: 0px;
+  height: 60px;
+}
