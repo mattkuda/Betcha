@@ -45,43 +45,44 @@ function MyBets() {
       <div style = {{
           marginTop: '40px',
         }}>
+
         <Header as='h3'>
           <Header.Content>My Bets</Header.Content>
         </Header>
 
-        <Segment raised>
-          <Grid stackable columns="two">
-            <Grid.Row>
-              <Fragment>
-                {user && data.getUserPosts.length  > 0 ? (
-                  data.getUserPosts.filter((post) => post.gameArray).map((post) => (
-                    <Grid.Column>
-                      {
-                        removeDuplicateGames(post.gameArray).map((game) => (
-                          <Link
-                            to={`/scoreboard/${game.gameId.league}/${game.gameId.gameId}`}
-                          >
-                            <span className="card" style={{ display: "block" }}>
-                              <MyBetGame key={game.gameId.gameId} {...game} />
-                            </span>
-                          </Link>
-                        ))
-                      }
-                    </Grid.Column>
-                  ))
-                ) : (
-                  <>
-                    {user ? (
-                      <p>Click the plus sign on the menu bar to share a bet!</p>
-                    ):(
-                      <p>Log in to see your bets!</p>
-                    )}
-                  </>
-                )}
-              </Fragment>
-            </Grid.Row>
-          </Grid>
-        </Segment>
+        {data.getUserPosts.length > 0 ? (
+        <>
+
+          <Segment raised>
+            <Grid stackable columns="two">
+              <Grid.Row>
+                <Fragment>
+                  {user ? (
+                    data.getUserPosts.filter((post) => post.gameArray).map((post) => (
+                      <Grid.Column>
+                        {
+                          removeDuplicateGames(post.gameArray).map((game) => (
+                            <Link
+                              to={`/scoreboard/${game.gameId.league}/${game.gameId.gameId}`}
+                            >
+                              <span className="card" style={{ display: "block" }}>
+                                <MyBetGame key={game.gameId.gameId} {...game} />
+                              </span>
+                            </Link>
+                          ))
+                        }
+                      </Grid.Column>
+                    ))
+                  ) : (
+                    <p>Log in to see your bets!</p>
+                  )}
+
+                </Fragment>
+              </Grid.Row>
+            </Grid>
+          </Segment>
+        </>
+    ) : (<p>Click the plus sign on the menu bar to share a bet!</p>)}
       </div>
     )
   }
