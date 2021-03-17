@@ -34,30 +34,12 @@ class NCAABMensGame extends Component {
                 <Grid columns={3}>
                   <Grid.Column>
                     <Image centered verticalAlign='middle' src={this.props.awayLogo} size='tiny'/>
-                      {this.props.specificData.awayRank !== -1 ? (
-                        <Label circular
-                          color="grey"
-                          floating
-                          style={{ padding: "2px 2px", top: "10px", left: "47px" }}
-                        >
-                          {this.props.specificData.awayRank}
-                        </Label>
-                      ):(<></>)}
                   </Grid.Column>
                   <Grid.Column>
                     <p>{betTimeFormat(this.props.startTime)}</p>
                   </Grid.Column>
                   <Grid.Column>
-                  <Image centered verticalAlign='middle' src={this.props.homeLogo} size='tiny'/>
-                    {this.props.specificData.homeRank !== -1 ? (
-                      <Label circular
-                        color="grey"
-                        floating
-                        style={{ padding: "2px 2px", top: "10px", left: "47px" }}
-                      >
-                        {this.props.specificData.homeRank}
-                      </Label>
-                    ):(<></>)}
+                    <Image centered verticalAlign='middle' src={this.props.homeLogo} size='tiny'/>
                   </Grid.Column>
                 </Grid>
               </Grid.Row>
@@ -125,15 +107,6 @@ class NCAABMensGame extends Component {
                 <Grid columns={3}>
                   <Grid.Column>
                     <Image centered verticalAlign='middle' src={this.props.awayLogo} size='tiny'/>
-                      {this.props.specificData.awayRank !== -1 ? (
-                        <Label circular
-                          color="grey"
-                          floating
-                          style={{ padding: "2px 2px", top: "10px", left: "47px" }}
-                        >
-                          {this.props.specificData.awayRank}
-                        </Label>
-                      ):(<></>)}
                   </Grid.Column>
                   <Grid.Column>
                   <Grid columns={3}>
@@ -150,15 +123,6 @@ class NCAABMensGame extends Component {
                   </Grid.Column>
                   <Grid.Column>
                   <Image centered verticalAlign='middle' src={this.props.homeLogo} size='tiny'/>
-                    {this.props.specificData.homeRank !== -1 ? (
-                      <Label circular
-                        color="grey"
-                        floating
-                        style={{ padding: "2px 2px", top: "10px", left: "47px" }}
-                      >
-                        {this.props.specificData.homeRank}
-                      </Label>
-                    ):(<></>)}
                   </Grid.Column>
                 </Grid>
               </Grid.Row>
@@ -203,30 +167,12 @@ class NCAABMensGame extends Component {
                 <Grid columns={3}>
                   <Grid.Column>
                     <Image centered verticalAlign='middle' src={this.props.awayLogo} size='tiny'/>
-                      {this.props.specificData.awayRank !== -1 ? (
-                        <Label circular
-                          color="grey"
-                          floating
-                          style={{ padding: "2px 2px", top: "10px", left: "47px" }}
-                        >
-                          {this.props.specificData.awayRank}
-                        </Label>
-                      ):(<></>)}
                   </Grid.Column>
                   <Grid.Column>
                     <p>{this.props.awayScore} - {this.props.homeScore}</p>
                   </Grid.Column>
                   <Grid.Column>
                   <Image centered verticalAlign='middle' src={this.props.homeLogo} size='tiny'/>
-                    {this.props.specificData.homeRank !== -1 ? (
-                      <Label circular
-                        color="grey"
-                        floating
-                        style={{ padding: "2px 2px", top: "10px", left: "47px" }}
-                      >
-                        {this.props.specificData.homeRank}
-                      </Label>
-                    ):(<></>)}
                   </Grid.Column>
                 </Grid>
               </Grid.Row>

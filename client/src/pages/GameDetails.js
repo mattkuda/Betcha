@@ -214,7 +214,7 @@ function GameDetails(props) {
 
     return (
 
-      <div>
+      <div className = "page-wrapper">
 
       <GameDetailsHeader gameId={myGameId} league={myLeague} />
 

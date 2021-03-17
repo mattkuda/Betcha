@@ -54,17 +54,17 @@ function NCAABPlaysAccordion(props) {
               <Grid>
                 <Grid.Row>
                 <Grid.Column width={2} className="timeColumn">
-                  {play.specificData.time}
+                  <p style={{fontSize: '12px'}}>{play.specificData.time}</p>
                 </Grid.Column>
                 <Grid.Column width={1} className="timeColumn">
                   {play.scoreValue > 0 ? (
-                    <p className="scoreVal">+{play.scoreValue}</p>
+                    <p className="scoreVal" style={{fontSize: '11px'}}>+{play.scoreValue}</p>
                     ):(
                     <p></p>
                     )
                   }
                 </Grid.Column>
-                <Grid.Column width={2}>
+                <Grid.Column width={2} className="mobile hidden">
                   {play.specificData.possession !== "" ? (
                     (parseInt(play.specificData.possession) === play.game.homeId ?
                       (<Image centered verticalAlign='middle' src={play.game.homeLogo} className="playImage"/>):
@@ -72,14 +72,22 @@ function NCAABPlaysAccordion(props) {
                     )
                   ):(<div></div>)}
                 </Grid.Column>
-                <Grid.Column width={6}>
-                  <p>{play.description}</p>
+                <Grid.Column width={2} className="mobile only">
+                  {play.specificData.possession !== "" ? (
+                    (parseInt(play.specificData.possession) === play.game.homeId ?
+                      (<Image centered verticalAlign='middle' src={play.game.homeLogo} className="play-image-mobile"/>):
+                      (<Image centered verticalAlign='middle' src={play.game.awayLogo} className="play-image-mobile"/>)
+                    )
+                  ):(<div></div>)}
                 </Grid.Column>
-                <Grid.Column width={2}>
-                  <p>{play.specificData.awayScore} - {play.specificData.homeScore}</p>
+                <Grid.Column width={5}>
+                  <p style={{fontSize: '12px'}}>{play.description}</p>
                 </Grid.Column>
                 <Grid.Column width={3}>
-                  {user ? (<Icon name='comment' onClick={() => {
+                  <p style={{fontSize: '12px'}}>{play.specificData.awayScore} - {play.specificData.homeScore}</p>
+                </Grid.Column>
+                <Grid.Column width={2}>
+                  {user ? (<Icon style={{cursor: 'pointer'}} name='comment' onClick={() => {
                     setModalOpen(true);
                     setCurrentPlay(play);
                   }}></Icon>) : (
@@ -109,17 +117,17 @@ function NCAABPlaysAccordion(props) {
             <Grid>
               <Grid.Row>
               <Grid.Column width={2} className="timeColumn">
-                {play.specificData.time}
+                <p style={{fontSize: '12px'}}>{play.specificData.time}</p>
               </Grid.Column>
               <Grid.Column width={1} className="timeColumn">
                 {play.scoreValue > 0 ? (
-                  <p className="scoreVal">+{play.scoreValue}</p>
+                  <p className="scoreVal" style={{fontSize: '11px'}}>+{play.scoreValue}</p>
                   ):(
                   <p></p>
                   )
                 }
               </Grid.Column>
-              <Grid.Column width={2}>
+              <Grid.Column width={2} className="mobile hidden">
                 {play.specificData.possession !== "" ? (
                   (parseInt(play.specificData.possession) === play.game.homeId ?
                     (<Image centered verticalAlign='middle' src={play.game.homeLogo} className="playImage"/>):
@@ -127,18 +135,26 @@ function NCAABPlaysAccordion(props) {
                   )
                 ):(<div></div>)}
               </Grid.Column>
-              <Grid.Column width={6}>
-                <p>{play.description}</p>
+              <Grid.Column width={2} className="mobile only">
+                {play.specificData.possession !== "" ? (
+                  (parseInt(play.specificData.possession) === play.game.homeId ?
+                    (<Image centered verticalAlign='middle' src={play.game.homeLogo} className="play-image-mobile"/>):
+                    (<Image centered verticalAlign='middle' src={play.game.awayLogo} className="play-image-mobile"/>)
+                  )
+                ):(<div></div>)}
               </Grid.Column>
-              <Grid.Column width={2}>
-                <p>{play.specificData.awayScore} - {play.specificData.homeScore}</p>
+              <Grid.Column width={5}>
+                <p style={{fontSize: '12px'}}>{play.description}</p>
               </Grid.Column>
               <Grid.Column width={3}>
-                {user ? (<Icon name='comment' onClick={() => {
+                <p style={{fontSize: '12px'}}>{play.specificData.awayScore} - {play.specificData.homeScore}</p>
+              </Grid.Column>
+              <Grid.Column width={2}>
+                {user ? (<Icon style={{cursor: 'pointer'}} name='comment' onClick={() => {
                   setModalOpen(true);
                   setCurrentPlay(play);
                 }}></Icon>) : (
-                  <Icon name='comment' link to="/login"></Icon>
+                  <Icon name='comment'></Icon>
                 )}
               </Grid.Column>
               </Grid.Row>
@@ -164,17 +180,17 @@ function NCAABPlaysAccordion(props) {
             <Grid>
               <Grid.Row>
               <Grid.Column width={2} className="timeColumn">
-                {play.specificData.time}
+                <p style={{fontSize: '12px'}}>{play.specificData.time}</p>
               </Grid.Column>
               <Grid.Column width={1} className="timeColumn">
                 {play.scoreValue > 0 ? (
-                  <p className="scoreVal">+{play.scoreValue}</p>
+                  <p className="scoreVal" style={{fontSize: '11px'}}>+{play.scoreValue}</p>
                   ):(
                   <p></p>
                   )
                 }
               </Grid.Column>
-              <Grid.Column width={2}>
+              <Grid.Column width={2} className="mobile hidden">
                 {play.specificData.possession !== "" ? (
                   (parseInt(play.specificData.possession) === play.game.homeId ?
                     (<Image centered verticalAlign='middle' src={play.game.homeLogo} className="playImage"/>):
@@ -182,18 +198,26 @@ function NCAABPlaysAccordion(props) {
                   )
                 ):(<div></div>)}
               </Grid.Column>
-              <Grid.Column width={6}>
-                <p>{play.description}</p>
+              <Grid.Column width={2} className="mobile only">
+                {play.specificData.possession !== "" ? (
+                  (parseInt(play.specificData.possession) === play.game.homeId ?
+                    (<Image centered verticalAlign='middle' src={play.game.homeLogo} className="play-image-mobile"/>):
+                    (<Image centered verticalAlign='middle' src={play.game.awayLogo} className="play-image-mobile"/>)
+                  )
+                ):(<div></div>)}
               </Grid.Column>
-              <Grid.Column width={2}>
-                <p>{play.specificData.awayScore} - {play.specificData.homeScore}</p>
+              <Grid.Column width={5}>
+                <p style={{fontSize: '12px'}}>{play.description}</p>
               </Grid.Column>
               <Grid.Column width={3}>
-                {user ? (<Icon name='comment' onClick={() => {
+                <p style={{fontSize: '12px'}}>{play.specificData.awayScore} - {play.specificData.homeScore}</p>
+              </Grid.Column>
+              <Grid.Column width={2}>
+                {user ? (<Icon style={{cursor: 'pointer'}} name='comment' onClick={() => {
                   setModalOpen(true);
                   setCurrentPlay(play);
                 }}></Icon>) : (
-                  <Icon name='comment' link to="/login"></Icon>
+                  <Icon name='comment'></Icon>
                 )}
               </Grid.Column>
               </Grid.Row>

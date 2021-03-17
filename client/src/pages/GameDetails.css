@@ -4,9 +4,16 @@
   height: 30px;
 }
 
+.play-image-mobile {
+  display: flex;
+  width: 15px;
+  height: 15px;
+}
+
 .scoreVal {
   color: green;
   font-family: "Helvetica";
+  padding-top: 5px;
 }
 
 .page-wrapper {
