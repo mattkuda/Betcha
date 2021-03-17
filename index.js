@@ -1,5 +1,5 @@
 //const { ApolloServer, PubSub } = require("apollo-server");
-const { ApolloServer } = require("apollo-server-express");
+const { ApolloServer, PubSub } = require("apollo-server-express");
 const mongoose = require("mongoose");
 const express = require('express');
 const path = require("path");
@@ -9,7 +9,7 @@ const { MONGODB } = require("./config.js");
 const typeDefs = require("./graphql/typedefs");
 const resolvers = require("./graphql/resolvers");
 
-//const pubsub = new PubSub();
+const pubsub = new PubSub();
 
 let updateGames = require('./services/GameService');
 let myGameService = updateGames.GameService;
@@ -25,7 +25,8 @@ const PORT = process.env.PORT || 5000;
 
 const server = new ApolloServer({
   typeDefs,
-  resolvers
+  resolvers,
+  context: ({ req }) => ({ req, pubsub }),
 });
 
 const app = express();
