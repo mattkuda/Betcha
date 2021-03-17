@@ -11,7 +11,6 @@ import GameSidebar from "../components/GameSidebar";
 import { FETCH_POSTS_QUERY } from "../util/graphql";
 import { FETCH_REACTIONS_QUERY } from "../util/graphql";
 import '../App.css'
-
 import './Home.css';
 
 function Home() {
@@ -46,15 +45,15 @@ function Home() {
       </Modal>
 
       <Grid celled>
-        <Grid.Column width={12}>
+        <Grid.Column width={12} mobile={16}>
           <Grid.Row className="page-title">
             <h1>Recent posts</h1>
           </Grid.Row>
           <Grid.Row>
             {user ? (
-              <Button onClick={(e) => setModalOpen(true)}>Share Bet</Button>
+              <Button onClick={(e) => setModalOpen(true)} class="mobile hidden tablet hidden">Share Bet</Button>
             ) : (
-              <Button as={Link} to="/login">
+              <Button as={Link} to="/login" class="mobile hidden tablet hidden">
                 Share Bet
               </Button>
             )}

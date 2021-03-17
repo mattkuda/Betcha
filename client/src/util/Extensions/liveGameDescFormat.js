@@ -24,4 +24,20 @@ export const reactionGameDescFormat = (awayAbbreviation, homeAbbreviation, speci
   return rValue;
 }
 
+export const contextualizeBet = (betData) =>{
+  console.log("we g8888888888888888888o inhere") 
+  if (betData.betType === "HOME"){
+    if (betData.betAmount > 0 ) betData.betAmount = "+" + betData.betAmount;
+    return betData.gameId.homeAbbreviation + " " + betData.betAmount;
+  }
+  else if (betData.betType == "AWAY"){
+    if (betData.betAmount > 0 ) betData.betAmount = "+" + betData.betAmount;
+    return betData.gameId.awayAbbreviation + " " + betData.betAmount;
+  }
+  else if (betData.betType == "UNDER"){
+    return "U " + betData.betAmount;
+  }
+  else return "O " + betData.betAmount;
+}
+
 

@@ -51,6 +51,7 @@ export default class SearchBoxSemantic extends Component {
 
       <div className="mobile only">
         <Search className="mobile-search"
+          style={{width: "100%"}}
           loading={isLoading}
           onResultSelect={this.handleResultSelect}
           onSearchChange={_.debounce(this.handleSearchChange, 500, {
