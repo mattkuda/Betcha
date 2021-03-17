@@ -85,7 +85,16 @@ function ReactionModal(props) {
             style={{ width: "80%", margin: "auto" }}
           />
         </div>
-        
+        <div className="betTextBox">
+                
+                <Button
+                  type="button"
+                  color="teal"
+                  onClick={() => createPostReactionCallback()}
+                >
+                  Submit
+                </Button>
+              </div>
       </>
     </div>
   );

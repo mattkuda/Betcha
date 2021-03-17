@@ -1,9 +1,9 @@
 import React, { useState, useContext, useEffect } from "react";
 import { useQuery } from "@apollo/react-hooks";
-import { Menu, Icon, Label, Dropdown , Modal} from "semantic-ui-react";
+import { Menu, Icon, Label, Dropdown, Modal } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 import PostModal from "../PostModal/PostModal";
-import './MenuBarMobile.css'
+import "./MenuBarMobile.css";
 
 import { AuthContext } from "../../context/auth";
 import SearchBoxSemantic from "./SearchBoxSemantic";
@@ -48,75 +48,122 @@ function MenuBarMobile() {
 
   const menuBar = user ? (
     <>
-    <Modal
+      <Modal
         open={modalOpen}
         onClose={() => setModalOpen(false)}
         closeIcon
         // dimmer="blurring" TODO
         style={{ height: "90%" }}
       >
-        <Modal.Content long image scrolling style={{padding: "1px", width: "100%", height: "210%"}}>
-          <PostModal handleClose={(e) => setModalOpen(false)} style={{height: "100%"}}/>
+        <Modal.Content
+          long
+          image
+          scrolling
+          style={{ padding: "1px", width: "100%", height: "210%" }}
+        >
+          <PostModal
+            handleClose={(e) => setModalOpen(false)}
+            style={{ height: "100%" }}
+          />
         </Modal.Content>
       </Modal>
 
-    <Menu pointing fluid secondary size="medium" color="teal">
-      <Menu.Item
-        name="home"
-        active={activeItem === "home"}
-        onClick={handleItemClick}
-        as={Link}
-        to="/"
-        style={{paddingLeft: "10px", paddingRight: "10px"}}
-      >
-        <Icon name="home" size="large" style={{margin: "0px 3px"}}/>
-      </Menu.Item>
-      <Menu.Item
-        name="scores"
-        active={activeItem === "scores"}
-        onClick={handleItemClick}
-        as={Link}
-        style={{paddingLeft: "10px", paddingRight: "10px"}}
-        to="/scoreboard"
-      >
-        <Icon name="calendar  alternate outline" size="large" style={{margin: "0px 3px"}} />
-      </Menu.Item>
-      <Menu.Item
-        name="my bets"
-        active={activeItem === "my bets"}
-        onClick={handleItemClick}
-        as={Link}
-        to="/mybets"
-        style={{paddingLeft: "10px", paddingRight: "10px"}}
-      >
-        <Icon name="dollar sign" size="large" style={{margin: "0px 3px"}}/>
-      </Menu.Item>
-
-      <Menu.Menu position="center" style={{padding: "0", marginLeft: "auto", marginRight: "auto"}}>
-        <Menu.Item onClick={(e) => setModalOpen(true)} style={{paddingLeft: "10px", paddingRight: "10px"}}>
-          <Icon name="plus square" size="large" style={{margin: "0px 3px"}}/>
-        </Menu.Item>
-      </Menu.Menu>
-
-      <Menu.Menu position="right" style={{marginLeft: "0"}} className="uniqueThing">
-        <Menu.Item onClick={handleItemClick} style={{paddingLeft: "10px", paddingRight: "10px"}}>
-          <NotificationsIcon user={user} style={{margin: "0px 3px"}}/>
-        </Menu.Item>
+      <Menu pointing fluid secondary size="medium" color="teal">
         <Menu.Item
-          active={activeItem === user.username}
-          name={user.username}
+          name="home"
+          active={activeItem === "home"}
           onClick={handleItemClick}
           as={Link}
-          to={"/user/" + user.username}
-          style={{paddingLeft: "10px", paddingRight: "10px"}}
+          to="/"
+          style={{ paddingLeft: "20px", paddingRight: "20px" }}
         >
-          <Icon name="user" size="large" style={{margin: "0px 3px"}}/>
+          <Icon name="home" size="large" style={{ margin: "0px 3px" }} />
         </Menu.Item>
-        <Menu.Item name="logout" onClick={logout} style={{paddingLeft: "10px", paddingRight: "10px"}}>
-          <Icon name="log out" size="large" style={{margin: "0px 3px"}}/>
+        <Menu.Item
+          name="scores"
+          active={activeItem === "scores"}
+          onClick={handleItemClick}
+          as={Link}
+          style={{ paddingLeft: "20px", paddingRight: "20px" }}
+          to="/scoreboard"
+        >
+          <Icon
+            name="calendar  alternate outline"
+            size="large"
+            style={{ margin: "0px 3px" }}
+          />
         </Menu.Item>
-      </Menu.Menu>
-    </Menu>
+        <Menu.Item
+          name="my bets"
+          active={activeItem === "my bets"}
+          onClick={handleItemClick}
+          as={Link}
+          to="/mybets"
+          style={{ paddingLeft: "20px", paddingRight: "20px" }}
+        >
+          <Icon name="dollar sign" size="large" style={{ margin: "0px 3px" }} />
+        </Menu.Item>
+
+        <Menu.Menu
+          position="center"
+          style={{ padding: "0", marginLeft: "auto", marginRight: "auto" }}
+        >
+          {user ? (
+            <Menu.Item
+              onClick={(e) => setModalOpen(true)}
+              style={{ paddingLeft: "20px", paddingRight: "20px" }}
+            >
+              <Icon
+                name="plus square"
+                size="large"
+                style={{ margin: "0px 3px" }}
+              />
+            </Menu.Item>
+          ) : (
+            <Menu.Item
+              as={Link}
+              to="/login"
+              style={{ paddingLeft: "20px", paddingRight: "20px" }}
+            >
+              <Icon
+                name="plus square"
+                size="large"
+                style={{ margin: "0px 3px" }}
+              />
+            </Menu.Item>
+          )}
+        </Menu.Menu>
+
+        <Menu.Menu
+          position="right"
+          style={{ marginLeft: "0" }}
+          className="uniqueThing"
+        >
+          <Menu.Item
+            onClick={handleItemClick}
+            style={{ paddingLeft: "20px", paddingRight: "20px" }}
+          >
+            <NotificationsIcon user={user} style={{ margin: "0px 3px" }} />
+          </Menu.Item>
+          <Menu.Item
+            active={activeItem === user.username}
+            name={user.username}
+            onClick={handleItemClick}
+            as={Link}
+            to={"/user/" + user.username}
+            style={{ paddingLeft: "20px", paddingRight: "20px" }}
+          >
+            <Icon name="user" size="large" style={{ margin: "0px 3px" }} />
+          </Menu.Item>
+          <Menu.Item
+            name="logout"
+            onClick={logout}
+            style={{ paddingLeft: "20px", paddingRight: "20px" }}
+          >
+            <Icon name="log out" size="large" style={{ margin: "0px 3px" }} />
+          </Menu.Item>
+        </Menu.Menu>
+      </Menu>
     </>
   ) : (
     <Menu pointing secondary size="medium" color="teal">
@@ -125,20 +172,24 @@ function MenuBarMobile() {
         active={activeItem === "home"}
         onClick={handleItemClick}
         as={Link}
-        style={{paddingLeft: "10px", paddingRight: "10px"}}
+        style={{ paddingLeft: "20px", paddingRight: "20px" }}
         to="/"
       >
-        <Icon name="home" size="large" style={{margin: "0px 3px"}}/>
+        <Icon name="home" size="large" style={{ margin: "0px 3px" }} />
       </Menu.Item>
       <Menu.Item
         name="scores"
         active={activeItem === "scores"}
         onClick={handleItemClick}
         as={Link}
-        style={{paddingLeft: "10px", paddingRight: "10px"}}
+        style={{ paddingLeft: "20px", paddingRight: "20px" }}
         to="/scoreboard"
       >
-        <Icon name="calendar alternate outline" size="large" style={{margin: "0px 3px"}}/>
+        <Icon
+          name="calendar alternate outline"
+          size="large"
+          style={{ margin: "0px 3px" }}
+        />
       </Menu.Item>
       <Menu.Menu position="right" className="uniqueThing">
         <Menu.Item
@@ -146,7 +197,7 @@ function MenuBarMobile() {
           active={activeItem === "join"}
           onClick={handleItemClick}
           as={Link}
-          style={{paddingLeft: "10px", paddingRight: "10px"}}
+          style={{ paddingLeft: "20px", paddingRight: "20px" }}
           to="/register"
         />
         <Menu.Item
@@ -154,12 +205,11 @@ function MenuBarMobile() {
           active={activeItem === "login"}
           onClick={handleItemClick}
           as={Link}
-          style={{paddingLeft: "10px", paddingRight: "10px"}}
+          style={{ paddingLeft: "20px", paddingRight: "20px" }}
           to="/login"
         />
       </Menu.Menu>
     </Menu>
-    
   );
 
   return (

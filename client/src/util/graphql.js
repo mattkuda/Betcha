@@ -138,6 +138,7 @@ export const FETCH_POSTS_QUERY = gql`
       }
       playId {
         game {
+          gameId
           sport
           homeFullName
           awayFullName

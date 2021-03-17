@@ -14,6 +14,7 @@ import { betDescFormat } from "../../util/Extensions/betDescFormat";
 import { betTimeFormat } from "../../util/Extensions/betTimeFormat";
 import { liveGameDescFormat } from "../../util/Extensions/liveGameDescFormat";
 import { reactionGameDescFormat } from "../../util/Extensions/liveGameDescFormat";
+import { contextualizeBet } from "../../util/Extensions/liveGameDescFormat";
 import { postGameDescFormat } from "../../util/Extensions/postGameDescFormal";
 import { determineBetResult } from "../../util/Extensions/betCalculations";
 
@@ -32,23 +33,24 @@ function ReactionCard({
 }) {
   const { userME } = useContext(AuthContext);
 
-  function findIcon(input){
+  function findIcon(input) {
     switch (input) {
-      case "basketball": 
-        return "basketball ball"; 
-      case "football": 
+      case "basketball":
+        return "basketball ball";
+      case "football":
         return "football ball";
-      case "hockey": 
+      case "hockey":
         return "hockey puck";
-      case "soccer": 
+      case "soccer":
         return "soccer";
-      default: return "talk"
+      default:
+        return "talk";
     }
   }
 
-  console.log("The Post is: " + post);
-  console.log("The body is: " + body);
+  console.log("The Post is: " + JSON.stringify(post));
   console.log("The playId.game is: " + JSON.stringify(playId));
+  
   const betData =
     post != null
       ? post.gameArray.find((o) => o.gameId.gameId === playId.game.gameId)
@@ -57,201 +59,188 @@ function ReactionCard({
   const gameData = playId.game;
 
   console.log("gamedata alert" + JSON.stringify(gameData));
+  console.log("betdata alert" + JSON.stringify(betData));
   console.log("user alert" + JSON.stringify(user));
 
-  let PostGameMarkup = (
+  let PostGameMarkup =
     //If the user ahs posted about the game
     post ? (
       <>
-      <Card fluid floated="right" style={{ width: "100%" }}>
-        <Card.Content>
-          <div
-            style={{ display: "inline-block", width: "auto", height: "100%" }}
-          >
-            <div>
+        <Card fluid floated="right" style={{ width: "100%" }}>
+          <Card.Content>
+            <div
+              style={{ display: "inline-block", width: "auto", height: "100%" }}
+            >
               <img
                 className="pc-img"
                 alt="profile-pic"
                 src={`${user.profilePicture}`}
               ></img>
             </div>
-          </div>
-          <div className="pc-header">
-            <Link to={`/user/${user.username}`}>
-              {user.name} @{user.username}
-            </Link>
-            <div
-              style={{ display: "inline-block", color: "gray", float: "right" }}
-            >
-              {moment(createdAt).fromNow(true)} ago
-            </div>
-
-            {gameData && gameData.gameId == null ? (
-              <div className="pc-bet">Failed to load game data</div>
-            ) : (
-              <div className="pc-bet">
-                <div
-                  className={determineBetResult(
-                    gameData.gameId.homeScore,
-                    gameData.gameId.awayScore,
-                    gameData.betType,
-                    gameData.betAmount
-                  )}
-                >
-                  {betDescFormat(
-                    gameData.betType,
-                    gameData.betAmount,
-                    gameData.gameId
-                  )}
+            <div className="pc-header">
+              <Link to={`/user/${user.username}`}>
+                {user.name} @{user.username}
+              </Link>
+              <div
+                style={{
+                  display: "inline-block",
+                  color: "gray",
+                  float: "right",
+                }}
+              >
+                {moment(createdAt).fromNow(true)} ago
+              </div>
+              <div className="pc-betBody">{body}</div>
+              <div className="pc-reactionScore">
+                  has the bet {contextualizeBet(betData)}
                 </div>
-
-                <div
-                  style={{
-                    display: "inline-block",
-                    fontWeight: "normal",
-                    fontStyle: "italic",
-                  }}
-                >
-                  · {postGameDescFormat(gameData.gameId)}
+              <div
+                style={{
+                  border: "solid #e3e3e3 2px",
+                  padding: "10px",
+                  marginTop: "10px",
+                }}
+              >
+                <div className="pc-betBody">
+                  <Icon name={findIcon(gameData.sport)} />
+                  <i>{playId.description}</i>
+                </div>
+                <div className="pc-reactionScore">
+                  <i>
+                    {reactionGameDescFormat(
+                      playId.game.awayAbbreviation,
+                      playId.game.homeAbbreviation,
+                      playId.specificData
+                    )}
+                  </i>
                 </div>
               </div>
-            )}
 
-            <div className="pc-betBody">
-              <i>{playId.description}</i>
-            </div>
-            <div className="pc-betBody">{body}</div>
-            <div className="pc-betBody">
-              {user.name} has the bet {betData}
-              {/* {betDescFormat(
-                betData.betType,
-                betData.betAmount,
-                playId.game
-              )} */}
-              
-              {" "}
-              {" ("}
-              {post.betOdds}
-              {")"}
-            </div>
-            <div className="pc-buttons">
-              <Button onClick={(e) => console.log(userME)}>userME</Button>
-              <LikeButton
-                user={userME}
-                receiver={user.id}
-                post={{ id, likes, likeCount }}
-              />
-              <MyPopup content="Commment on post" inverted>
-                <Button labelPosition="right" as={Link} to={`/posts/${id}`}>
-                  <Button color="blue" basic>
-                    <Icon name="comments" />
+              <div className="pc-buttons">
+                <Button onClick={(e) => console.log(userME)}>userME</Button>
+                <LikeButton
+                  user={userME}
+                  receiver={user.id}
+                  post={{ id, likes, likeCount }}
+                />
+                <MyPopup content="Commment on post" inverted>
+                  <Button labelPosition="right" as={Link} to={`/posts/${id}`}>
+                    <Button color="blue" basic>
+                      <Icon name="comments" />
+                    </Button>
+                    <Label basic color="blue" pointing="left">
+                      {commentCount}
+                    </Label>
                   </Button>
-                  <Label basic color="blue" pointing="left">
-                    {commentCount}
-                  </Label>
-                </Button>
-              </MyPopup>
-              {userME && userME.username === post.username && (
-                <div
-                  style={{
-                    display: "inline-block",
-                    color: "gray",
-                    float: "right",
-                  }}
-                >
-                  <DeleteButton postId={id} />
-                </div>
-              )}
+                </MyPopup>
+                {userME && userME.username === post.username && (
+                  <div
+                    style={{
+                      display: "inline-block",
+                      color: "gray",
+                      float: "right",
+                    }}
+                  >
+                    <DeleteButton postId={id} />
+                  </div>
+                )}
+              </div>
             </div>
-          </div>
-        </Card.Content>
-      </Card>
-    </>
-    ) : 
-    //If the user hasn't posted about the game
-    (
+          </Card.Content>
+        </Card>
+      </>
+    ) : (
+      //If the user hasn't posted about the game
       <>
-      <Card fluid floated="right" style={{ width: "100%" }}>
-        <Card.Content>
-          <div
-            style={{ display: "inline-block", width: "auto", height: "100%" }}
-          >
+        <Card fluid floated="right" style={{ width: "100%" }}>
+          <Card.Content>
+            <div
+              style={{ display: "inline-block", width: "auto", height: "100%" }}
+            >
               <img
                 className="pc-img"
                 alt="profile-pic"
                 src={`${user.profilePicture}`}
               ></img>
-          </div>
-          <div className="pc-header">
-            <Link to={`/user/${user.username}`}>
-              {user.name} @{user.username}
-            </Link>
-            <div
-              style={{ display: "inline-block", color: "gray", float: "right" }}
-            >
-              {moment(createdAt).fromNow(true)} ago
             </div>
-            <div className="pc-betBody">{body}</div>
-            <div style={{border: "solid #e3e3e3 2px", padding: "10px", marginTop: "10px"}}>
-              <div className="pc-betBody">
-                <Icon name={findIcon(gameData.sport)}/>
-                <i>{playId.description}</i>
+            <div className="pc-header">
+              <Link to={`/user/${user.username}`}>
+                {user.name} @{user.username}
+              </Link>
+              <div
+                style={{
+                  display: "inline-block",
+                  color: "gray",
+                  float: "right",
+                }}
+              >
+                {moment(createdAt).fromNow(true)} ago
               </div>
-              <div className="pc-reactionScore" >
-                <i>{reactionGameDescFormat(playId.game.awayAbbreviation, playId.game.homeAbbreviation, playId.specificData )}</i>
-              </div>
-            </div>
-            
-
-            <div className="pc-buttons">
-              <Button onClick={(e) => console.log(userME)}>userME</Button>
-              <LikeButton
-                user={userME}
-                receiver={user.id}
-                post={{ id, likes, likeCount }}
-              />
-              <MyPopup content="Commment on post" inverted>
-                <Button labelPosition="right" as={Link} to={`/posts/${id}`}>
-                  <Button color="blue" basic>
-                    <Icon name="comments" />
-                  </Button>
-                  <Label basic color="blue" pointing="left">
-                    {commentCount}
-                  </Label>
-                </Button>
-              </MyPopup>
-              {userME && userME.username === post.username && (
-                <div
-                  style={{
-                    display: "inline-block",
-                    color: "gray",
-                    float: "right",
-                  }}
-                >
-                  <DeleteButton postId={id} />
+              <div className="pc-betBody">{body}</div>
+              <div
+                style={{
+                  border: "solid #e3e3e3 2px",
+                  padding: "10px",
+                  marginTop: "10px",
+                }}
+              >
+                <div className="pc-betBody">
+                  <Icon name={findIcon(gameData.sport)} />
+                  <i>{playId.description}</i>
                 </div>
-              )}
+                <div className="pc-reactionScore">
+                  <i>
+                    {reactionGameDescFormat(
+                      playId.game.awayAbbreviation,
+                      playId.game.homeAbbreviation,
+                      playId.specificData
+                    )}
+                  </i>
+                </div>
+              </div>
+
+              <div className="pc-buttons">
+                <Button onClick={(e) => console.log(userME)}>userME</Button>
+                <LikeButton
+                  user={userME}
+                  receiver={user.id}
+                  post={{ id, likes, likeCount }}
+                />
+                <MyPopup content="Commment on post" inverted>
+                  <Button labelPosition="right" as={Link} to={`/posts/${id}`}>
+                    <Button color="blue" basic>
+                      <Icon name="comments" />
+                    </Button>
+                    <Label basic color="blue" pointing="left">
+                      {commentCount}
+                    </Label>
+                  </Button>
+                </MyPopup>
+                {userME && userME.username === post.username && (
+                  <div
+                    style={{
+                      display: "inline-block",
+                      color: "gray",
+                      float: "right",
+                    }}
+                  >
+                    <DeleteButton postId={id} />
+                  </div>
+                )}
+              </div>
             </div>
-          </div>
-        </Card.Content>
-      </Card>
-    </>
-    )
-    
-  );
+          </Card.Content>
+        </Card>
+      </>
+    );
 
-
-    if (post != null) {
-      console.log("111111");
-      return PostGameMarkup;
-    } else {
-      console.log("222222");
-      return PostGameMarkup;
-    }
-  
-   
-      
-    
+  if (post != null) {
+    console.log("111111");
+    return PostGameMarkup;
+  } else {
+    console.log("222222");
+    return PostGameMarkup;
+  }
 }
 
 export default ReactionCard;

@@ -1,3 +1,7 @@
 .mobile-search {
   padding-top: 10px;
 }
+
+.ui.input {
+  width: 100%
+}
