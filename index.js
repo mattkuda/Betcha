@@ -1,5 +1,7 @@
 const { ApolloServer, PubSub } = require("apollo-server");
 const mongoose = require("mongoose");
+const express = require('express');
+const path = require("path");
 
 const { MONGODB } = require("./config.js");
 const typeDefs = require("./graphql/typedefs");
@@ -18,6 +20,14 @@ const server = new ApolloServer({
   resolvers,
   context: ({ req }) => ({ req, pubsub }),
 });
+
+const app = express();
+app.use('/',express.static(path.join(__dirname, "/client/build")));
+app.get("*", (req, res) => {
+    res.sendFile(path.join(__dirname, "client", "build", "index.html"));
+});
+
+server.applyMiddleware({ app });
 
 mongoose
   .connect(MONGODB, { useNewUrlParser: true, useFindAndModify: false, useUnifiedTopology: true })
