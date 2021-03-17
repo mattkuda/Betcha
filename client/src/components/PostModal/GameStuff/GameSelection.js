@@ -55,13 +55,13 @@ function GameSelection(props) {
 
   return (
     <div style={{padding: "0px"}}>
-      <Grid columns="two" style={{width: "100%",padding: "0px", margin: "0px"}}>
+      <Grid stackable columns="two" style={{width: "100%",padding: "0px", margin: "0px"}}>
         <Grid.Row>
           {gamesLoading ? (
             {/* <Loader>Loading Games...</Loader> */}
           ) : (
             //Transition group adds animation for when new post is added/deleted
-            <Transition.Group>
+            <>
               {games &&
                 games.filter(o => o.league === props.league && o.spread !== -1 && o.overUnder > 0 && o.startTime >= timeNow).map((game) => (
                   
@@ -79,7 +79,7 @@ function GameSelection(props) {
                     />
                   </Grid.Column>
                 ))}
-            </Transition.Group>
+            </>
           )}
         </Grid.Row>
       </Grid>
