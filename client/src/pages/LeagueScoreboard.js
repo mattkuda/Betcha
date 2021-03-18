@@ -324,8 +324,6 @@ function LeagueScoreboard(props) {
     return (
       <>
 
-      <Divider />
-
       <div style = {{
           marginTop: '40px',
         }}>
@@ -439,69 +437,108 @@ function LeagueScoreboard(props) {
     const currentDate = new Date();
 
     return (
-      <div>
 
-        <h1>Live Games</h1>
-        <Grid stackable columns="two">
-          <Grid.Row>
-            <Fragment>
-              {
-                NBAlivegameData.getLivegamesByLeague.map(game => (
-                  <Grid.Column>
-                    <Link to={`/scoreboard/${myLeague}/${game.gameId}`}>
-                      <span className="card" style={{"display": "block"}}>
-                        <NBAGame key={game.gameId} {...game} />
-                      </span>
-                    </Link>
-                  </Grid.Column>
-                ))
-              }
-            </Fragment>
-          </Grid.Row>
-        </Grid>
+      <>
 
-      <h1>Upcoming Games</h1>
-      <Grid stackable columns="two">
-        <Grid.Row>
-          <Fragment>
-            {
-              NBApregameData.getPregamesByLeague.filter((game) => game.awayAbbreviation !== "TBD" &&
-              game.homeAbbreviation !== "TBD")
-              .filter(game => new Date(game.startTime) >= currentDate.setHours(currentDate.getHours()-1))
-              .map(game => (
-                <Grid.Column>
-                  <Link to={`/scoreboard/${myLeague}/${game.gameId}`}>
-                    <span className="card" style={{"display": "block"}}>
-                      <NBAGame key={game.gameId} {...game} />
-                    </span>
-                  </Link>
-                </Grid.Column>
-              ))
-            }
-          </Fragment>
-        </Grid.Row>
-      </Grid>
+        <div style = {{
+            marginTop: '40px',
+          }}>
 
-      <h1>Completed Games</h1>
-      <Grid stackable columns="two">
-        <Grid.Row>
-          <Fragment>
-            {
-              NBApostgameData.getPostgamesByLeague.map(game => (
-                <Grid.Column>
-                  <Link to={`/scoreboard/${myLeague}/${game.gameId}`}>
-                    <span className="card" style={{"display": "block"}}>
-                      <NBAGame key={game.gameId} {...game} />
-                    </span>
-                  </Link>
-                </Grid.Column>
-              ))
-            }
-          </Fragment>
-        </Grid.Row>
-      </Grid>
+          {NBAlivegameData.getLivegamesByLeague.length > 0 ? (
+            <>
+            <Header as='h3'>
+              <Header.Content>Live Games</Header.Content>
+            </Header>
 
+            <Segment raised>
+
+            <Grid stackable columns="two">
+              <Grid.Row>
+                <Fragment>
+                  {
+                    NBAlivegameData.getLivegamesByLeague.map(game => (
+                      <Grid.Column>
+                        <Link to={`/scoreboard/${myLeague}/${game.gameId}`}>
+                          <span className="card" style={{"display": "block"}}>
+                            <NBAGame key={game.gameId} {...game} />
+                          </span>
+                        </Link>
+                      </Grid.Column>
+                    ))
+                  }
+                </Fragment>
+              </Grid.Row>
+            </Grid>
+
+          </Segment>
+          </>
+        ) : (<></>)}
+
+          {NBApregameData.getPregamesByLeague.length > 0 ? (
+            <>
+            <Header as='h3'>
+              <Header.Content>Upcoming Games</Header.Content>
+            </Header>
+
+            <Segment raised>
+
+            <Grid stackable columns="two">
+              <Grid.Row>
+                <Fragment>
+                  {
+                    NBApregameData.getPregamesByLeague.filter((game) => game.awayAbbreviation !== "TBD" &&
+                    game.homeAbbreviation !== "TBD")
+                    .filter(game => new Date(game.startTime) >= currentDate.setHours(currentDate.getHours()-1))
+                    .map(game => (
+                      <Grid.Column>
+                        <Link to={`/scoreboard/${myLeague}/${game.gameId}`}>
+                          <span className="card" style={{"display": "block"}}>
+                            <NBAGame key={game.gameId} {...game} />
+                          </span>
+                        </Link>
+                      </Grid.Column>
+                    ))
+                  }
+                </Fragment>
+              </Grid.Row>
+            </Grid>
+
+          </Segment>
+          </>
+        ) : (<></>)}
+
+        {NBApostgameData.getPostgamesByLeague.length > 0 ? (
+          <>
+          <Header as='h3'>
+            <Header.Content>Completed Games</Header.Content>
+          </Header>
+
+          <Segment raised>
+
+          <Grid stackable columns="two">
+            <Grid.Row>
+              <Fragment>
+                {
+                  NBApostgameData.getPostgamesByLeague.map(game => (
+                    <Grid.Column>
+                      <Link to={`/scoreboard/${myLeague}/${game.gameId}`}>
+                        <span className="card" style={{"display": "block"}}>
+                          <NBAGame key={game.gameId} {...game} />
+                        </span>
+                      </Link>
+                    </Grid.Column>
+                  ))
+                }
+              </Fragment>
+            </Grid.Row>
+          </Grid>
+
+        </Segment>
+        </>
+      ) : (<></>)}
       </div>
+
+    </>
     )
   }
 
@@ -511,69 +548,108 @@ function LeagueScoreboard(props) {
     const currentDate = new Date();
 
     return (
-      <div>
 
-        <h1>Live Games</h1>
-        <Grid stackable columns="two">
-          <Grid.Row>
-            <Fragment>
-              {
-                NHLlivegameData.getLivegamesByLeague.map(game => (
-                  <Grid.Column>
-                    <Link to={`/scoreboard/${myLeague}/${game.gameId}`}>
-                      <span className="card" style={{"display": "block"}}>
-                        <Game key={game.gameId} {...game} />
-                      </span>
-                    </Link>
-                  </Grid.Column>
-                ))
-              }
-            </Fragment>
-          </Grid.Row>
-        </Grid>
+      <>
 
-      <h1>Upcoming Games</h1>
-      <Grid stackable columns="two">
-        <Grid.Row>
-          <Fragment>
-            {
-              NHLpregameData.getPregamesByLeague.filter((game) => game.awayAbbreviation !== "TBD" &&
-              game.homeAbbreviation !== "TBD")
-              .filter(game => new Date(game.startTime) >= currentDate.setHours(currentDate.getHours()-1))
-              .map(game => (
-                <Grid.Column>
-                  <Link to={`/scoreboard/${myLeague}/${game.gameId}`}>
-                    <span className="card" style={{"display": "block"}}>
-                      <Game key={game.gameId} {...game} />
-                    </span>
-                  </Link>
-                </Grid.Column>
-              ))
-            }
-          </Fragment>
-        </Grid.Row>
-      </Grid>
+        <div style = {{
+            marginTop: '40px',
+          }}>
 
-      <h1>Completed Games</h1>
-      <Grid stackable columns="two">
-        <Grid.Row>
-          <Fragment>
-            {
-              NHLpostgameData.getPostgamesByLeague.map(game => (
-                <Grid.Column>
-                  <Link to={`/scoreboard/${myLeague}/${game.gameId}`}>
-                    <span className="card" style={{"display": "block"}}>
-                      <Game key={game.gameId} {...game} />
-                    </span>
-                  </Link>
-                </Grid.Column>
-              ))
-            }
-          </Fragment>
-        </Grid.Row>
-      </Grid>
+          {NHLlivegameData.getLivegamesByLeague.length > 0 ? (
+            <>
+            <Header as='h3'>
+              <Header.Content>Live Games</Header.Content>
+            </Header>
 
+            <Segment raised>
+
+            <Grid stackable columns="two">
+              <Grid.Row>
+                <Fragment>
+                  {
+                    NHLlivegameData.getLivegamesByLeague.map(game => (
+                      <Grid.Column>
+                        <Link to={`/scoreboard/${myLeague}/${game.gameId}`}>
+                          <span className="card" style={{"display": "block"}}>
+                            <Game key={game.gameId} {...game} />
+                          </span>
+                        </Link>
+                      </Grid.Column>
+                    ))
+                  }
+                </Fragment>
+              </Grid.Row>
+            </Grid>
+
+          </Segment>
+          </>
+        ) : (<></>)}
+
+          {NHLpregameData.getPregamesByLeague.length > 0 ? (
+            <>
+            <Header as='h3'>
+              <Header.Content>Upcoming Games</Header.Content>
+            </Header>
+
+            <Segment raised>
+
+            <Grid stackable columns="two">
+              <Grid.Row>
+                <Fragment>
+                  {
+                    NHLpregameData.getPregamesByLeague.filter((game) => game.awayAbbreviation !== "TBD" &&
+                    game.homeAbbreviation !== "TBD")
+                    .filter(game => new Date(game.startTime) >= currentDate.setHours(currentDate.getHours()-1))
+                    .map(game => (
+                      <Grid.Column>
+                        <Link to={`/scoreboard/${myLeague}/${game.gameId}`}>
+                          <span className="card" style={{"display": "block"}}>
+                            <Game key={game.gameId} {...game} />
+                          </span>
+                        </Link>
+                      </Grid.Column>
+                    ))
+                  }
+                </Fragment>
+              </Grid.Row>
+            </Grid>
+
+          </Segment>
+          </>
+        ) : (<></>)}
+
+        {NHLpostgameData.getPostgamesByLeague.length > 0 ? (
+          <>
+          <Header as='h3'>
+            <Header.Content>Completed Games</Header.Content>
+          </Header>
+
+          <Segment raised>
+
+          <Grid stackable columns="two">
+            <Grid.Row>
+              <Fragment>
+                {
+                  NHLpostgameData.getPostgamesByLeague.map(game => (
+                    <Grid.Column>
+                      <Link to={`/scoreboard/${myLeague}/${game.gameId}`}>
+                        <span className="card" style={{"display": "block"}}>
+                          <Game key={game.gameId} {...game} />
+                        </span>
+                      </Link>
+                    </Grid.Column>
+                  ))
+                }
+              </Fragment>
+            </Grid.Row>
+          </Grid>
+
+        </Segment>
+        </>
+      ) : (<></>)}
       </div>
+
+    </>
     )
   }
 
@@ -584,69 +660,107 @@ function LeagueScoreboard(props) {
     const currentDate = new Date();
 
     return (
-      <div>
+      <>
 
-        <h1>Live Games</h1>
-        <Grid stackable columns="two">
-          <Grid.Row>
-            <Fragment>
-              {
-                PremierLeaguelivegameData.getLivegamesByLeague.map(game => (
-                  <Grid.Column>
-                    <Link to={`/scoreboard/${myLeague}/${game.gameId}`}>
-                      <span className="card" style={{"display": "block"}}>
-                        <Game key={game.gameId} {...game} />
-                      </span>
-                    </Link>
-                  </Grid.Column>
-                ))
-              }
-            </Fragment>
-          </Grid.Row>
-        </Grid>
+        <div style = {{
+            marginTop: '40px',
+          }}>
 
-      <h1>Upcoming Games</h1>
-      <Grid stackable columns="two">
-        <Grid.Row>
-          <Fragment>
-            {
-              PremierLeaguepregameData.getPregamesByLeague.filter((game) => game.awayAbbreviation !== "TBD" &&
-              game.homeAbbreviation !== "TBD")
-              .filter(game => new Date(game.startTime) >= currentDate.setHours(currentDate.getHours()-1))
-              .map(game => (
-                <Grid.Column>
-                  <Link to={`/scoreboard/${myLeague}/${game.gameId}`}>
-                    <span className="card" style={{"display": "block"}}>
-                      <Game key={game.gameId} {...game} />
-                    </span>
-                  </Link>
-                </Grid.Column>
-              ))
-            }
-          </Fragment>
-        </Grid.Row>
-      </Grid>
+          {PremierLeaguelivegameData.getLivegamesByLeague.length > 0 ? (
+            <>
+            <Header as='h3'>
+              <Header.Content>Live Games</Header.Content>
+            </Header>
 
-      <h1>Completed Games</h1>
-      <Grid stackable columns="two">
-        <Grid.Row>
-          <Fragment>
-            {
-              PremierLeaguepostgameData.getPostgamesByLeague.map(game => (
-                <Grid.Column>
-                  <Link to={`/scoreboard/${myLeague}/${game.gameId}`}>
-                    <span className="card" style={{"display": "block"}}>
-                      <Game key={game.gameId} {...game} />
-                    </span>
-                  </Link>
-                </Grid.Column>
-              ))
-            }
-          </Fragment>
-        </Grid.Row>
-      </Grid>
+            <Segment raised>
 
+            <Grid stackable columns="two">
+              <Grid.Row>
+                <Fragment>
+                  {
+                    PremierLeaguelivegameData.getLivegamesByLeague.map(game => (
+                      <Grid.Column>
+                        <Link to={`/scoreboard/${myLeague}/${game.gameId}`}>
+                          <span className="card" style={{"display": "block"}}>
+                            <Game key={game.gameId} {...game} />
+                          </span>
+                        </Link>
+                      </Grid.Column>
+                    ))
+                  }
+                </Fragment>
+              </Grid.Row>
+            </Grid>
+
+          </Segment>
+          </>
+        ) : (<></>)}
+
+          {PremierLeaguepregameData.getPregamesByLeague.length > 0 ? (
+            <>
+            <Header as='h3'>
+              <Header.Content>Upcoming Games</Header.Content>
+            </Header>
+
+            <Segment raised>
+
+            <Grid stackable columns="two">
+              <Grid.Row>
+                <Fragment>
+                  {
+                    PremierLeaguepregameData.getPregamesByLeague.filter((game) => game.awayAbbreviation !== "TBD" &&
+                    game.homeAbbreviation !== "TBD")
+                    .filter(game => new Date(game.startTime) >= currentDate.setHours(currentDate.getHours()-1))
+                    .map(game => (
+                      <Grid.Column>
+                        <Link to={`/scoreboard/${myLeague}/${game.gameId}`}>
+                          <span className="card" style={{"display": "block"}}>
+                            <Game key={game.gameId} {...game} />
+                          </span>
+                        </Link>
+                      </Grid.Column>
+                    ))
+                  }
+                </Fragment>
+              </Grid.Row>
+            </Grid>
+
+          </Segment>
+          </>
+        ) : (<></>)}
+
+        {PremierLeaguepostgameData.getPostgamesByLeague.length > 0 ? (
+          <>
+          <Header as='h3'>
+            <Header.Content>Completed Games</Header.Content>
+          </Header>
+
+          <Segment raised>
+
+          <Grid stackable columns="two">
+            <Grid.Row>
+              <Fragment>
+                {
+                  PremierLeaguepostgameData.getPostgamesByLeague.map(game => (
+                    <Grid.Column>
+                      <Link to={`/scoreboard/${myLeague}/${game.gameId}`}>
+                        <span className="card" style={{"display": "block"}}>
+                          <Game key={game.gameId} {...game} />
+                        </span>
+                      </Link>
+                    </Grid.Column>
+                  ))
+                }
+              </Fragment>
+            </Grid.Row>
+          </Grid>
+
+        </Segment>
+        </>
+      ) : (<></>)}
       </div>
+
+    </>
     )
   }
 
@@ -657,69 +771,107 @@ function LeagueScoreboard(props) {
     const currentDate = new Date();
 
     return (
-      <div>
+      <>
 
-        <h1>Live Games</h1>
-        <Grid stackable columns="two">
-          <Grid.Row>
-            <Fragment>
-              {
-                ChampionsLeaguelivegameData.getLivegamesByLeague.map(game => (
-                  <Grid.Column>
-                    <Link to={`/scoreboard/${myLeague}/${game.gameId}`}>
-                      <span className="card" style={{"display": "block"}}>
-                        <Game key={game.gameId} {...game} />
-                      </span>
-                    </Link>
-                  </Grid.Column>
-                ))
-              }
-            </Fragment>
-          </Grid.Row>
-        </Grid>
+        <div style = {{
+            marginTop: '40px',
+          }}>
 
-      <h1>Upcoming Games</h1>
-      <Grid stackable columns="two">
-        <Grid.Row>
-          <Fragment>
-            {
-              ChampionsLeaguepregameData.getPregamesByLeague.filter((game) => game.awayAbbreviation !== "TBD" &&
-              game.homeAbbreviation !== "TBD")
-              .filter(game => new Date(game.startTime) >= currentDate.setHours(currentDate.getHours()-1))
-              .map(game => (
-                <Grid.Column>
-                  <Link to={`/scoreboard/${myLeague}/${game.gameId}`}>
-                    <span className="card" style={{"display": "block"}}>
-                      <Game key={game.gameId} {...game} />
-                    </span>
-                  </Link>
-                </Grid.Column>
-              ))
-            }
-          </Fragment>
-        </Grid.Row>
-      </Grid>
+          {ChampionsLeaguelivegameData.getLivegamesByLeague.length > 0 ? (
+            <>
+            <Header as='h3'>
+              <Header.Content>Live Games</Header.Content>
+            </Header>
 
-      <h1>Completed Games</h1>
-      <Grid stackable columns="two">
-        <Grid.Row>
-          <Fragment>
-            {
-              ChampionsLeaguepostgameData.getPostgamesByLeague.map(game => (
-                <Grid.Column>
-                  <Link to={`/scoreboard/${myLeague}/${game.gameId}`}>
-                    <span className="card" style={{"display": "block"}}>
-                      <Game key={game.gameId} {...game} />
-                    </span>
-                  </Link>
-                </Grid.Column>
-              ))
-            }
-          </Fragment>
-        </Grid.Row>
-      </Grid>
+            <Segment raised>
 
+            <Grid stackable columns="two">
+              <Grid.Row>
+                <Fragment>
+                  {
+                    ChampionsLeaguelivegameData.getLivegamesByLeague.map(game => (
+                      <Grid.Column>
+                        <Link to={`/scoreboard/${myLeague}/${game.gameId}`}>
+                          <span className="card" style={{"display": "block"}}>
+                            <Game key={game.gameId} {...game} />
+                          </span>
+                        </Link>
+                      </Grid.Column>
+                    ))
+                  }
+                </Fragment>
+              </Grid.Row>
+            </Grid>
+
+          </Segment>
+          </>
+        ) : (<></>)}
+
+          {ChampionsLeaguepregameData.getPregamesByLeague.length > 0 ? (
+            <>
+            <Header as='h3'>
+              <Header.Content>Upcoming Games</Header.Content>
+            </Header>
+
+            <Segment raised>
+
+            <Grid stackable columns="two">
+              <Grid.Row>
+                <Fragment>
+                  {
+                    ChampionsLeaguepregameData.getPregamesByLeague.filter((game) => game.awayAbbreviation !== "TBD" &&
+                    game.homeAbbreviation !== "TBD")
+                    .filter(game => new Date(game.startTime) >= currentDate.setHours(currentDate.getHours()-1))
+                    .map(game => (
+                      <Grid.Column>
+                        <Link to={`/scoreboard/${myLeague}/${game.gameId}`}>
+                          <span className="card" style={{"display": "block"}}>
+                            <Game key={game.gameId} {...game} />
+                          </span>
+                        </Link>
+                      </Grid.Column>
+                    ))
+                  }
+                </Fragment>
+              </Grid.Row>
+            </Grid>
+
+          </Segment>
+          </>
+        ) : (<></>)}
+
+        {ChampionsLeaguepostgameData.getPostgamesByLeague.length > 0 ? (
+          <>
+          <Header as='h3'>
+            <Header.Content>Completed Games</Header.Content>
+          </Header>
+
+          <Segment raised>
+
+          <Grid stackable columns="two">
+            <Grid.Row>
+              <Fragment>
+                {
+                  ChampionsLeaguepostgameData.getPostgamesByLeague.map(game => (
+                    <Grid.Column>
+                      <Link to={`/scoreboard/${myLeague}/${game.gameId}`}>
+                        <span className="card" style={{"display": "block"}}>
+                          <Game key={game.gameId} {...game} />
+                        </span>
+                      </Link>
+                    </Grid.Column>
+                  ))
+                }
+              </Fragment>
+            </Grid.Row>
+          </Grid>
+
+        </Segment>
+        </>
+      ) : (<></>)}
       </div>
+
+    </>
     )
   }
 

@@ -6,8 +6,18 @@ import { createHttpLink } from 'apollo-link-http';
 import { ApolloProvider } from '@apollo/react-hooks';
 import { setContext } from 'apollo-link-context';
 
+
+let myUrl = '';
+if (process.env.NODE_ENV === 'development') {
+  console.log("development");
+  myUrl = 'http://localhost:5000/graphql';
+}
+else {
+  myUrl = 'https://betcha-sports.herokuapp.com/graphql';
+}
+
 const httpLink = createHttpLink({
-  uri: 'http://localhost:5000'
+  uri: myUrl
 });
 
 const authLink = setContext(() => {

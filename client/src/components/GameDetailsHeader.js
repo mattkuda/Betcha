@@ -26,31 +26,22 @@ function GameDetailsHeader(props) {
   const homeColorRgb = hexToRgb(data.getGameByID.homeColor);
 
   return (
-    <div className="header-wrapper">
+
+    <>
+    <div className="header-wrapper mobile hidden">
 
       <div style = {{
-        height: '200px',
         display: 'inline-block',
         width: '50%',
         backgroundImage: `linear-gradient(to bottom, rgba(${awayColorRgb.r},${awayColorRgb.g},${awayColorRgb.b},0), rgba(${awayColorRgb.r},${awayColorRgb.g},${awayColorRgb.b},.3))`
       }} className="header-content-left">
-        <Grid rows={2} className="header-content-left-content">
+        <Grid rows={2}>
           <Grid.Row>
             <Grid columns={3} className="header-main-content-grid">
               <Grid.Column verticalAlign='middle'>
                 <Image centered src={data.getGameByID.awayLogo} className='header-logo'/>
-                  {(myLeague === "mens-college-basketball" || myLeague === "college-football") &&
-                     (data.getGameByID.specificData.awayRank !== -1) ? (
-                    <Label circular
-                      color="grey"
-                      floating
-                      style={{ padding: "2px 2px", top: "10px", left: "47px" }}
-                    >
-                      {data.getGameByID.specificData.awayRank}
-                    </Label>
-                  ):(<></>)}
               </Grid.Column>
-              <Grid.Column verticalAlign="middle">
+              <Grid.Column verticalAlign="middle" textAlign='center'>
                 <div className="team-name">{data.getGameByID.awayFullName}</div>
                 <div className="team-record">({data.getGameByID.awayRecord})</div>
               </Grid.Column>
@@ -61,21 +52,21 @@ function GameDetailsHeader(props) {
           </Grid.Row>
           <Grid.Row>
             <Grid columns={3} textAlign="center" className="header-betting-odds-grid">
-              <Grid.Column verticalAlign="top">
+              <Grid.Column verticalAlign="middle">
                 {data.getGameByID.awayId === data.getGameByID.favoredTeamId ? (
                   <div className="ml-text">ML: {data.getGameByID.awayML}</div>
                 ):(
                   <div className="ml-text">ML: +{data.getGameByID.awayML}</div>
                 )}
               </Grid.Column>
-              <Grid.Column verticalAlign='top'>
+              <Grid.Column verticalAlign='middle'>
                 {data.getGameByID.awayId === data.getGameByID.favoredTeamId ? (
                   <div className="ml-text">Spread: -{data.getGameByID.spread} ({data.getGameByID.awaySpreadOdds})</div>
                 ):(
                   <div className="ml-text">Spread: +{data.getGameByID.spread} ({data.getGameByID.awaySpreadOdds})</div>
                 )}
               </Grid.Column>
-              <Grid.Column verticalAlign='top' textAlign='right'>
+              <Grid.Column verticalAlign='middle' textAlign='right'>
                 <div className="ou-text">OU:</div>
               </Grid.Column>
             </Grid>
@@ -85,49 +76,38 @@ function GameDetailsHeader(props) {
       </div>
 
       <div style = {{
-        height: '200px',
         display: 'inline-block',
         width: '50%',
         backgroundImage: `linear-gradient(to bottom, rgba(${homeColorRgb.r},${homeColorRgb.g},${homeColorRgb.b},0), rgba(${homeColorRgb.r},${homeColorRgb.g},${homeColorRgb.b},.3))`
       }} className="header-content-right">
-        <Grid rows={2} className="header-content-right-content">
+        <Grid rows={2}>
           <Grid.Row>
             <Grid columns={3} className="header-main-content-grid">
               <Grid.Column verticalAlign='middle'>
                 <div className="score-text">{data.getGameByID.homeScore}</div>
               </Grid.Column>
-              <Grid.Column verticalAlign="middle">
+              <Grid.Column verticalAlign="middle" textAlign='center'>
                 <div className="team-name">{data.getGameByID.homeFullName}</div>
                 <div className="team-record">({data.getGameByID.homeRecord})</div>
               </Grid.Column>
               <Grid.Column verticalAlign='middle'>
                 <Image centered src={data.getGameByID.homeLogo} className='header-logo'/>
-                  {(myLeague === "mens-college-basketball" || myLeague === "college-football") &&
-                    (data.getGameByID.specificData.homeRank !== -1) ? (
-                    <Label circular
-                      color="grey"
-                      floating
-                      style={{ padding: "2px 2px", top: "10px", left: "47px" }}
-                    >
-                      {data.getGameByID.specificData.homeRank}
-                    </Label>
-                  ):(<></>)}
               </Grid.Column>
             </Grid>
           </Grid.Row>
           <Grid.Row>
               <Grid columns={3} textAlign="center" className="header-betting-odds-grid">
-                <Grid.Column verticalAlign='top' textAlign='left'>
+                <Grid.Column textAlign='left'>
                   <div className="ou-value">{data.getGameByID.overUnder}</div>
                 </Grid.Column>
-                <Grid.Column verticalAlign='top'>
+                <Grid.Column>
                   {data.getGameByID.homeId === data.getGameByID.favoredTeamId ? (
                     <div className="ml-text">Spread: -{data.getGameByID.spread} ({data.getGameByID.homeSpreadOdds})</div>
                   ):(
                     <div className="ml-text">Spread: +{data.getGameByID.spread} ({data.getGameByID.homeSpreadOdds})</div>
                   )}
                 </Grid.Column>
-                <Grid.Column verticalAlign="top">
+                <Grid.Column>
                   {data.getGameByID.homeId === data.getGameByID.favoredTeamId ? (
                     <div className="ml-text">ML: {data.getGameByID.homeML}</div>
                   ):(
@@ -143,6 +123,140 @@ function GameDetailsHeader(props) {
       <div>
       </div>
     </div>
+
+
+
+
+
+
+    <div className="header-wrapper-mobile mobile only">
+
+      <div style = {{
+        display: 'inline-block',
+        width: '50%',
+        backgroundImage: `linear-gradient(to bottom, rgba(${awayColorRgb.r},${awayColorRgb.g},${awayColorRgb.b},0), rgba(${awayColorRgb.r},${awayColorRgb.g},${awayColorRgb.b},.3))`
+      }} className="header-content-left">
+        <Grid rows={2} style={{
+            margin: '0px auto',
+            verticalAlign: 'middle',
+          }}>
+          <Grid.Row style={{
+              paddingBottom: '0px',
+              paddingTop: '5px',
+            }} verticalAlign='middle'>
+            <Grid columns={3} className="header-main-content-grid">
+              <Grid.Column verticalAlign='middle'>
+                <Image centered src={data.getGameByID.awayLogo} className='header-logo'/>
+              </Grid.Column>
+              <Grid.Column verticalAlign="middle" textAlign='center'>
+                <div className="team-name">{data.getGameByID.awayFullName}</div>
+                <div className="team-record">({data.getGameByID.awayRecord})</div>
+              </Grid.Column>
+              <Grid.Column verticalAlign='middle'>
+                <div className="score-text">{data.getGameByID.awayScore}</div>
+              </Grid.Column>
+            </Grid>
+          </Grid.Row>
+          <Grid.Row style={{
+              paddingTop: '5px',
+              paddingBottom: '0px',
+            }} verticalAlign='middle'>
+            <Grid columns={3} textAlign="center" className="header-betting-odds-grid">
+              <Grid.Column style={{
+                  paddingTop: '0px',
+                }}>
+                {data.getGameByID.awayId === data.getGameByID.favoredTeamId ? (
+                  <div className="ml-text">ML: {data.getGameByID.awayML}</div>
+                ):(
+                  <div className="ml-text">ML: +{data.getGameByID.awayML}</div>
+                )}
+              </Grid.Column>
+              <Grid.Column style={{
+                  paddingTop: '0px',
+                }}>
+                {data.getGameByID.awayId === data.getGameByID.favoredTeamId ? (
+                  <div className="ml-text">-{data.getGameByID.spread} ({data.getGameByID.awaySpreadOdds})</div>
+                ):(
+                  <div className="ml-text">+{data.getGameByID.spread} ({data.getGameByID.awaySpreadOdds})</div>
+                )}
+              </Grid.Column>
+              <Grid.Column style={{
+                  paddingTop: '0px',
+                  paddingRight: '10px',
+                }} textAlign='right'>
+                <div className="ou-text">OU:</div>
+              </Grid.Column>
+            </Grid>
+          </Grid.Row>
+        </Grid>
+
+      </div>
+
+      <div style = {{
+        display: 'inline-block',
+        width: '50%',
+        backgroundImage: `linear-gradient(to bottom, rgba(${homeColorRgb.r},${homeColorRgb.g},${homeColorRgb.b},0), rgba(${homeColorRgb.r},${homeColorRgb.g},${homeColorRgb.b},.3))`
+      }} className="header-content-right">
+        <Grid rows={2} style={{
+            margin: '0px auto',
+            verticalAlign: 'middle',
+          }}>
+          <Grid.Row style={{
+              paddingBottom: '0px',
+              paddingTop: '5px',
+            }} verticalAlign='middle'>
+            <Grid columns={3} className="header-main-content-grid">
+              <Grid.Column verticalAlign='middle'>
+                <div className="score-text">{data.getGameByID.homeScore}</div>
+              </Grid.Column>
+              <Grid.Column verticalAlign="middle" textAlign='center'>
+                <div className="team-name">{data.getGameByID.homeFullName}</div>
+                <div className="team-record">({data.getGameByID.homeRecord})</div>
+              </Grid.Column>
+              <Grid.Column verticalAlign='middle'>
+                <Image centered src={data.getGameByID.homeLogo} className='header-logo'/>
+              </Grid.Column>
+            </Grid>
+          </Grid.Row>
+          <Grid.Row style={{
+              paddingTop: '5px',
+              paddingBottom: '0px',
+            }} verticalAlign='middle'>
+              <Grid columns={3} textAlign="center" className="header-betting-odds-grid">
+                <Grid.Column style={{
+                    paddingTop: '0px',
+                    paddingLeft: '10px',
+                  }} textAlign='left'>
+                  <div className="ou-value">{data.getGameByID.overUnder}</div>
+                </Grid.Column>
+                <Grid.Column style={{
+                    padding: '0px',
+                  }}>
+                  {data.getGameByID.homeId === data.getGameByID.favoredTeamId ? (
+                    <div className="ml-text">-{data.getGameByID.spread} ({data.getGameByID.homeSpreadOdds})</div>
+                  ):(
+                    <div className="ml-text">+{data.getGameByID.spread} ({data.getGameByID.homeSpreadOdds})</div>
+                  )}
+                </Grid.Column>
+                <Grid.Column style={{
+                    padding: '0px',
+                  }}>
+                  {data.getGameByID.homeId === data.getGameByID.favoredTeamId ? (
+                    <div className="ml-text">ML: {data.getGameByID.homeML}</div>
+                  ):(
+                    <div className="ml-text">ML: +{data.getGameByID.homeML}</div>
+                  )}
+                </Grid.Column>
+            </Grid>
+          </Grid.Row>
+
+        </Grid>
+      </div>
+
+      <div>
+      </div>
+    </div>
+    </>
   )
 }
 

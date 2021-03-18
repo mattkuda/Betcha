@@ -5,7 +5,11 @@
   "main": "index.js",
   "scripts": {
     "serve": "node index",
-    "start": "nodemon index",
+    "start": "node index.js g",
+    "heroku-postbuild": "cd client && npm install --only=dev && npm install && npm run build",
+    "client": "cd client && npm run start",
+    "server": "node index.js",
+    "dev": "concurrently --kill-others-on-fail \"npm run server\" \"npm run client\"",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -14,8 +18,12 @@
   "dependencies": {
     "@google-cloud/storage": "^5.7.4",
     "apollo-server": "^2.19.0",
+    "apollo-server-express": "^2.21.1",
     "bcryptjs": "^2.4.3",
+    "concurrently": "^6.0.0",
+    "cors": "^2.8.5",
     "dotenv": "^8.2.0",
+    "express": "^4.17.1",
     "firebase": "^8.2.9",
     "fs": "0.0.1-security",
     "graphql": "^15.4.0",

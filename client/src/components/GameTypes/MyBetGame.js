@@ -62,15 +62,27 @@ function Game(props) {
                       color: 'white',
                       textAlign: 'auto',
                       }}>
-                      {props.betType === "AWAY" ?
-                        (props.gameId.awayAbbreviation) : (
-                        props.gameId.homeAbbreviation
+                      {props.betType === "OVER" || props.betType === "UNDER" ? (
+                        props.betType
+                      ) : (
+                        <>
+                        {props.betType === "AWAY" ?
+                          (props.gameId.awayAbbreviation) : (
+                            props.gameId.homeAbbreviation
+                          )}
+                        </>
                       )}
                       <br></br>
                       {props.betAmount === "0" ? (
                       "ML"
                     ) : (
-                      myBetAmountString()
+                      <>
+                        {props.betType !== "OVER" && props.betType !== "UNDER" ? (
+                          myBetAmountString()
+                        ):(
+                          props.betAmount
+                        )}
+                      </>
                     )} {props.betOdds}</div>
                   </Grid.Column>
                   <Grid.Column>

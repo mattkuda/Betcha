@@ -468,6 +468,9 @@ export const FETCH_NCAABMENS_PREGAMES = gql`
       awayFullName
       homeRecord
       awayRecord
+      homeId
+      awayId
+      favoredTeamId
       awayLogo
       homeLogo
       awayAbbreviation
@@ -501,6 +504,9 @@ export const FETCH_NCAABMENS_LIVEGAMES = gql`
       awayFullName
       homeRecord
       awayRecord
+      homeId
+      awayId
+      favoredTeamId
       awayLogo
       homeLogo
       awayAbbreviation
@@ -540,6 +546,9 @@ export const FETCH_NCAABMENS_POSTGAMES = gql`
       awayFullName
       homeRecord
       awayRecord
+      homeId
+      awayId
+      favoredTeamId
       homeLogo
       awayLogo
       homeAbbreviation
@@ -607,6 +616,9 @@ export const FETCH_NBA_PREGAMES = gql`
       awayFullName
       homeRecord
       awayRecord
+      homeId
+      awayId
+      favoredTeamId
       awayLogo
       homeLogo
       awayAbbreviation
@@ -636,6 +648,9 @@ export const FETCH_NBA_LIVEGAMES = gql`
       awayFullName
       homeRecord
       awayRecord
+      homeId
+      awayId
+      favoredTeamId
       awayLogo
       homeLogo
       awayAbbreviation
@@ -673,6 +688,9 @@ export const FETCH_NBA_POSTGAMES = gql`
       awayFullName
       homeRecord
       awayRecord
+      homeId
+      awayId
+      favoredTeamId
       homeLogo
       awayLogo
       homeAbbreviation
@@ -694,6 +712,9 @@ export const FETCH_NBA_GAME = gql`
       awayFullName
       homeRecord
       awayRecord
+      homeId
+      awayId
+      favoredTeamId
       homeLogo
       awayLogo
       homeAbbreviation
@@ -721,6 +742,9 @@ export const FETCH_NHL_PREGAMES = gql`
       awayFullName
       homeRecord
       awayRecord
+      homeId
+      awayId
+      favoredTeamId
       awayLogo
       homeLogo
       awayAbbreviation
@@ -750,6 +774,9 @@ export const FETCH_NHL_LIVEGAMES = gql`
       awayFullName
       homeRecord
       awayRecord
+      homeId
+      awayId
+      favoredTeamId
       awayLogo
       homeLogo
       awayAbbreviation
@@ -787,6 +814,9 @@ export const FETCH_NHL_POSTGAMES = gql`
       awayFullName
       homeRecord
       awayRecord
+      homeId
+      awayId
+      favoredTeamId
       homeLogo
       awayLogo
       homeAbbreviation
@@ -814,6 +844,9 @@ export const FETCH_PREMIER_LEAGUE_PREGAMES = gql`
       awayFullName
       homeRecord
       awayRecord
+      homeId
+      awayId
+      favoredTeamId
       awayLogo
       homeLogo
       awayAbbreviation
@@ -843,6 +876,9 @@ export const FETCH_PREMIER_LEAGUE_LIVEGAMES = gql`
       awayFullName
       homeRecord
       awayRecord
+      homeId
+      awayId
+      favoredTeamId
       awayLogo
       homeLogo
       awayAbbreviation
@@ -880,6 +916,9 @@ export const FETCH_PREMIER_LEAGUE_POSTGAMES = gql`
       awayFullName
       homeRecord
       awayRecord
+      homeId
+      awayId
+      favoredTeamId
       homeLogo
       awayLogo
       homeAbbreviation
@@ -907,6 +946,9 @@ export const FETCH_CHAMPIONS_LEAGUE_PREGAMES = gql`
       awayFullName
       homeRecord
       awayRecord
+      homeId
+      awayId
+      favoredTeamId
       awayLogo
       homeLogo
       awayAbbreviation
@@ -936,6 +978,9 @@ export const FETCH_CHAMPIONS_LEAGUE_LIVEGAMES = gql`
       awayFullName
       homeRecord
       awayRecord
+      homeId
+      awayId
+      favoredTeamId
       awayLogo
       homeLogo
       awayAbbreviation
@@ -973,6 +1018,9 @@ export const FETCH_CHAMPIONS_LEAGUE_POSTGAMES = gql`
       awayFullName
       homeRecord
       awayRecord
+      homeId
+      awayId
+      favoredTeamId
       homeLogo
       awayLogo
       homeAbbreviation

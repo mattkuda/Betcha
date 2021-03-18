@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useQuery } from "@apollo/react-hooks";
 import { Link } from 'react-router-dom';
-import { Menu, Segment, Sidebar } from 'semantic-ui-react';
+import { Menu, Segment, Sidebar, Divider } from 'semantic-ui-react';
 import { FETCH_ACTIVE_LEAGUES_QUERY } from "../util/graphql";
 
 function ScoreboardNav() {
@@ -249,6 +249,8 @@ function ScoreboardNav() {
           )
         }
       </Menu>
+
+      <Divider className="mobile only"/>
 
     </>
 

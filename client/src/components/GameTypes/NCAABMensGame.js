@@ -51,7 +51,7 @@ class NCAABMensGame extends Component {
                   }/>
                   </Grid.Column>
                   <Grid.Column>
-                    <p>{this.props.broadcasts}</p>
+                    <p>{this.props.broadcasts[0]}</p>
                   </Grid.Column>
                   <Grid.Column>
                     <Popup content={this.props.homeFullName} position='bottom center' size='tiny' trigger={
@@ -64,25 +64,65 @@ class NCAABMensGame extends Component {
                 <Grid columns={3}>
                   <Grid.Column>
                     <div>
-                      {this.props.awayML > 0 ? (
-                        <p>+{this.props.awayML}</p>
-                      ): (
-                        <p>{this.props.awayML}</p>
-                        )
+                      {this.props.awayML !== 0 ? (
+
+                        <>
+                        {
+                          this.props.awayML > 0 ? (
+                            <p>+{this.props.awayML}</p>
+                          ): (
+                            <p>{this.props.awayML}</p>
+                          )
+                        }
+                        </>
+                    ) : (<></>)
                       }
                     </div>
                   </Grid.Column>
                   <Grid.Column>
-                    <p>{this.props.spread}</p>
-                    <p>O/U: {this.props.overUnder}</p>
+                    <div>
+                      {this.props.spread > 0 ? (
+                        <>
+                        {
+                          this.props.homeId === this.props.favoredTeamId ? (
+                            <p>{this.props.homeAbbreviation} -{this.props.spread}</p>
+                          ) : (
+                            <p>{this.props.awayAbbreviation} -{this.props.spread}</p>
+                          )
+                        }
+                        </>
+                      ):(
+                        <>
+                        {
+                          this.props.spread === 0 ? (
+                            <p>PK</p>
+                          ):(
+                            <></>
+                          )
+                        }
+                        </>
+                    )}
+                    </div>
+                    <div>
+                      {this.props.overUnder !== 0 ? (
+                        <p>O/U: {this.props.overUnder}</p>
+                    ):(<></>)}
+                    </div>
                   </Grid.Column>
                   <Grid.Column>
                     <div>
-                      {this.props.homeML > 0 ? (
-                        <p>+{this.props.homeML}</p>
-                      ): (
-                        <p>{this.props.homeML}</p>
-                        )
+                      {this.props.homeML !== 0 ? (
+
+                        <>
+                        {
+                          this.props.homeML > 0 ? (
+                            <p>+{this.props.homeML}</p>
+                          ): (
+                            <p>{this.props.homeML}</p>
+                          )
+                        }
+                        </>
+                    ) : (<></>)
                       }
                     </div>
                   </Grid.Column>

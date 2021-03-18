@@ -3,7 +3,7 @@ import { useQuery } from "@apollo/react-hooks";
 import { Link } from "react-router-dom";
 import gql from "graphql-tag";
 import MyBetGame from "../components/GameTypes/MyBetGame";
-import { Grid } from "semantic-ui-react";
+import { Grid, Header, Segment } from "semantic-ui-react";
 import { AuthContext } from "../context/auth";
 //import { FETCH_ACTIVE_LEAGUES_QUERY } from "../util/graphql";
 
@@ -42,34 +42,47 @@ function MyBets() {
     if (error) return `Error! ${error.message}`;
 
     return (
-      <div>
-        <h1>My Bets</h1>
-        <Grid columns="two">
-          <Grid.Row>
-            <Fragment>
-              {user ? (
-                data.getUserPosts.filter((post) => post.gameArray).map((post) => (
-                  <Grid.Column>
-                    {
-                      removeDuplicateGames(post.gameArray).map((game) => (
-                        <Link
-                          to={`/scoreboard/${game.gameId.league}/${game.gameId.gameId}`}
-                        >
-                          <span className="card" style={{ display: "block" }}>
-                            <MyBetGame key={game.gameId.gameId} {...game} />
-                          </span>
-                        </Link>
-                      ))
-                    }
-                  </Grid.Column>
-                ))
-              ) : (
-                <div></div>
-              )}
-            </Fragment>
-          </Grid.Row>
-        </Grid>
+      <div style = {{
+          marginTop: '40px',
+        }}>
 
+        <Header as='h3'>
+          <Header.Content>My Bets</Header.Content>
+        </Header>
+
+        {data.getUserPosts.length > 0 ? (
+        <>
+
+          <Segment raised>
+            <Grid stackable columns="two">
+              <Grid.Row>
+                <Fragment>
+                  {user ? (
+                    data.getUserPosts.filter((post) => post.gameArray).map((post) => (
+                      <Grid.Column>
+                        {
+                          removeDuplicateGames(post.gameArray).map((game) => (
+                            <Link
+                              to={`/scoreboard/${game.gameId.league}/${game.gameId.gameId}`}
+                            >
+                              <span className="card" style={{ display: "block" }}>
+                                <MyBetGame key={game.gameId.gameId} {...game} />
+                              </span>
+                            </Link>
+                          ))
+                        }
+                      </Grid.Column>
+                    ))
+                  ) : (
+                    <p>Log in to see your bets!</p>
+                  )}
+
+                </Fragment>
+              </Grid.Row>
+            </Grid>
+          </Segment>
+        </>
+    ) : (<p>Click the plus sign on the menu bar to share a bet!</p>)}
       </div>
     )
   }

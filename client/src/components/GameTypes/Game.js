@@ -32,27 +32,83 @@ function Game(props) {
               <Grid.Row>
                 <Grid columns={3}>
                   <Grid.Column>
-                  <p>{props.awayAbbreviation}</p>
+                  <Popup content={props.awayFullName} position='bottom center' size='tiny' trigger={
+                    <p>{props.awayAbbreviation} ({props.awayRecord})</p>
+                  }/>
                   </Grid.Column>
                   <Grid.Column>
-                    <p>{props.broadcasts}</p>
+                    <p>{props.broadcasts[0]}</p>
                   </Grid.Column>
                   <Grid.Column>
-                    <p>{props.homeAbbreviation}</p>
+                    <Popup content={props.homeFullName} position='bottom center' size='tiny' trigger={
+                        <p>{props.homeAbbreviation} ({props.homeRecord})</p>
+                    }/>
                   </Grid.Column>
                 </Grid>
               </Grid.Row>
               <Grid.Row>
                 <Grid columns={3}>
                   <Grid.Column>
-                    <p>{props.awayRecord}</p>
+                    <div>
+                      {props.awayML !== 0 ? (
+
+                        <>
+                        {
+                          props.awayML > 0 ? (
+                            <p>+{props.awayML}</p>
+                          ): (
+                            <p>{props.awayML}</p>
+                          )
+                        }
+                        </>
+                    ) : (<></>)
+                      }
+                    </div>
                   </Grid.Column>
                   <Grid.Column>
-                    <p>{props.spread}</p>
-                    <p>{props.overUnder}</p>
+                    <p>{props.spread > 0 ? (
+                        <>
+                        {
+                          props.homeId === props.favoredTeamId ? (
+                            <p>{props.homeAbbreviation} -{props.spread}</p>
+                          ) : (
+                            <p>{props.awayAbbreviation} -{props.spread}</p>
+                          )
+                        }
+                        </>
+                      ):(
+                        <>
+                        {
+                          props.spread === 0 ? (
+                            <p>PK</p>
+                          ):(
+                            <></>
+                          )
+                        }
+                        </>
+                      )}</p>
+                      <div>
+                        {props.overUnder !== -1 ? (
+                          <p>O/U: {props.overUnder}</p>
+                      ):(<></>)}
+                      </div>
                   </Grid.Column>
                   <Grid.Column>
-                    <p>{props.homeRecord}</p>
+                    <div>
+                      {props.homeML !== 0 ? (
+
+                        <>
+                        {
+                          props.homeML > 0 ? (
+                            <p>+{props.homeML}</p>
+                          ): (
+                            <p>{props.homeML}</p>
+                          )
+                        }
+                        </>
+                    ) : (<></>)
+                      }
+                    </div>
                   </Grid.Column>
                 </Grid>
               </Grid.Row>
