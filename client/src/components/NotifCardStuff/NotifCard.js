@@ -38,7 +38,7 @@ function NotifCard({
           <div className="pc-header">
             <div>
               <img
-                className="pc-img"
+                className="pc-img-notif"
                 alt="profile-pic"
                 src={sender.profilePicture}
               ></img>
@@ -90,7 +90,7 @@ function NotifCard({
           <div className="pc-header">
             <div>
               <img
-                className="pc-img"
+                className="pc-img-notif"
                 alt="profile-pic"
                 src={sender.profilePicture}
               ></img>
@@ -137,7 +137,7 @@ function NotifCard({
           <div className="pc-header">
             <div>
               <img
-                className="pc-img"
+                className="pc-img-notif"
                 alt="profile-pic"
                 src={sender.profilePicture}
               ></img>

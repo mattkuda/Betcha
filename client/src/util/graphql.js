@@ -28,6 +28,7 @@ export const FETCH_USERS_WHO_POSTED_ABOUT_GAME = gql`
         betAmount
         betType
         gameId {
+          id
           gameId
           homeAbbreviation
           awayAbbreviation

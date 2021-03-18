@@ -9,12 +9,19 @@ import "./FriendLinker.css"
 
 
 function storeOdds(post, odds) {
+
+  let gameOdds = {
+    betOdds: post.betOdds,
+  }
+
   for (const game of post.gameArray) {
-    odds.push({
-      betOdds: post.betOdds,
-      betType: game.betType,
-      betAmount: game.betAmount,
-    });
+
+    gameOdds.betType = game.betType;
+    gameOdds.betAmount = game.betAmount;
+
+
+    console.log(gameOdds);
+    odds.push(gameOdds);
   }
 }
 
@@ -35,10 +42,10 @@ function FriendLinker(props) {
     pollInterval: 30000,
   });
 
-  const myOdds = [];
+  let myOdds = [];
 
   if (loading) return "Loading...";
-  if (error) return error;
+  if (error) return "Error occured";
 
   return (
     <div>
@@ -61,22 +68,30 @@ function FriendLinker(props) {
                               {post.gameArray.map(game => (
                                 game.gameId.gameId === myGameId ? (
                                   <>
-                                    {game.betType === "HOME" ? (
+                                    {game.betType === "OVER" || game.betType === "UNDER" ? (
                                       <>
-                                        {game.gameId.homeAbbreviation}
+                                        {game.betType === "OVER" ? "O" : "U"}
                                       </>
                                     ):(
                                       <>
-                                        {game.gameId.awayAbbreviation}
+                                        {game.betType === "HOME" ? (
+                                          <>
+                                            {game.gameId.homeAbbreviation}
+                                          </>
+                                        ):(
+                                          <>
+                                            {game.gameId.awayAbbreviation}
+                                          </>
+                                        )}
                                       </>
                                     )}
                                     {game.betAmount === "0" ? (
-                                      " ML"
+                                      <p> ML</p>
                                     ):(
                                       <>
                                         {' '}{game.betAmount}
                                       </>
-                                    )} ({findMatchingOdds(game.betType, game.betAmount, myOdds)})
+                                  )} ({findMatchingOdds(game.betType, game.betAmount, myOdds)})
                                   </>
                                 ):(<></>)
                               ))}

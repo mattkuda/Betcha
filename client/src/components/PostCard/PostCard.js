@@ -37,7 +37,7 @@ function PostCard({
       <Card
         fluid
         floated="right"
-        rasied="false"
+        raised="false"
         style={{ width: "100%" }}
         as={Link}
         to={`/posts/${id}`}

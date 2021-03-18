@@ -2,9 +2,9 @@
   color: #444444;
   font-size: 18px;
   font-weight: normal;
-  display: inline-block; 
-  padding: 10px; 
-  top: 0px; 
+  display: inline-block;
+  padding: 10px;
+  top: 0px;
   width: calc(100% - 150px);
   position: relative ;
 }
@@ -14,7 +14,7 @@
   color: #444444;
   font-size: 18px;
   font-weight: bold;
-  padding-top: 10px; 
+  padding-top: 10px;
   position: relative ;
 }
 
@@ -22,26 +22,26 @@
   color: #444444;
   font-size: 18px;
   font-style: italic;
-  padding-top: 5px; 
+  padding-top: 5px;
   position: relative ;
 }
 
 .pc-betBody{
   color: #444444;
   font-size: 18px;
-  padding-top: 10px; 
+  padding-top: 10px;
   position: relative ;
 }
 
 .pc-buttons{
   font-size: 18px;
-  padding-top: 30px; 
+  padding-top: 30px;
   position: relative ;
 }
 
 
-.pc-img {
-  display: inline-block; 
+.pc-img-notif {
+  display: inline-block;
   padding: 10px 10px;
   position: relative;
   border-radius: 50%;
@@ -52,7 +52,7 @@
 }
 
 .pc-icon {
-  display: inline-block; 
+  display: inline-block;
   padding: 10px 10px;
   position: relative;
   border-radius: 50%;
@@ -76,6 +76,3 @@
   display: inline-block;
   color: #ff3d3d !important
 }
-
-
-
