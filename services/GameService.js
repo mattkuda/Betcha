@@ -15,7 +15,7 @@ const fetch = require("node-fetch");
 
 
 //define constants here
-const LIVE_TICK_INTERVAL = 30000;   //30 seconds
+const LIVE_TICK_INTERVAL = 10000;   //10 seconds
 const TOTAL_PREGAME_DAYS = 16;
 const ONE_DAY_IN_MS = 86400000;   //24 hrs
 const TODAYS_GAMES_ODDS_UPDATE_INTERVAL = 1800000  //30 mins
