@@ -18,6 +18,7 @@ import Profile from "./pages/Profile";
 import TestPage from "./pages/TestPage";
 import NotificationsPage from "./pages/NotificationsPage";
 import SinglePost from "./pages/SinglePost";
+import SingleReaction from "./pages/SingleReaction";
 import ScoreboardNav from "./components/ScoreboardNav";
 import ScoreboardHome from "./pages/ScoreboardHome";
 import LeagueScoreboard from "./pages/LeagueScoreboard";
@@ -42,6 +43,7 @@ function App() {
             <AuthRoute exact path="/login" component={Login} />
             <AuthRoute exact path="/register" component={Register} />
             <Route exact path="/posts/:postId" component={SinglePost} />
+            <Route exact path="/reacts/:postId" component={SingleReaction} />
             <Route exact path="/user/:usernameId" component={Profile} />
             <Route exact path="/test" component={TestPage} />
             <Route exact path="/notifications" component={NotificationsPage} />

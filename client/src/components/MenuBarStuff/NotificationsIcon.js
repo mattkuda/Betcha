@@ -43,13 +43,13 @@ function NotificationsIcon({ user }) {
           {notifications.length > 0 ? (
             <>
               <Icon name="bell outline" size="large" />
-              <Label
+              {/* <Label
                 color="red"
                 floating
                 style={{ padding: "2px 3px", top: "10px", left: "47px" }}
               >
                 {notifications.length}
-              </Label>
+              </Label> */}
             </>
           ) : (
             <>
@@ -68,14 +68,14 @@ function NotificationsIcon({ user }) {
         <>
           {notifications.length > 0 ? (
             <>
-              <Icon name="bell outline" size="large" />
-              <Label
+              <Icon name="bell outline"  />
+              {/* <Label
                 color="red"
                 floating
                 style={{ padding: "2px 3px", top: "10px", left: "47px" }}
               >
                 {notifications.length}
-              </Label>
+              </Label> */}
             </>
           ) : (
             <>

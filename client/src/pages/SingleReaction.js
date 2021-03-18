@@ -1,6 +1,6 @@
 import React, { useContext, useState, useRef } from "react";
 import gql from "graphql-tag";
-import { useForm } from '../util/hooks';
+import { useForm } from "../util/hooks";
 import { useQuery, useMutation } from "@apollo/react-hooks";
 import {
   Grid,
@@ -12,6 +12,7 @@ import {
   Label,
 } from "semantic-ui-react";
 import moment from "moment";
+import { Link } from "react-router-dom";
 
 import LikeButton from "../components/Buttons/LikeButton";
 import { AuthContext } from "../context/auth";
@@ -19,6 +20,10 @@ import DeleteButton from "../components/Buttons/DeleteButton";
 import MyPopup from "../util/MyPopup";
 import { betDescFormat } from "../util/Extensions/betDescFormat";
 import { betTimeFormat } from "../util/Extensions/betTimeFormat";
+import { reactionGameDescFormat } from "../util/Extensions/liveGameDescFormat";
+import { contextualizeBet } from "../util/Extensions/liveGameDescFormat";
+
+import './SingleReactionPage.css';
 
 function SingleReaction(props) {
   const postId = props.match.params.postId;
@@ -26,8 +31,23 @@ function SingleReaction(props) {
 
   const commentInputRef = useRef(null);
 
+  function findIcon(input) {
+    switch (input) {
+      case "basketball":
+        return "basketball ball";
+      case "football":
+        return "football ball";
+      case "hockey":
+        return "hockey puck";
+      case "soccer":
+        return "soccer";
+      default:
+        return "talk";
+    }
+  }
+
   const { values } = useForm(createNotifCallback, {
-    receiverId: ''
+    receiverId: "",
   });
 
   const { data: { getPost } = {} } = useQuery(FETCH_POST_QUERY, {
@@ -37,10 +57,13 @@ function SingleReaction(props) {
   });
 
   ///YOU ARE BUILDING NOTIFS FOR COMMENTS
-  
 
   const [createNotification] = useMutation(CREATE_NOTIFICATION_MUTATION, {
-    variables: { objectType: "comment", objectId: postId, receiver: values.receiverId },
+    variables: {
+      objectType: "comment",
+      objectId: postId,
+      receiver: values.receiverId,
+    },
   });
 
   const [comment, setComment] = useState("");
@@ -75,7 +98,6 @@ function SingleReaction(props) {
     props.history.push("/");
   }
 
- 
   //Depends on whether we have data from query yet
   let postMarkup;
 
@@ -83,48 +105,101 @@ function SingleReaction(props) {
     postMarkup = <p>Loading post...</p>;
   } else {
     const {
-      id, body, user, playId, createdAt, post, comments, commentCount, likeCount, likes, username
+      id,
+      body,
+      user,
+      playId,
+      createdAt,
+      post,
+      comments,
+      commentCount,
+      likeCount,
+      likes,
+      username,
     } = getPost;
-
-    const gameData = playId.game;
 
     values.receiverId = getPost.user.id;
 
-    console.log("the recID is: ");
-  
+    console.log("The post is: " + JSON.stringify(post));
+    const betData =
+      post != null
+        ? post.gameArray.find((o) => o.gameId.gameId === playId.game.gameId)
+        : null;
+
+    const gameData = playId.game;
+
     postMarkup = (
       <Grid>
         <Grid.Row>
           <Grid.Column width={2}>
-            <Image
-              src={`${user.profilePicture}`}
-              size="small"
-              float="right"
-            />
+            <Image src={`${user.profilePicture}`} size="small" float="right" />
           </Grid.Column>
           <Grid.Column width={10}>
             <Card fluid>
               <Card.Content>
                 <Card.Header>{username}</Card.Header>
                 <Card.Meta>{moment(createdAt).fromNow()}</Card.Meta>
-                
-              {gameData.gameArray && gameData.gameArray.map((game) => (
-                   
-              <div>
-              <div className="pc-bet">
-                {betDescFormat(gameData.betType, gameData.betAmount, gameData.gameId)} 
-                <div
-                  style={{
-                    fontWeight: "normal",
-                    fontStyle: "italic",
-                  }}
-                >
-                  {gameData.gameId.awayAbbreviation} @ {gameData.gameId.homeAbbreviation},{" "}
-                  {betTimeFormat(gameData.gameId.startTime)}
-                </div>
-              </div></div>))
-            }
-                <Card.Description>This is the body: {body}</Card.Description>
+
+                {post ? (
+                  <>
+                    <div className="rc-header">
+                      
+                      <div className="rc-betBody">{body}</div>
+                      <div className="rc-reactionScore">
+                        has the bet {contextualizeBet(betData)}
+                      </div>
+                      <div
+                        style={{
+                          border: "solid #e3e3e3 2px",
+                          padding: "10px",
+                          marginTop: "10px",
+                        }}
+                      >
+                        <div className="rc-betBody">
+                          <Icon name={findIcon(gameData.sport)} />
+                          <i>{playId.description}</i>
+                        </div>
+                        <div className="rc-reactionScore">
+                          <i>
+                            {reactionGameDescFormat(
+                              playId.game.awayAbbreviation,
+                              playId.game.homeAbbreviation,
+                              playId.specificData
+                            )}
+                          </i>
+                        </div>
+                      </div>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <div className="rc-header">
+                      
+                      <div className="rc-betBody">{body}</div>
+                      <div
+                        style={{
+                          border: "solid #e3e3e3 2px",
+                          padding: "10px",
+                          marginTop: "10px",
+                        }}
+                      >
+                        <div className="rc-betBody">
+                          <Icon name={findIcon(gameData.sport)} />
+                          <i>{playId.description}</i>
+                        </div>
+                        <div className="rc-reactionScore">
+                          <i>
+                            {reactionGameDescFormat(
+                              playId.game.awayAbbreviation,
+                              playId.game.homeAbbreviation,
+                              playId.specificData
+                            )}
+                          </i>
+                        </div>
+                      </div>
+                    </div>
+                  </>
+                )}
               </Card.Content>
               <hr />
               <Card.Content extra>
@@ -245,6 +320,8 @@ const FETCH_POST_QUERY = gql`
       }
       playId {
         game {
+          gameId
+          sport
           homeFullName
           awayFullName
           stateDetails
@@ -264,6 +341,14 @@ const FETCH_POST_QUERY = gql`
           overUnder
         }
         description
+        specificData {
+          homeScore
+          awayScore
+          time
+          half
+          quarter
+          possession
+        }
       }
       gameArray {
         gameId {
@@ -307,7 +392,6 @@ const FETCH_POST_QUERY = gql`
         createdAt
         body
       }
-      
     }
   }
 `;

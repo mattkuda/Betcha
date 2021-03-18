@@ -24,23 +24,17 @@ function NotificationsPage(props) {
   const [followUser] = useMutation(READ_NOTIFICATIONS_MUTATION, {
     variables: { userId: user.id },
   });
-
-  function testFunc(temp){
-    console.log(temp)
-  }
-
-  React.useEffect(() => {
-    testFunc("Uo");
-  }, []);
-
   
-
   const { data: { getUserNotifications: notifications } = {} } = useQuery(
     FETCH_USER_NOTIFICATIONS_QUERY,
     {
       variables: { userId: user.id },
     }
   );
+
+  // const { data: { readNotifications: notifications } = {} } = useMutation(READ_NOTIFICATIONS_MUTATION, {
+  //   variables: { userId: user.id },
+  // });
 
   console.log("The get user notifs are " + JSON.stringify(notifications));
   let userMarkup;
@@ -54,8 +48,7 @@ function NotificationsPage(props) {
       <>
         <Grid>
         <Grid.Row className="page-title">
-            <h1>Notifications 👷🏾‍♂️</h1>
-            <h4>Still need to build "readAt" functionality</h4>
+            <h1>Notifications</h1>
           </Grid.Row>
           <Grid.Row>
             {notifications &&
@@ -77,7 +70,6 @@ function NotificationsPage(props) {
               ))}
           </Grid.Row>
         </Grid>
-        test
       </>
     );
   }
@@ -92,6 +84,8 @@ const FETCH_USER_NOTIFICATIONS_QUERY = gql`
       sender {
         id
         name
+        username
+        profilePicture
       }
       objectType
       createdAt
@@ -107,6 +101,8 @@ const READ_NOTIFICATIONS_MUTATION = gql`
       sender {
         id
         name
+        username
+        profilePicture
       }
       objectType
       createdAt

@@ -48,19 +48,12 @@ function ReactionCard({
     }
   }
 
-  console.log("The Post is: " + JSON.stringify(post));
-  console.log("The playId.game is: " + JSON.stringify(playId));
-  
   const betData =
     post != null
       ? post.gameArray.find((o) => o.gameId.gameId === playId.game.gameId)
       : null;
 
   const gameData = playId.game;
-
-  console.log("gamedata alert" + JSON.stringify(gameData));
-  console.log("betdata alert" + JSON.stringify(betData));
-  console.log("user alert" + JSON.stringify(user));
 
   let PostGameMarkup =
     //If the user ahs posted about the game
@@ -71,11 +64,13 @@ function ReactionCard({
             <div
               style={{ display: "inline-block", width: "auto", height: "100%" }}
             >
+            <div>
               <img
                 className="pc-img"
                 alt="profile-pic"
                 src={`${user.profilePicture}`}
               ></img>
+              </div>
             </div>
             <div className="pc-header">
               <Link to={`/user/${user.username}`}>
@@ -117,14 +112,13 @@ function ReactionCard({
               </div>
 
               <div className="pc-buttons">
-                <Button onClick={(e) => console.log(userME)}>userME</Button>
                 <LikeButton
                   user={userME}
                   receiver={user.id}
                   post={{ id, likes, likeCount }}
                 />
                 <MyPopup content="Commment on post" inverted>
-                  <Button labelPosition="right" as={Link} to={`/posts/${id}`}>
+                  <Button labelPosition="right" as={Link} to={`/reacts/${id}`}>
                     <Button color="blue" basic>
                       <Icon name="comments" />
                     </Button>
@@ -155,13 +149,14 @@ function ReactionCard({
         <Card fluid floated="right" style={{ width: "100%" }}>
           <Card.Content>
             <div
-              style={{ display: "inline-block", width: "auto", height: "100%" }}
+              style={{ display: "inline-block", width: "auto"}}
             >
+            <div>
               <img
                 className="pc-img"
                 alt="profile-pic"
                 src={`${user.profilePicture}`}
-              ></img>
+              ></img></div>
             </div>
             <div className="pc-header">
               <Link to={`/user/${user.username}`}>
@@ -200,14 +195,13 @@ function ReactionCard({
               </div>
 
               <div className="pc-buttons">
-                <Button onClick={(e) => console.log(userME)}>userME</Button>
                 <LikeButton
                   user={userME}
                   receiver={user.id}
                   post={{ id, likes, likeCount }}
                 />
                 <MyPopup content="Commment on post" inverted>
-                  <Button labelPosition="right" as={Link} to={`/posts/${id}`}>
+                  <Button labelPosition="right" as={Link} to={`/reacts/${id}`}>
                     <Button color="blue" basic>
                       <Icon name="comments" />
                     </Button>

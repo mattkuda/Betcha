@@ -3,7 +3,6 @@ import { Button, Input, Form, Transition } from "semantic-ui-react";
 import gql from "graphql-tag";
 import { useMutation } from "@apollo/react-hooks";
 import { storage } from "../../firebase";
-import { Croppie } from "croppie";
 
 import { useForm } from "../../util/hooks";
 
@@ -32,22 +31,6 @@ function EditInfoModal(props) {
     }
   };
 
-  const croppie = document.getElementById("croppie");
-  const c = new Croppie(croppie, croppieOptions);
-
-  const onFileUpload = (e) => {
-    this.setState({ isFileUploaded: true }, () => {
-      const reader = new FileReader();
-      const file = this.file.current.files[0];
-      reader.readAsDataURL(file);
-      reader.onload = () => {
-        c.bind({ url: reader.result });
-      };
-      reader.onerror = function(error) {
-        console.log("Error: ", error);
-      };
-    });
-  };
 
   const [updateInfo, { error }] = useMutation(UPDATE_INFO_MUTATION, {
     variables: values,
@@ -66,15 +49,6 @@ function EditInfoModal(props) {
   const [progress, setProgress] = useState(0);
 
   const handleChange = (e) => {
-    const reader = new FileReader();
-    const file = this.file.current.files[0];
-    reader.readAsDataURL(file);
-      reader.onload = () => {
-        c.bind({ url: reader.result });
-      };
-      reader.onerror = function(error) {
-        console.log("Error: ", error);
-      };
     if (e.target.files[0] && e.target.files[0].size < 5242880) {
       setImage(e.target.files[0]);
     } else {
@@ -162,7 +136,6 @@ function EditInfoModal(props) {
 
   return (
     <div>
-    <div id="croppie"></div>
       <input
         type="file"
         onChange={handleChange}

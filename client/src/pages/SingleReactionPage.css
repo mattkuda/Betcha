@@ -1,16 +1,16 @@
-.pc-header{
+.rc-header{
   color: #444444;
   font-size: 18px;
   font-weight: normal;
   display: inline-block; 
   padding: 10px; 
   top: 0px; 
-  width: calc(100% - 150px);
+  width: 100%;
   position: relative ;
 }
 
 
-.pc-bet{
+.rc-bet{
   color: #444444;
   font-size: 18px;
   font-weight: bold;
@@ -18,7 +18,7 @@
   position: relative ;
 }
 
-.pc-game{
+.rc-game{
   color: #444444;
   font-size: 18px;
   font-style: italic;
@@ -26,28 +26,28 @@
   position: relative ;
 }
 
-.pc-betBody{
+.rc-betBody{
   color: #444444;
   font-size: 18px;
   padding-top: 10px; 
   position: relative ;
 }
 
-.pc-reactionScore{
+.rc-reactionScore{
   color: #969696;
   font-size: 12px;
   padding-top: 4px; 
   position: relative ;
 }
 
-.pc-buttons{
+.rc-buttons{
   font-size: 18px;
   padding-top: 30px; 
   position: relative ;
 }
 
 
-.pc-img {
+.rc-img {
   display: inline-block; 
   padding: 10px 10px;
   position: relative;
@@ -55,7 +55,9 @@
   width: 120px;
   text-align: center;
   top: -75px;
-
+  height: 100%;
+  background-size: cover; 
+  background-position: 50%
 }
 
 .win{

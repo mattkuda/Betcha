@@ -93,7 +93,6 @@ function PostCard({
 
             <div className="pc-betBody">{body}</div>
             <div className="pc-buttons">
-              <Button onClick={(e) => console.log(userME)}>userME</Button>
               <LikeButton
                 user={userME}
                 receiver={user.id}

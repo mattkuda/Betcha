@@ -7,14 +7,6 @@ import MyPopup from "../../util/MyPopup";
 import "./NotifCard.css";
 
 import { AuthContext } from "../../context/auth";
-import LikeButton from "../Buttons/LikeButton";
-import DeleteButton from "../Buttons/DeleteButton";
-
-import { betDescFormat } from "../../util/Extensions/betDescFormat";
-import { betTimeFormat } from "../../util/Extensions/betTimeFormat";
-import { liveGameDescFormat } from "../../util/Extensions/liveGameDescFormat";
-import { postGameDescFormat } from "../../util/Extensions/postGameDescFormal";
-import { determineBetResult } from "../../util/Extensions/betCalculations";
 
 function NotifCard({
   notification: { createdAt, id, sender, readAt, objectType, objectId } = {},
@@ -48,7 +40,7 @@ function NotifCard({
               <img
                 className="pc-img"
                 alt="profile-pic"
-                src="https://react.semantic-ui.com/images/avatar/large/matthew.png"
+                src={sender.profilePicture}
               ></img>
               <div
                 style={{
@@ -100,7 +92,7 @@ function NotifCard({
               <img
                 className="pc-img"
                 alt="profile-pic"
-                src="https://react.semantic-ui.com/images/avatar/large/matthew.png"
+                src={sender.profilePicture}
               ></img>
               <div
                 style={{
@@ -147,7 +139,7 @@ function NotifCard({
               <img
                 className="pc-img"
                 alt="profile-pic"
-                src="https://react.semantic-ui.com/images/avatar/large/matthew.png"
+                src={sender.profilePicture}
               ></img>
               <div
                 style={{

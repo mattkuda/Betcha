@@ -130,6 +130,7 @@ module.exports = {
 
     async readNotifications(_, {}, context) {
       try {
+        console.log("111")
         const user = checkAuth(context);
 
         const notifications = await Notification.find({
@@ -138,14 +139,19 @@ module.exports = {
         }).sort({
           createdAt: -1,
         });
+        console.log("222")
 
         var timestamp = new Date();
         for(const notif in notifications){
           if(notif.readAt == ""){
             notif.readAt = timestamp;
             await notif.save();
+            console.log("notif marked as read")
+
           }
         }
+        console.log("333")
+
         return notifications;
       } catch (err) {
         console.log(err);

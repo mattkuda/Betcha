@@ -75,7 +75,7 @@ function MenuBarMobile() {
           onClick={handleItemClick}
           as={Link}
           to="/"
-          style={{ paddingLeft: "20px", paddingRight: "20px" }}
+          style={{ paddingLeft: "10px", paddingRight: "10px" }}
         >
           <Icon name="home" size="large" style={{ margin: "0px 3px" }} />
         </Menu.Item>
@@ -84,7 +84,7 @@ function MenuBarMobile() {
           active={activeItem === "scores"}
           onClick={handleItemClick}
           as={Link}
-          style={{ paddingLeft: "20px", paddingRight: "20px" }}
+          style={{ paddingLeft: "10px", paddingRight: "10px" }}
           to="/scoreboard"
         >
           <Icon
@@ -99,7 +99,7 @@ function MenuBarMobile() {
           onClick={handleItemClick}
           as={Link}
           to="/mybets"
-          style={{ paddingLeft: "20px", paddingRight: "20px" }}
+          style={{ paddingLeft: "10px", paddingRight: "10px" }}
         >
           <Icon name="dollar sign" size="large" style={{ margin: "0px 3px" }} />
         </Menu.Item>
@@ -111,7 +111,7 @@ function MenuBarMobile() {
           {user ? (
             <Menu.Item
               onClick={(e) => setModalOpen(true)}
-              style={{ paddingLeft: "20px", paddingRight: "20px" }}
+              style={{ paddingLeft: "10px", paddingRight: "10px" }}
             >
               <Icon
                 name="plus square"
@@ -123,7 +123,7 @@ function MenuBarMobile() {
             <Menu.Item
               as={Link}
               to="/login"
-              style={{ paddingLeft: "20px", paddingRight: "20px" }}
+              style={{ paddingLeft: "10px", paddingRight: "10px" }}
             >
               <Icon
                 name="plus square"
@@ -141,7 +141,7 @@ function MenuBarMobile() {
         >
           <Menu.Item
             onClick={handleItemClick}
-            style={{ paddingLeft: "20px", paddingRight: "20px" }}
+            style={{ paddingLeft: "10px", paddingRight: "10px" }}
           >
             <NotificationsIcon user={user} style={{ margin: "0px 3px" }} />
           </Menu.Item>
@@ -151,14 +151,14 @@ function MenuBarMobile() {
             onClick={handleItemClick}
             as={Link}
             to={"/user/" + user.username}
-            style={{ paddingLeft: "20px", paddingRight: "20px" }}
+            style={{ paddingLeft: "10px", paddingRight: "10px" }}
           >
             <Icon name="user" size="large" style={{ margin: "0px 3px" }} />
           </Menu.Item>
           <Menu.Item
             name="logout"
             onClick={logout}
-            style={{ paddingLeft: "20px", paddingRight: "20px" }}
+            style={{ paddingLeft: "10px", paddingRight: "10px" }}
           >
             <Icon name="log out" size="large" style={{ margin: "0px 3px" }} />
           </Menu.Item>
@@ -172,7 +172,7 @@ function MenuBarMobile() {
         active={activeItem === "home"}
         onClick={handleItemClick}
         as={Link}
-        style={{ paddingLeft: "20px", paddingRight: "20px" }}
+        style={{ paddingLeft: "10px", paddingRight: "10px" }}
         to="/"
       >
         <Icon name="home" size="large" style={{ margin: "0px 3px" }} />
@@ -182,7 +182,7 @@ function MenuBarMobile() {
         active={activeItem === "scores"}
         onClick={handleItemClick}
         as={Link}
-        style={{ paddingLeft: "20px", paddingRight: "20px" }}
+        style={{ paddingLeft: "10px", paddingRight: "10px" }}
         to="/scoreboard"
       >
         <Icon
@@ -197,7 +197,7 @@ function MenuBarMobile() {
           active={activeItem === "join"}
           onClick={handleItemClick}
           as={Link}
-          style={{ paddingLeft: "20px", paddingRight: "20px" }}
+          style={{ paddingLeft: "10px", paddingRight: "10px" }}
           to="/register"
         />
         <Menu.Item
@@ -205,7 +205,7 @@ function MenuBarMobile() {
           active={activeItem === "login"}
           onClick={handleItemClick}
           as={Link}
-          style={{ paddingLeft: "20px", paddingRight: "20px" }}
+          style={{ paddingLeft: "10px", paddingRight: "10px" }}
           to="/login"
         />
       </Menu.Menu>
