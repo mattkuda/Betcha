@@ -328,7 +328,7 @@ function PostCard({
   } else if (gameArray[0].gameId.stateDetails === "STATUS_FINAL") {
     console.log("the status is: " + gameArray[0].gameId.stateDetails);
     return PostGameMarkup;
-  } else console.log("the status is: " + gameArray[0].gameId.stateDetails);
+  } else return PreGameMarkup;
 }
 
 export default PostCard;

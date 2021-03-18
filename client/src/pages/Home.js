@@ -1,6 +1,6 @@
 import React, { useContext, useState } from "react";
 import { useQuery } from "@apollo/react-hooks";
-import { Grid, Transition, Modal, Button, Loader, Icon } from "semantic-ui-react";
+import { Grid, Transition, Modal, Button, Loader, Icon, Card } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 import { Waypoint } from "react-waypoint";
 import { AuthContext } from "../context/auth";
@@ -47,6 +47,19 @@ function Home() {
   if(loading){
     return <Loader active inline='centered' size='large'>{loadingText}</Loader>
   }
+
+  if(!user){
+    return <Card style={{margin: "auto", marginTop: "20px", width: "75%"}}>
+    <Card.Content>
+      <h2 style={{textAlign: "center"}}><i>Welcome to Betcha Sports</i></h2>
+      <img style={{display: "block",marginLeft: "auto", marginRight: "auto"}} src="android-chrome-192x192.png" alt=""/>
+      <h3 style={{textAlign: "center"}}>Ready to join the action? <br/><Link to={`/login`} activeClassName="active">Login</Link> or <Link to={`/login`} activeClassName="active">signup</Link> today!</h3>
+      <p style={{textAlign: "center", color: "gray", fontStyle: "italic"}}>Access limited for alpha release</p>
+    </Card.Content>
+      
+    </Card>
+  }
+
   return (
     <>
 
@@ -74,7 +87,7 @@ function Home() {
               <Button onClick={(e) => setModalOpen(true)} className="mobile hidden tablet hidden">Share Bet</Button>
             ) : (
               <Button as={Link} to="/login" className="mobile hidden tablet hidden">
-                Share Bet
+                Share Bet <Icon name="pencil"/>
               </Button>
             )}
           </Grid.Row>

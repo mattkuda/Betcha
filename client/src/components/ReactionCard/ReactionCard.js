@@ -59,7 +59,8 @@ function ReactionCard({
     //If the user ahs posted about the game
     post ? (
       <>
-        <Card fluid floated="right" style={{ width: "100%" }}>
+        <Card fluid floated="right" style={{ width: "100%" }} as={Link}
+        to={`/reacts/${id}`}>
           <Card.Content>
             <div
               style={{
@@ -150,7 +151,8 @@ function ReactionCard({
     ) : (
       //If the user hasn't posted about the game
       <>
-        <Card fluid floated="right" style={{ width: "100%" }}>
+        <Card fluid floated="right" style={{ width: "100%" }} as={Link}
+        to={`/reacts/${id}`}>
           <Card.Content style={{ verticalAlign: "top" }}>
             <div
               style={{

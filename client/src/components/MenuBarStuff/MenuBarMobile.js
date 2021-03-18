@@ -155,12 +155,22 @@ function MenuBarMobile() {
           >
             <Icon name="user" size="large" style={{ margin: "0px 3px" }} />
           </Menu.Item>
-          <Menu.Item
+          {/* <Menu.Item
             name="logout"
             onClick={logout}
             style={{ paddingLeft: "10px", paddingRight: "10px" }}
+          > */}
+
+          <Menu.Item
+            name="info"
+            
+            href="https://docs.google.com/forms/d/e/1FAIpQLSc9W98G37tOXq5sq3YByN7U0o813FThNt5o5ysaZHK1Jgl9jQ/viewform" target="_blank"
+            style={{ paddingLeft: "10px", paddingRight: "10px" }}
           >
-            <Icon name="log out" size="large" style={{ margin: "0px 3px" }} />
+            <Icon.Group size="large" style={{ margin: "0px 3px" }}>
+              <Icon name="comment alternate outline"/>
+              <Icon corner="top right" name="pencil" />
+            </Icon.Group>
           </Menu.Item>
         </Menu.Menu>
       </Menu>
