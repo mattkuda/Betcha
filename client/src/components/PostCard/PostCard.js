@@ -30,7 +30,6 @@ function PostCard({
     user,
   } = {},
 }) {
-
   const { userME } = useContext(AuthContext);
 
   let PreGameMarkup = (
@@ -45,7 +44,11 @@ function PostCard({
       >
         <Card.Content>
           <div
-            style={{ display: "inline-block", width: "auto", height: "100%" }}
+            style={{
+              display: "inline-block",
+              width: "auto",
+              verticalAlign: "top",
+            }}
           >
             <div>
               <img
@@ -131,7 +134,11 @@ function PostCard({
       <Card fluid floated="right" style={{ width: "100%" }}>
         <Card.Content>
           <div
-            style={{ display: "inline-block", width: "auto", height: "100%" }}
+            style={{
+              display: "inline-block",
+              width: "auto",
+              verticalAlign: "top",
+            }}
           >
             <div>
               <img
@@ -168,7 +175,7 @@ function PostCard({
                     fontStyle: "italic",
                   }}
                 >
-                  LIVE: 
+                  LIVE: {liveGameDescFormat(gameArray[0].gameId)}
                 </div>
               </div>
             )}
@@ -213,7 +220,11 @@ function PostCard({
       <Card fluid floated="right" style={{ width: "100%" }}>
         <Card.Content>
           <div
-            style={{ display: "inline-block", width: "auto", height: "100%" }}
+            style={{
+              display: "inline-block",
+              width: "auto",
+              verticalAlign: "top",
+            }}
           >
             <div>
               <img
@@ -299,15 +310,19 @@ function PostCard({
     </>
   );
 
-  if (gameArray[0].gameId.stateDetails === "STATUS_SCHEDULED" ||
-  gameArray[0].gameId.stateDetails === "STATUS_UNCONTESTED") {
+  if (
+    gameArray[0].gameId.stateDetails === "STATUS_SCHEDULED" ||
+    gameArray[0].gameId.stateDetails === "STATUS_UNCONTESTED"
+  ) {
     console.log("the status is: " + gameArray[0].gameId.stateDetails);
     return PreGameMarkup;
-  } else if (gameArray[0].gameId.stateDetails === "STATUS_IN_PROGRESS" ||
-             gameArray[0].gameId.stateDetails === "STATUS_FIRST_HALF" ||
-             gameArray[0].gameId.stateDetails === "STATUS_SECOND_HALF" ||
-             gameArray[0].gameId.stateDetails === "STATUS_HALFTIME" ||
-             gameArray[0].gameId.stateDetails === "STATUS_END_OF_PERIOD") {
+  } else if (
+    gameArray[0].gameId.stateDetails === "STATUS_IN_PROGRESS" ||
+    gameArray[0].gameId.stateDetails === "STATUS_FIRST_HALF" ||
+    gameArray[0].gameId.stateDetails === "STATUS_SECOND_HALF" ||
+    gameArray[0].gameId.stateDetails === "STATUS_HALFTIME" ||
+    gameArray[0].gameId.stateDetails === "STATUS_END_OF_PERIOD"
+  ) {
     console.log("the status is: " + gameArray[0].gameId.stateDetails);
     return LiveGameMarkup;
   } else if (gameArray[0].gameId.stateDetails === "STATUS_FINAL") {

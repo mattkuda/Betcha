@@ -12,7 +12,7 @@ import { FETCH_POSTS_QUERY } from "../util/graphql";
 import '../App.css'
 import './Home.css';
 
-function Home() {
+function GlobalFeed() {
   const { user } = useContext(AuthContext);
   var loadingFeed = true;
 
@@ -26,27 +26,10 @@ function Home() {
   loadingFeed = false;
   const [modalOpen, setModalOpen] = useState(false);
 
-  var random = Math.random() * 5;
-  var loadingText = "";
-
-  if (random < 1){
-    loadingText = "Buffering drunk bets..."
-  } else if (random < 2){
-    loadingText = "Loading all winners..."
-  } else if (random < 3){
-    loadingText = "Loading all losers..."
-  } else if (random < 4){
-    loadingText = "Rendering mortal locks..."
-  } else if (random < 4.95){
-    loadingText = "Retrieving picks from the future..."
-  } else if (random < 5){
-    loadingText = "The odds of this happening were 1% ..."
-  } 
-
-
   if(loading){
-    return <Loader active inline='centered' size='large'>{loadingText}</Loader>
+    return <Loader></Loader>
   }
+
   return (
     <>
 
@@ -65,18 +48,19 @@ function Home() {
       </Modal>
 
       <Grid celled>
-        <Grid.Column desktop={12} mobile={16}>
+        <Grid.Column width={12} mobile={16}>
           <Grid.Row className="page-title">
-            <h2>Home Feed</h2>
+            <h1>Recent posts</h1>
           </Grid.Row>
           <Grid.Row>
             {user ? (
-              <Button onClick={(e) => setModalOpen(true)} className="mobile hidden tablet hidden">Share Bet</Button>
+              <Button onClick={(e) => setModalOpen(true)} class="mobile hidden tablet hidden">Share Bet</Button>
             ) : (
-              <Button as={Link} to="/login" className="mobile hidden tablet hidden">
+              <Button as={Link} to="/login" class="mobile hidden tablet hidden">
                 Share Bet
               </Button>
             )}
+            <Button onClick={(e) => console.log(posts)}>Console Posts</Button>
           </Grid.Row>
           {loading || loadingFeed === true ? (
             <h1>Loading feed...</h1>
@@ -192,7 +176,7 @@ function Home() {
         </Grid.Column>
         <Grid.Column width={4} className="mobile hidden tablet hidden">
           <Grid.Row className="page-title">
-            <h2>Game Center</h2>
+            <h1>Game Center</h1>
           </Grid.Row>
           <Grid.Row>
             <div className="games-sidebar-container">
@@ -207,4 +191,4 @@ function Home() {
   );
 }
 
-export default Home;
+export default GlobalFeed;

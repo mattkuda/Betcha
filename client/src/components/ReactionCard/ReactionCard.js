@@ -62,14 +62,18 @@ function ReactionCard({
         <Card fluid floated="right" style={{ width: "100%" }}>
           <Card.Content>
             <div
-              style={{ display: "inline-block", width: "auto", height: "100%" }}
+              style={{
+                display: "inline-block",
+                width: "auto",
+                verticalAlign: "top",
+              }}
             >
-            <div>
-              <img
-                className="pc-img"
-                alt="profile-pic"
-                src={`${user.profilePicture}`}
-              ></img>
+              <div>
+                <img
+                  className="pc-img"
+                  alt="profile-pic"
+                  src={`${user.profilePicture}`}
+                ></img>
               </div>
             </div>
             <div className="pc-header">
@@ -87,8 +91,8 @@ function ReactionCard({
               </div>
               <div className="pc-betBody">{body}</div>
               <div className="pc-reactionScore">
-                  has the bet {contextualizeBet(betData)}
-                </div>
+                has the bet {contextualizeBet(betData)}
+              </div>
               <div
                 style={{
                   border: "solid #e3e3e3 2px",
@@ -147,16 +151,21 @@ function ReactionCard({
       //If the user hasn't posted about the game
       <>
         <Card fluid floated="right" style={{ width: "100%" }}>
-          <Card.Content>
+          <Card.Content style={{ verticalAlign: "top" }}>
             <div
-              style={{ display: "inline-block", width: "auto"}}
+              style={{
+                display: "inline-block",
+                width: "auto",
+                verticalAlign: "top",
+              }}
             >
-            <div>
-              <img
-                className="pc-img"
-                alt="profile-pic"
-                src={`${user.profilePicture}`}
-              ></img></div>
+              <div>
+                <img
+                  className="pc-img"
+                  alt="profile-pic"
+                  src={`${user.profilePicture}`}
+                ></img>
+              </div>
             </div>
             <div className="pc-header">
               <Link to={`/user/${user.username}`}>
