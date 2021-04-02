@@ -41,7 +41,7 @@ function Home() {
     loadingText = "Retrieving picks from the future..."
   } else if (random < 5){
     loadingText = "The odds of this happening were 1% ..."
-  } 
+  }
 
 
   if(loading){
@@ -56,7 +56,7 @@ function Home() {
       <h3 style={{textAlign: "center"}}>Ready to join the action? <br/><Link to={`/login`} activeClassName="active">Login</Link> or <Link to={`/register`} activeClassName="active">signup</Link> today!</h3>
       <p style={{textAlign: "center", color: "gray", fontStyle: "italic"}}>Access limited for alpha release</p>
     </Card.Content>
-      
+
     </Card>
   }
 

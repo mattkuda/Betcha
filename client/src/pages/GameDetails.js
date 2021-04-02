@@ -193,7 +193,7 @@ function GameDetails(props) {
         <Header.Content>User Bets</Header.Content>
       </Header>
 
-      <FriendLinker gameId={myGameId}/>
+      <FriendLinker gameId={myGameId} />
 
       {NBAdata.getPlaysInGame.length > 0 ? (
         <>
