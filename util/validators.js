@@ -9,9 +9,15 @@ module.exports.validateRegisterInput = (
   accessCode
 ) => {
   const errors = {};
+  var usernameRegex = /^[a-zA-Z][a-zA-Z0-9\_]{2,}/
   if(username.trim() ===''){
     errors.username = 'Username must not be empty.'
   }
+
+  //username must contain only letters and numbers
+  if(!/^[a-zA-Z][a-zA-Z0-9\_]{2,}/.test(username)){
+    errors.username = 'Username must start with a letter and not contain special characters.'
+  }   
 
   if(email.trim() ===''){
     errors.email = 'Email must not be empty.'

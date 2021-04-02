@@ -53,7 +53,7 @@ function Home() {
     <Card.Content>
       <h2 style={{textAlign: "center"}}><i>Welcome to Betcha Sports</i></h2>
       <img style={{display: "block",marginLeft: "auto", marginRight: "auto"}} src="android-chrome-192x192.png" alt=""/>
-      <h3 style={{textAlign: "center"}}>Ready to join the action? <br/><Link to={`/login`} activeClassName="active">Login</Link> or <Link to={`/login`} activeClassName="active">signup</Link> today!</h3>
+      <h3 style={{textAlign: "center"}}>Ready to join the action? <br/><Link to={`/login`} activeClassName="active">Login</Link> or <Link to={`/register`} activeClassName="active">signup</Link> today!</h3>
       <p style={{textAlign: "center", color: "gray", fontStyle: "italic"}}>Access limited for alpha release</p>
     </Card.Content>
       
